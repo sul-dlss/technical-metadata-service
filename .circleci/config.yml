@@ -66,10 +66,10 @@ jobs:
         name: Test prepare
         command: bin/rails db:test:prepare
 
-    # - run:
-    #     name: Check styles using rubocop
-    #     command: bundle exec rubocop
-    #
+    - run:
+        name: Check styles using rubocop
+        command: bundle exec rubocop
+
     # - run:
     #     name: Setup Code Climate test-reporter
     #     command: |
