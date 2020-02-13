@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/sul-dlss/technical-metadata-service.svg?style=svg)](https://circleci.com/gh/sul-dlss/technical-metadata-service)
+
 # Technical Metadata Service
 
 This API provides methods for creating technical metadata for files in the DOR.  It persists the technical metadata and allows it to be queried.
