@@ -21,10 +21,32 @@ require 'rails/test_unit/railtie'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+class JSONAPIError < Committee::ValidationError
+  def error_body
+    {
+      errors: [
+        { status: id, detail: message }
+      ]
+    }
+  end
+
+  def render
+    [
+      status,
+      { "Content-Type" => "application/vnd.api+json" },
+      [JSON.generate(error_body)]
+    ]
+  end
+end
+
 module TechnicalMetadataService
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.0
+
+    config.middleware.use Committee::Middleware::RequestValidation, schema_path: 'openapi.yml', strict: true, error_class: JSONAPIError
+    config.middleware.use Committee::Middleware::ResponseValidation, schema_path: 'openapi.yml'
+
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
