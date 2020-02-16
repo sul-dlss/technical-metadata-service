@@ -1,0 +1,67 @@
+openapi: 3.0.0
+info:
+  description: API for the Stanford digital repository technical metadata
+  version: 1.0.0
+  title: Technical Metadata API
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+servers:
+  - url: 'https://technical-metadata-{env}.stanford.edu'
+    description: Production service
+    variables:
+      env:
+        default: prod
+  - url: 'https://technical-metadata-{env}.stanford.edu'
+    description: Staging service
+    variables:
+      env:
+        default: stage
+tags:
+  - name: metadata
+    description: Digital Repository Objects
+paths:
+  /v1/about:
+    get:
+      summary: A healthcheck endpoint
+      responses:
+        '200':
+          description: The status of the service
+  /v1/technical-metadata:
+    post:
+      tags:
+        - metadata
+      summary: Create the metadata for the object
+      description: ''
+      operationId: 'technical_metadata#create'
+      responses:
+        '200':
+          description: OK
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - druid
+                - version
+                - files
+              properties:
+                druid:
+                    $ref: '#/components/schemas/Druid'
+                version:
+                  type: integer
+                files:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/FileURL'
+components:
+  schemas:
+    Druid:
+      type: string
+      pattern: '^druid:[b-df-hjkmnp-tv-z]{2}[0-9]{3}[b-df-hjkmnp-tv-z]{2}[0-9]{4}$'
+      example: 'druid:bc123df4567'
+    FileURL:
+      type: string
+      pattern: '^file:\/\/\/([^\\/]+\/)*[^\\/]+$'
+      example: 'file:///foo/bar/baz/quix.jp2'
