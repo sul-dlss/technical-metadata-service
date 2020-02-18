@@ -44,24 +44,22 @@ paths:
               type: object
               required:
                 - druid
-                - version
                 - files
               properties:
                 druid:
                     $ref: '#/components/schemas/Druid'
-                version:
-                  type: integer
                 files:
                   type: array
                   items:
-                    $ref: '#/components/schemas/FileURL'
+                    $ref: '#/components/schemas/FileURI'
 components:
   schemas:
     Druid:
       type: string
       pattern: '^druid:[b-df-hjkmnp-tv-z]{2}[0-9]{3}[b-df-hjkmnp-tv-z]{2}[0-9]{4}$'
       example: 'druid:bc123df4567'
-    FileURL:
+    FileURI:
+      summary: File URI for the absolute path of the file
       type: string
       pattern: '^file:\/\/\/([^\\/]+\/)*[^\\/]+$'
       example: 'file:///foo/bar/baz/quix.jp2'

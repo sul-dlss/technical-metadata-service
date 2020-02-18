@@ -14,6 +14,10 @@ AllCops:
 Layout/LineLength:
   Max: 120
 
+Metrics/BlockLength:
+  Exclude:
+    - spec/**/*.rb
+
 Style/Documentation:
   Exclude:
     - 'spec/**/*'
@@ -23,3 +27,13 @@ Style/Documentation:
 
 Rails/FilePath:
   EnforcedStyle: arguments
+
+RSpec/DescribeClass:
+  Exclude:
+    - 'spec/requests/**/*.rb'
+
+RSpec/ExampleLength:
+  Enabled: false
+
+RSpec/MultipleExpectations:
+  Enabled: false
