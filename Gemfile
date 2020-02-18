@@ -7,6 +7,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 gem 'rails', '~> 6.0.2', '>= 6.0.2.1'
 
 gem 'committee' # validates Open API spec (OAS)
+gem 'config'
 gem 'pg'
 gem 'sidekiq', '~> 5.2'
 gem 'sidekiq-statistic'
@@ -20,6 +21,9 @@ gem 'puma', '~> 4.1'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.2', require: false
+
+# SDR specific
+gem 'dor-workflow-client', '~> 3.17'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

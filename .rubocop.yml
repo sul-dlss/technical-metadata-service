@@ -6,8 +6,10 @@ require:
 
 AllCops:
   Exclude:
-    - bin/bundle
-    - vendor/**/*
+    - 'bin/bundle'
+    - 'vendor/**/*'
+    - 'db/schema.rb'
+    - 'db/migrate/*.rb'
 
 Layout/LineLength:
   Max: 120
