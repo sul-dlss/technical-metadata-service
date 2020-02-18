@@ -15,3 +15,12 @@ Background processing is performed by [Sidekiq](https://github.com/mperham/sidek
 
 Sidekiq can be monitored from [/queues](http://localhost:3000/queues).
 For more information on configuring and deploying Sidekiq, see this [doc](https://github.com/sul-dlss/DevOpsDocs/blob/master/projects/sul-requests/background_jobs.md).
+
+## Requirements
+### Siegfried
+[Siegfried](https://github.com/richardlehane/siegfried) is used for file identification.
+
+To install on OS X:
+```
+brew install mistydemeo/digipres/siegfried
+```
