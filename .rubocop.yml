@@ -13,6 +13,13 @@ AllCops:
 
 Layout/LineLength:
   Max: 120
+  Exclude:
+    - 'spec/services/technical_metadata_generator_spec.rb'
+    - 'spec/services/file_identifier_service_spec.rb'
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
 
 Style/Documentation:
   Exclude:

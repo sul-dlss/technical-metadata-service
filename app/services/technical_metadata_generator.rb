@@ -63,12 +63,11 @@ class TechnicalMetadataGenerator
     raise
   end
 
-  def generate_metadata(_filepath)
-    # TODO
+  def generate_metadata(filepath)
     {
-      filetype: 'TBD',
+      filetype: file_identifier.identify(filepath: filepath),
       tool_versions: {
-        'TBD' => '1.0.0'
+        'siegfried' => file_identifier.version
       }
     }
   end
@@ -102,5 +101,9 @@ class TechnicalMetadataGenerator
 
   def filenames
     @filenames ||= filepaths.map { |filepath| filename_for(filepath) }
+  end
+
+  def file_identifier
+    @file_identifier ||= FileIdentifierService.new
   end
 end
