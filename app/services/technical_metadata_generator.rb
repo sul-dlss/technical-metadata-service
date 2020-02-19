@@ -64,8 +64,10 @@ class TechnicalMetadataGenerator
   end
 
   def generate_metadata(filepath)
+    filetype, mimetype = file_identifier.identify(filepath: filepath)
     {
-      filetype: file_identifier.identify(filepath: filepath),
+      filetype: filetype,
+      mimetype: mimetype,
       tool_versions: {
         'siegfried' => file_identifier.version
       }
