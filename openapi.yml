@@ -21,12 +21,6 @@ tags:
   - name: metadata
     description: Digital Repository Objects
 paths:
-  /v1/about:
-    get:
-      summary: A healthcheck endpoint
-      responses:
-        '200':
-          description: The status of the service
   /v1/technical-metadata:
     post:
       tags:
