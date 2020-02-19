@@ -8,13 +8,13 @@ class FileIdentifierService
   end
 
   # @param [String] filepath of the file to identify
-  # @return [String|nil] mimetype of the file or nil if unknown
+  # @return [String,String|nil,nil] pronom id, mimetype of the file or nil, nil if unknown
   # @raise [FileIdentifierServiceError]
   def identify(filepath:)
     output, status = Open3.capture2e("sf -json #{filepath}")
     raise Error, "Identifying #{filepath} returned #{status.exitstatus}: #{output}" unless status.success?
 
-    extract_mimetype(output, filepath)
+    extract_file_types(output, filepath)
   end
 
   # @return [String] version of Siegfried
@@ -33,7 +33,7 @@ class FileIdentifierService
 
   private
 
-  def extract_mimetype(output, filepath)
+  def extract_file_types(output, filepath)
     json_output = JSON.parse(output)
     json_output['files'].each do |file|
       next unless file['filename'] == filepath
@@ -41,10 +41,20 @@ class FileIdentifierService
       file['matches'].each do |match|
         next unless match['id'] == 'pronom'
 
-        return match['mime'].presence
+        return [extract_pronom_id(match), extract_mimetype(match)]
       end
     end
 
     raise Error, "Unable to find file type for #{filepath} in: #{output}"
+  end
+
+  def extract_pronom_id(match)
+    return nil if match['puid'] == 'UNKNOWN'
+
+    match['puid'].presence
+  end
+
+  def extract_mimetype(match)
+    match['mime'].presence
   end
 end
