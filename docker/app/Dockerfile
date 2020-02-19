@@ -18,8 +18,9 @@ WORKDIR /app
 
 COPY Gemfile Gemfile.lock ./
 
-RUN bundle install --without production
+RUN bundle config set without 'production'
+RUN bundle install
 
 COPY . .
 
-CMD ["./docker/invoke.sh"]
+CMD ["./docker/app/invoke.sh"]
