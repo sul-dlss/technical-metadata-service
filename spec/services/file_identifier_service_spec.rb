@@ -15,17 +15,17 @@ RSpec.describe FileIdentifierService do
     context 'when siegfried returns version' do
       let(:output) do
         <<~OUTPUT
-          siegfried 1.4.5
-          /usr/local/Cellar/siegfried/1.4.5/share/siegfried/pronom.sig (2016-02-05T17:41:10+11:00)
+          siegfried 1.8.0
+          /usr/share/siegfried/default.sig (2020-01-21T23:30:42+01:00)
           identifiers:
-            - pronom: DROID_SignatureFile_V84.xml; container-signature-20160121.xml
+            - pronom: DROID_SignatureFile_V96.xml; container-signature-20200121.xml
         OUTPUT
       end
 
       let(:status) { instance_double(Process::Status, success?: true) }
 
       it 'returns version' do
-        expect(version).to eq('1.4.5')
+        expect(version).to eq('1.8.0')
         expect(Open3).to have_received(:capture2e).with('sf -version')
       end
     end
@@ -52,7 +52,7 @@ RSpec.describe FileIdentifierService do
     let(:identifiers) { service.identify(filepath: 'bar.txt') }
 
     context 'when file is identified' do
-      let(:output) { '{"siegfried":"1.4.5","scandate":"2020-02-18T16:44:36-05:00","signature":"pronom.sig","created":"2016-02-05T17:41:10+11:00","identifiers":[{"name":"pronom","details":"DROID_SignatureFile_V84.xml; container-signature-20160121.xml"}],"files":[{"filename":"bar.txt","filesize": 4,"modified":"2020-02-18T15:36:15-05:00","errors": "","matches": [{"id":"pronom","puid":"x-fmt/111","format":"Plain Text File","version":"","mime":"text/plain","basis":"extension match; text match ASCII","warning":""}]}]}' }
+      let(:output) { '{"siegfried":"1.8.0","scandate":"2020-02-18T16:44:36-05:00","signature":"default.sig","created":"2020-01-21T23:30:42+01:00","identifiers":[{"name":"pronom","details":"DROID_SignatureFile_V96.xml; container-signature-20200121.xml"}],"files":[{"filename":"bar.txt","filesize": 4,"modified":"2020-02-18T15:36:15-05:00","errors": "","matches": [{"ns":"pronom","id":"x-fmt/111","format":"Plain Text File","version":"","mime":"text/plain","basis":"extension match txt; text match ASCII","warning":""}]}]}' }
 
       let(:status) { instance_double(Process::Status, success?: true) }
 
@@ -63,7 +63,7 @@ RSpec.describe FileIdentifierService do
     end
 
     context 'when file is not identified' do
-      let(:output) { '{"siegfried":"1.4.5","scandate":"2020-02-18T16:52:36-05:00","signature":"pronom.sig","created":"2016-02-05T17:41:10+11:00","identifiers":[{"name":"pronom","details":"DROID_SignatureFile_V84.xml; container-signature-20160121.xml"}],"files":[{"filename":"bar.txt","filesize": 933521532,"modified":"2020-02-18T12:25:17-05:00","errors": "","matches": [{"id":"pronom","puid":"UNKNOWN","format":"","version":"","mime":"","basis":"","warning":"no match"}]}]}' }
+      let(:output) { '{"siegfried":"1.8.0","scandate":"2020-02-18T16:44:36-05:00","signature":"default.sig","created":"2020-01-21T23:30:42+01:00","identifiers":[{"name":"pronom","details":"DROID_SignatureFile_V96.xml; container-signature-20200121.xml"}],"files":[{"filename":"bar.txt","filesize": 933521532,"modified":"2020-02-18T12:25:17-05:00","errors": "","matches": [{"ns":"pronom","id":"UNKNOWN","format":"","version":"","mime":"","basis":"","warning":"no match"}]}]}' }
 
       let(:status) { instance_double(Process::Status, success?: true) }
 
@@ -82,7 +82,7 @@ RSpec.describe FileIdentifierService do
 
     context 'when siegfried produces unexpected results' do
       let(:status) { instance_double(Process::Status, success?: true) }
-      let(:output) { '{"siegfried":"1.4.5","scandate":"2020-02-18T16:44:36-05:00","signature":"pronom.sig","created":"2016-02-05T17:41:10+11:00","identifiers":[{"name":"pronom","details":"DROID_SignatureFile_V84.xml; container-signature-20160121.xml"}],"files":[{"filename":"xbar.txt","filesize": 4,"modified":"2020-02-18T15:36:15-05:00","errors": "","matches": [{"id":"pronom","puid":"x-fmt/111","format":"Plain Text File","version":"","mime":"text/plain","basis":"extension match; text match ASCII","warning":""}]}]}' }
+      let(:output) { '{"siegfried":"1.8.0","scandate":"2020-02-18T16:44:36-05:00","signature":"default.sig","created":"2020-01-21T23:30:42+01:00","identifiers":[{"name":"pronom","details":"DROID_SignatureFile_V96.xml; container-signature-20200121.xml"}],"files":[{"filename":"xbar.txt","filesize": 4,"modified":"2020-02-18T15:36:15-05:00","errors": "","matches": [{"ns":"pronom","id":"x-fmt/111","format":"Plain Text File","version":"","mime":"text/plain","basis":"extension match txt; text match ASCII","warning":""}]}]}' }
 
       it 'raises' do
         expect { identifiers }.to raise_error(FileIdentifierService::Error)

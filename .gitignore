@@ -17,6 +17,7 @@
 /tmp/*
 !/log/.keep
 !/tmp/.keep
+!/tmp/pids/.keep
 
 # Ignore uploaded files in development.
 /storage/*
@@ -25,5 +26,8 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+
+# The workflow docker-compose service creates this file
+workflow_service.log
 
 spec/examples.txt

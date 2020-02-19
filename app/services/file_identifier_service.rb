@@ -39,7 +39,7 @@ class FileIdentifierService
       next unless file['filename'] == filepath
 
       file['matches'].each do |match|
-        next unless match['id'] == 'pronom'
+        next unless match['ns'] == 'pronom'
 
         return [extract_pronom_id(match), extract_mimetype(match)]
       end
@@ -49,9 +49,9 @@ class FileIdentifierService
   end
 
   def extract_pronom_id(match)
-    return nil if match['puid'] == 'UNKNOWN'
+    return nil if match['id'] == 'UNKNOWN'
 
-    match['puid'].presence
+    match['id'].presence
   end
 
   def extract_mimetype(match)

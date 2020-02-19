@@ -1,17 +1,70 @@
 version: '3.6'
 
 services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/app/Dockerfile
+    environment:
+      DATABASE_NAME: technical_metadata
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: sekret
+      DATABASE_HOSTNAME: db
+      DATABASE_PORT: 5432
+      RAILS_LOG_TO_STDOUT: "true"
+      REDIS_URL: redis://redis:6379/
+    volumes:
+       - .:/app
+    working_dir: /app
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
+      - workers
+  workers:
+    build:
+      context: .
+      dockerfile: docker/workers/Dockerfile
+    environment:
+      DATABASE_NAME: technical_metadata
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: sekret
+      DATABASE_HOSTNAME: db
+      DATABASE_PORT: 5432
+      RAILS_LOG_TO_STDOUT: "true"
+      REDIS_URL: redis://redis:6379/
+      SETTINGS__WORKFLOW__URL: http://workflow:3000
+    volumes:
+      - .:/app
+    working_dir: /app
+    depends_on:
+      - db
+      - redis
+      - workflow
+  workflow:
+    image: suldlss/workflow-server:latest
+    depends_on:
+      - db
+    ports:
+      - 3001:3000
+    environment:
+      DATABASE_NAME: workflow-server
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: sekret
+      DATABASE_HOSTNAME: db
+      DATABASE_PORT: 5432
+      SETTINGS__ENABLE_STOMP: "false"
+      SETTINGS__REDIS__HOSTNAME: redis
   db:
-    image: postgres
+    image: postgres:11
     ports:
       - 5432:5432
     environment:
-      - POSTGRES_PASSWORD=sekret
+      POSTGRES_PASSWORD: sekret
     volumes:
       - postgres-data:/var/lib/postgresql/data
   redis:
-    image: redis:3
-    command: redis-server
+    image: redis
     ports:
       - 6379:6379
     volumes:
