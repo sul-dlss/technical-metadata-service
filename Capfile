@@ -11,7 +11,7 @@ install_plugin Capistrano::SCM::Git
 
 require 'capistrano/bundler'
 # These are waiting for dependencies to be used
-# require 'capistrano/honeybadger'
+require 'capistrano/honeybadger'
 require 'capistrano/passenger'
 # require 'capistrano/rails'
 require 'capistrano/rails/migrations'
