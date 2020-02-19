@@ -1,4 +1,6 @@
 [![CircleCI](https://circleci.com/gh/sul-dlss/technical-metadata-service.svg?style=svg)](https://circleci.com/gh/sul-dlss/technical-metadata-service)
+[![Maintainability](https://api.codeclimate.com/v1/badges/96da90f8c036d8e9fbaf/maintainability)](https://codeclimate.com/github/sul-dlss/technical-metadata-service/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/96da90f8c036d8e9fbaf/test_coverage)](https://codeclimate.com/github/sul-dlss/technical-metadata-service/test_coverage)
 
 # Technical Metadata Service
 
