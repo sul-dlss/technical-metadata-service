@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_19_141254) do
+ActiveRecord::Schema.define(version: 2020_02_19_221217) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,6 +26,14 @@ ActiveRecord::Schema.define(version: 2020_02_19_141254) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "mimetype"
     t.index ["druid", "filename"], name: "index_dro_files_on_druid_and_filename", unique: true
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "name"
+    t.string "email"
+    t.string "password_digest"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
 end
