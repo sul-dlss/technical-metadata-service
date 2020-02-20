@@ -8,7 +8,7 @@ module AuthHelper
   private
 
   def payload
-    user = User.create!(email: 'jcoyne85@stanford.edu', password: 'sekr3t!')
+    user = User.create!(email: 'amcollie@stanford.edu', password: 'sekr3t!')
 
     { user_id: user.id }
   end
