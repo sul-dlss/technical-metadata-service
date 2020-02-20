@@ -27,7 +27,7 @@ For more information on configuring and deploying Sidekiq, see this [doc](https:
 
 To install on OS X:
 ```
-brew install mistydemeo/digipres/siegfried
+brew install richardlehane/digipres/siegfried
 ```
 
 ## Testing
