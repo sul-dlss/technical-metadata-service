@@ -52,6 +52,27 @@ paths:
                   type: array
                   items:
                     $ref: '#/components/schemas/FileURI'
+  /v1/auth/login:
+    post:
+      summary: Login and return a token
+      description: ''
+      operationId: 'authentication#login'
+      responses:
+        '200':
+          description: OK
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                    $ref: '#/components/schemas/Email'
+                password:
+                    $ref: '#/components/schemas/Password'
 components:
   schemas:
     Druid:
@@ -63,3 +84,8 @@ components:
       type: string
       pattern: '^file:\/\/\/([^\\/]+\/)*[^\\/]+$'
       example: 'file:///foo/bar/baz/quix.jp2'
+    Email:
+      type: string
+    Password:
+      type: string
+  
