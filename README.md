@@ -30,6 +30,16 @@ To install on OS X:
 brew install richardlehane/digipres/siegfried
 ```
 
+### Exiftool
+
+[Exiftool](https://exiftool.org/) is used for image characterization.
+
+To install on OS X:
+```
+brew install exiftool
+```
+
+
 ## Testing
 
 ### CI build
