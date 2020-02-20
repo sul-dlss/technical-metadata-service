@@ -11,10 +11,8 @@ services:
       DATABASE_PASSWORD: sekret
       DATABASE_HOSTNAME: db
       DATABASE_PORT: 5432
-      RAILS_ENV: production
       RAILS_LOG_TO_STDOUT: "true"
       REDIS_URL: redis://redis:6379/
-      SECRET_KEY_BASE: b317535dfaecfba700f68f9165f09438cdbe48126b500a713d6c2addbe005a833923b8ba81679bd7e1289525cbef6c6aafabd75314339bf592d5457bc41a728e # only used for local testing
     volumes:
        - .:/app
     working_dir: /app
@@ -33,7 +31,6 @@ services:
       DATABASE_PASSWORD: sekret
       DATABASE_HOSTNAME: db
       DATABASE_PORT: 5432
-      RAILS_ENV: production
       RAILS_LOG_TO_STDOUT: "true"
       REDIS_URL: redis://redis:6379/
       SETTINGS__WORKFLOW__URL: http://workflow:3000
