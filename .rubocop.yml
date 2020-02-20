@@ -24,6 +24,7 @@ Metrics/BlockLength:
 Style/Documentation:
   Exclude:
     - 'spec/**/*'
+    - 'app/controllers/application_controller.rb'
     - 'app/mailers/application_mailer.rb'
     - 'app/models/application_record.rb'
     - 'config/application.rb'

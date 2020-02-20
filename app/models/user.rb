@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# User - our basic user class used for authenticating and obtaining a web token
 class User < ApplicationRecord
   has_secure_password
 

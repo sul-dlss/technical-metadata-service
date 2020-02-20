@@ -7,6 +7,11 @@
 # versions of RuboCop, may require this file to be generated again.
 
 # Offense count: 1
+Metrics/AbcSize:
+  Exclude:
+    - 'app/controllers/authentication_controller.rb'
+
+# Offense count: 1
 # Configuration parameters: Max.
 RSpec/ExampleLength:
   Exclude:

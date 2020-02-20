@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# JsonWebToken produces and encodes/decodes an authenticated web token
 class JsonWebToken
   SECRET_KEY = Rails.application.secrets.secret_key_base. to_s
 

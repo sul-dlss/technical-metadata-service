@@ -29,7 +29,7 @@ RSpec.describe TechnicalMetadataJob do
     end
   end
 
-  context 'when no errors' do
+  context 'when errors' do
     let(:errors) { ['Ooops'] }
 
     it('logs success') do
