@@ -29,10 +29,10 @@ RSpec.describe TechnicalMetadataJob do
     end
   end
 
-  context 'when no errors' do
+  context 'when an error' do
     let(:errors) { ['Ooops'] }
 
-    it('logs success') do
+    it('logs error') do
       expect(client).to have_received(:update_error_status)
     end
   end
