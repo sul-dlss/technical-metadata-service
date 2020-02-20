@@ -1,2 +1,4 @@
 workflow:
   url: 'https://workflow.example.com/workflow'
+
+hmac_secret: 'my$ecretK3y'
