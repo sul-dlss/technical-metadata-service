@@ -62,10 +62,16 @@ $ rails c
 > client.create_workflow_by_name('druid:bc123df4567', 'accessionWF', version: '1')
 ```
 
+Get a JWT token for authentication
+
+```shell
+bundle exec rake generate_token
+```
+
 Hit the technical-metadata-service's HTTP API:
 
 ```shell
-$ curl -i -H 'Content-Type: application/json' --data '{"druid":"druid:bc123df4567","files":["file:///app/README.md","file:///app/openapi.yml"]}' http://localhost:3000/v1/technical-metadata
+$ curl -i H "Authorization: Bearer #{TOKEN}" -H 'Content-Type: application/json' --data '{"druid":"druid:bc123df4567","files":["file:///app/README.md","file:///app/openapi.yml"]}' http://localhost:3000/v1/technical-metadata
 ```
 
 Verify that technical metadata was created:
