@@ -26,7 +26,7 @@ set :log_level, :info
 # set :pty, true
 
 # Default value for :linked_files is []
-set :linked_files, %w[config/database.yml config/secrets.yml]
+set :linked_files, %w[config/database.yml config/secrets.yml config/honeybadger.yml]
 
 # Default value for linked_dirs is []
 set :linked_dirs, %w[log config/settings public/system tmp/pids]
@@ -38,7 +38,7 @@ set :linked_dirs, %w[log config/settings public/system tmp/pids]
 # set :keep_releases, 5
 
 # honeybadger_env otherwise defaults to rails_env
-# set :honeybadger_env, fetch(:stage)
+set :honeybadger_env, fetch(:stage)
 
 # update shared_configs before restarting app
 before 'deploy:restart', 'shared_configs:update'
