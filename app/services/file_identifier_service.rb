@@ -39,7 +39,9 @@ class FileIdentifierService
       next unless file['filename'] == filepath
 
       file['matches'].each do |match|
-        next unless match['ns'] == 'pronom'
+        # This is a temporary tweak to allow testing to continue.
+        # next unless match['ns'] == 'pronom'
+        next unless match['ns'] == 'archivematica'
 
         return [extract_pronom_id(match), extract_mimetype(match)]
       end
