@@ -18,7 +18,7 @@ WORKDIR /app
 
 COPY Gemfile Gemfile.lock ./
 
-RUN bundle config set without 'production'
+RUN bundle config set without 'development test'
 RUN bundle install
 
 COPY . .
