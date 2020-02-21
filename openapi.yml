@@ -49,11 +49,12 @@ paths:
 components:
   schemas:
     Druid:
+      description: Digital Repository Unique Identifier (ID)
       type: string
       pattern: '^druid:[b-df-hjkmnp-tv-z]{2}[0-9]{3}[b-df-hjkmnp-tv-z]{2}[0-9]{4}$'
       example: 'druid:bc123df4567'
     FileURI:
-      summary: File URI for the absolute path of the file
+      description: File URI for the absolute path of the file
       type: string
       pattern: '^file:\/\/\/([^\\/]+\/)*[^\\/]+$'
       example: 'file:///foo/bar/baz/quix.jp2'
