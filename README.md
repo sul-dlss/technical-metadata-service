@@ -1,6 +1,8 @@
 [![CircleCI](https://circleci.com/gh/sul-dlss/technical-metadata-service.svg?style=svg)](https://circleci.com/gh/sul-dlss/technical-metadata-service)
 [![Maintainability](https://api.codeclimate.com/v1/badges/7f4010377decf07ba1e4/maintainability)](https://codeclimate.com/github/sul-dlss/technical-metadata-service/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/7f4010377decf07ba1e4/test_coverage)](https://codeclimate.com/github/sul-dlss/technical-metadata-service/test_coverage)
+[![Docker image](https://images.microbadger.com/badges/image/suldlss/technical-metadata-service.svg)](https://microbadger.com/images/suldlss/technical-metadata-service "Get your own image badge on microbadger.com")
+[![OpenAPI Validator](http://validator.swagger.io/validator?url=https://raw.githubusercontent.com/sul-dlss/technical-metadata-service/master/openapi.yml)](http://validator.swagger.io/validator/debug?url=https://raw.githubusercontent.com/sul-dlss/technical-metadata-service/master/openapi.yml)
 
 # Technical Metadata Service
 
