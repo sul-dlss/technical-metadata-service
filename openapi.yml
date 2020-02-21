@@ -46,6 +46,31 @@ paths:
                   type: array
                   items:
                     $ref: '#/components/schemas/FileURI'
+  /v1/technical-metadata/druid/{druid}:
+    get:
+      tags:
+        - metadata
+      summary: Get the metadata for the files associated with a druid
+      description: ''
+      operationId: technical_metadata#show_by_druid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TechnicalMetadataResponse'
+        '404':
+          description: Druid not found
+      parameters:
+        - name: druid
+          in: path
+          description: druid for which to return the technical metadata
+          required: true
+          schema:
+            $ref: '#/components/schemas/Druid'
 components:
   schemas:
     Druid:
@@ -58,3 +83,25 @@ components:
       type: string
       pattern: '^file:\/\/\/([^\\/]+\/)*[^\\/]+$'
       example: 'file:///foo/bar/baz/quix.jp2'
+    TechnicalMetadataResponse:
+      description: Technical metadata for a single file
+      type: object
+      properties:
+        druid:
+          $ref: '#/components/schemas/Druid'
+        filename:
+          type: string
+        filetype:
+          description: Pronom id
+          type: string
+        mimetype:
+          type: string
+        bytes:
+          type: integer
+        height:
+          type: integer
+        width:
+          type: integer
+      required:
+        - druid
+        - filename

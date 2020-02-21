@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_20_211359) do
+ActiveRecord::Schema.define(version: 2020_02_21_141923) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,6 +28,7 @@ ActiveRecord::Schema.define(version: 2020_02_20_211359) do
     t.integer "height"
     t.integer "width"
     t.index ["druid", "filename"], name: "index_dro_files_on_druid_and_filename", unique: true
+    t.index ["druid"], name: "index_dro_files_on_druid"
   end
 
 end
