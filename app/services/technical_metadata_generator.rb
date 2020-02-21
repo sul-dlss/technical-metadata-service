@@ -57,6 +57,7 @@ class TechnicalMetadataGenerator
     # No need to generate if md5's match.
     return if dro_file && dro_file.md5 == md5
 
+    # Note that when upserting, all object must have same keys
     upserts << upsert_for(filepath, md5).merge(generate_metadata(filepath))
   rescue StandardError => e
     errors << "Error generating for #{filepath} (#{druid}): #{e.message}"
@@ -71,7 +72,20 @@ class TechnicalMetadataGenerator
       tool_versions: {
         'siegfried' => file_identifier.version
       }
-    }
+    }.deep_merge(generate_metadata_for_mimetype(mimetype, filepath))
+  end
+
+  def generate_metadata_for_mimetype(mimetype, filepath)
+    # Additional characterizers can be added here.
+    # Need to provide all keys for upsert, so creating a blank metadata template.
+    metadata = { height: nil, width: nil }
+
+    if !mimetype.nil? && mimetype.start_with?('image/')
+      metadata[:height], metadata[:width] = image_characterizer.characterize(filepath: filepath)
+      metadata[:tool_versions] = { 'exiftool' => image_characterizer.version }
+    end
+
+    metadata
   end
 
   def filename_for(filepath)
@@ -107,5 +121,9 @@ class TechnicalMetadataGenerator
 
   def file_identifier
     @file_identifier ||= FileIdentifierService.new
+  end
+
+  def image_characterizer
+    @image_characterizer ||= ImageCharacterizerService.new
   end
 end
