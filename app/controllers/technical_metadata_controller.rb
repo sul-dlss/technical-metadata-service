@@ -12,4 +12,10 @@ class TechnicalMetadataController < ApplicationController
 
     head :ok
   end
+
+  # GET /v1/technical-metadata/druid/{druid}
+  def show_by_druid
+    @files = DroFile.where(druid: params[:druid])
+    return head(:not_found) if @files.empty?
+  end
 end

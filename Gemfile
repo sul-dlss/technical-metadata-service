@@ -9,6 +9,7 @@ gem 'rails', '~> 6.0.2', '>= 6.0.2.1'
 gem 'committee' # validates Open API spec (OAS)
 gem 'config'
 gem 'honeybadger'
+gem 'jbuilder'
 gem 'jwt'
 gem 'okcomputer'
 gem 'pg'
