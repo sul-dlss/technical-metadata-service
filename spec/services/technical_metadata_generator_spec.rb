@@ -100,4 +100,22 @@ RSpec.describe TechnicalMetadataGenerator do
       expect(DroFile).not_to exist(filename: '0002.html')
     end
   end
+
+  context 'when some DroFiles are 0 bytes' do
+    let(:filepaths) do
+      [
+        'spec/fixtures/test/0001.html',
+        'spec/fixtures/test/bar.txt',
+        'spec/fixtures/test/foo.jpg',
+        'spec/fixtures/test/zero.txt'
+      ]
+    end
+
+    it 'does not identify them' do
+      expect(errors.length).to eq(0)
+      file = DroFile.find_by!(druid: druid, filename: 'zero.txt')
+      expect(file.bytes).to eq(0)
+      expect(file.filetype).to be_nil
+    end
+  end
 end

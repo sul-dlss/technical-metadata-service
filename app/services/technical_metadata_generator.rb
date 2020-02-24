@@ -65,14 +65,15 @@ class TechnicalMetadataGenerator
   end
 
   def generate_metadata(filepath)
-    filetype, mimetype = file_identifier.identify(filepath: filepath)
-    {
-      filetype: filetype,
-      mimetype: mimetype,
-      tool_versions: {
-        'siegfried' => file_identifier.version
-      }
-    }.deep_merge(generate_metadata_for_mimetype(mimetype, filepath))
+    # Need to provide all keys for upsert, so creating a blank metadata template.
+    metadata = { filetype: nil, mimetype: nil, tool_versions: {} }
+
+    if ::File.size(filepath).positive?
+      metadata[:filetype], metadata[:mimetype] = file_identifier.identify(filepath: filepath)
+      metadata[:tool_versions]['siegfried'] = file_identifier.version
+    end
+
+    metadata.deep_merge(generate_metadata_for_mimetype(metadata[:mimetype], filepath))
   end
 
   def generate_metadata_for_mimetype(mimetype, filepath)
