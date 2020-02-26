@@ -103,6 +103,8 @@ class TechnicalMetadataGenerator
       filename: filename_for(filepath),
       md5: md5,
       bytes: ::File.size(filepath),
+      file_create: ::File.birthtime(filepath),
+      file_modification: ::File.mtime(filepath),
       created_at: Time.zone.now,
       updated_at: Time.zone.now
     }
