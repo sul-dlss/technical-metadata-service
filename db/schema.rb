@@ -29,6 +29,7 @@ ActiveRecord::Schema.define(version: 2020_02_26_055313) do
     t.integer "width"
     t.datetime "file_modification"
     t.datetime "file_create"
+    t.jsonb "pdf_metadata"
     t.index ["druid", "filename"], name: "index_dro_files_on_druid_and_filename", unique: true
     t.index ["druid"], name: "index_dro_files_on_druid"
   end

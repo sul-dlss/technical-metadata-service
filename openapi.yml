@@ -83,6 +83,30 @@ components:
       type: string
       pattern: '^file:\/\/\/([^\\/]+\/)*[^\\/]+$'
       example: 'file:///foo/bar/baz/quix.jp2'
+    PdfMetadata:
+      description: PDF-specific technical metadata
+      type: object
+      properties:
+        pdf_version:
+          type: string
+        pages:
+          type: integer
+        page_size:
+          type: string
+        tagged:
+          type: boolean
+        encrypted:
+          type: boolean
+        javascript:
+          type: boolean
+        form:
+          type: boolean
+        text:
+          type: boolean
+        creator:
+          type: string
+        producer:
+          type: string
     TechnicalMetadataResponse:
       description: Technical metadata for a single file
       type: object
@@ -108,6 +132,8 @@ components:
           type: integer
         width:
           type: integer
+        pdf_metdata:
+          $ref: '#/components/schemas/PdfMetadata'
       required:
         - druid
         - filename

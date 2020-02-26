@@ -2,4 +2,4 @@
 
 json.ignore_nil!
 json.array! @files, :druid, :filename, :filetype, :mimetype, :bytes, :file_create, :file_modification,
-            :height, :width
+            :height, :width, :pdf_metadata
