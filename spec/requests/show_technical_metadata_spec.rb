@@ -6,7 +6,7 @@ RSpec.describe 'Show technical metadata' do
 
   before do
     DroFile.create(druid: 'druid:bc123df4568', filename: '0001.html', md5: '1711cb9f08a0504e1035d198d08edda9',
-                   bytes: 10, filetype: 'test', mimetype: 'text/test', height: 14, width: 15)
+                   bytes: 10, filetype: 'test', mimetype: 'text/test', image_metadata: { height: 14, width: 15 })
     DroFile.create(druid: 'druid:bc123df4568', filename: '0002.xyz', md5: '2811cb9f08a0504e1035d198d08edda9', bytes: 11)
   end
 
@@ -15,7 +15,7 @@ RSpec.describe 'Show technical metadata' do
       let(:response_json) do
         [
           { 'druid' => 'druid:bc123df4568', 'filename' => '0001.html', 'filetype' => 'test',
-            'mimetype' => 'text/test', 'bytes' => 10, 'height' => 14, 'width' => 15 },
+            'mimetype' => 'text/test', 'bytes' => 10, 'image_metadata' => { 'height' => 14, 'width' => 15 } },
           { 'druid' => 'druid:bc123df4568', 'filename' => '0002.xyz', 'bytes' => 11 }
         ]
       end

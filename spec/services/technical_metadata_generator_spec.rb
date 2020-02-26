@@ -25,7 +25,7 @@ RSpec.describe TechnicalMetadataGenerator do
                                                         .and_return(['fmt/20', 'application/pdf'])
     allow(ImageCharacterizerService).to receive(:new).and_return(image_characterizer_service)
     allow(image_characterizer_service).to receive(:characterize).with(filepath: 'spec/fixtures/test/foo.jpg')
-                                                                .and_return([200, 151])
+                                                                .and_return(height: 200, width: 151)
     allow(PdfCharacterizerService).to receive(:new).and_return(pdf_characterizer_service)
     allow(pdf_characterizer_service).to receive(:characterize).with(filepath: 'spec/fixtures/test/brief.pdf').and_return(form: false,
                                                                                                                          pages: 111,
@@ -75,8 +75,8 @@ RSpec.describe TechnicalMetadataGenerator do
         expect(file3.filetype).to eq('fmt/43')
         expect(file3.mimetype).to eq('image/jpeg')
         expect(file3.bytes).to eq(16_245)
-        expect(file3.height).to eq(200)
-        expect(file3.width).to eq(151)
+        expect(file3.image_metadata['height']).to eq(200)
+        expect(file3.image_metadata['width']).to eq(151)
         expect(file3.tool_versions).to eq('siegfried' => '1.4.5', 'exiftool' => '11.85')
 
         file4 = DroFile.find_by!(druid: druid, filename: 'brief.pdf')

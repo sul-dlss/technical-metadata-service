@@ -62,7 +62,7 @@ RSpec.describe ImageCharacterizerService do
       let(:status) { instance_double(Process::Status, success?: true) }
 
       it 'returns height and width' do
-        expect(characterization).to eq([694, 1366])
+        expect(characterization).to eq(height: 694, width: 1366)
         expect(Open3).to have_received(:capture2e).with('exiftool -ImageHeight -ImageWidth -json bar.png')
       end
     end
@@ -79,7 +79,7 @@ RSpec.describe ImageCharacterizerService do
       let(:status) { instance_double(Process::Status, success?: true) }
 
       it 'returns nil' do
-        expect(characterization).to eq([nil, nil])
+        expect(characterization).to eq(nil)
       end
     end
 

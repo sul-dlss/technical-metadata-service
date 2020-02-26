@@ -25,11 +25,10 @@ ActiveRecord::Schema.define(version: 2020_02_26_055313) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "mimetype"
-    t.integer "height"
-    t.integer "width"
     t.datetime "file_modification"
     t.datetime "file_create"
     t.jsonb "pdf_metadata"
+    t.jsonb "image_metadata"
     t.index ["druid", "filename"], name: "index_dro_files_on_druid_and_filename", unique: true
     t.index ["druid"], name: "index_dro_files_on_druid"
   end

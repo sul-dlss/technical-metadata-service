@@ -79,12 +79,12 @@ class TechnicalMetadataGenerator
   def generate_metadata_for_mimetype(mimetype, filepath)
     # Additional characterizers can be added here.
     # Need to provide all keys for upsert, so creating a blank metadata template.
-    metadata = { height: nil, width: nil, pdf_metadata: nil }
+    metadata = { image_metadata: nil, pdf_metadata: nil }
 
     return metadata if mimetype.nil?
 
     if mimetype.start_with?('image/')
-      metadata[:height], metadata[:width] = image_characterizer.characterize(filepath: filepath)
+      metadata[:image_metadata] = image_characterizer.characterize(filepath: filepath)
       metadata[:tool_versions] = { 'exiftool' => image_characterizer.version }
     elsif mimetype == 'application/pdf'
       metadata[:pdf_metadata] = pdf_characterizer.characterize(filepath: filepath)

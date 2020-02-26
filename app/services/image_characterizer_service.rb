@@ -8,7 +8,7 @@ class ImageCharacterizerService
   end
 
   # @param [String] filepath of the image to characterize
-  # @return [Integer,Integer|nil,nil] height, width of the image or nil, nil if unknown
+  # @return [Hash] attributes including height and width
   # @raise [ImageCharacterizerService::Error]
   def characterize(filepath:)
     output, status = Open3.capture2e("exiftool -ImageHeight -ImageWidth -json #{filepath}")
@@ -38,7 +38,11 @@ class ImageCharacterizerService
     json_output.each do |file|
       next unless file['SourceFile'] == filepath
 
-      return file['ImageHeight'], file['ImageWidth']
+      attributes = {}.tap do |metadata|
+        metadata[:height] = file['ImageHeight'] unless file['ImageHeight'].nil?
+        metadata[:width] = file['ImageWidth'] unless file['ImageWidth'].nil?
+      end
+      return attributes.presence
     end
 
     raise Error, "Unable to find image attributes for #{filepath} in: #{output}"
