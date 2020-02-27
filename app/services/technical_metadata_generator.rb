@@ -12,7 +12,8 @@ class TechnicalMetadataGenerator
     @druid = druid
     @filepaths = filepaths
     @errors = []
-    @upserts = []
+    @dro_file_upserts = []
+    @dro_file_part_inserts = {}
   end
 
   # Generate and persist technical metadata.
@@ -21,6 +22,7 @@ class TechnicalMetadataGenerator
   # for all files.
   # @return [Array<String>] errors
   # rubocop:disable Metrics/AbcSize
+  # rubocop:disable Metrics/MethodLength
   def generate
     # Check that file exists for every filepath. If it doesn't, add to errors and fail.
     check_files_exist
@@ -35,16 +37,20 @@ class TechnicalMetadataGenerator
 
     ApplicationRecord.transaction do
       to_delete.each(&:destroy)
-      DroFile.upsert_all(upserts, unique_by: %i[druid filename])
+      dro_file_upserts.each do |upsert|
+        dro_file = upsert_dro_file(upsert)
+        insert_dro_file_parts(dro_file)
+      end
     end
 
     errors
   end
   # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/MethodLength
 
   private
 
-  attr_reader :druid, :filepaths, :errors, :upserts
+  attr_reader :druid, :filepaths, :errors, :dro_file_upserts, :dro_file_part_inserts
 
   def check_files_exist
     filepaths.each { |filepath| errors << "#{filepath} not found" unless File.exist?(filepath) }
@@ -58,7 +64,7 @@ class TechnicalMetadataGenerator
     return if dro_file && dro_file.md5 == md5
 
     # Note that when upserting, all object must have same keys
-    upserts << upsert_for(filepath, md5).merge(generate_metadata(filepath))
+    dro_file_upserts << upsert_for(filepath, md5).merge(generate_metadata(filepath))
   rescue StandardError => e
     errors << "Error generating for #{filepath} (#{druid}): #{e.message}"
     raise
@@ -76,10 +82,10 @@ class TechnicalMetadataGenerator
     metadata.deep_merge(generate_metadata_for_mimetype(metadata[:mimetype], filepath))
   end
 
+  # rubocop:disable Metrics/AbcSize
+  # rubocop:disable Metrics/MethodLength
   def generate_metadata_for_mimetype(mimetype, filepath)
-    # Additional characterizers can be added here.
-    # Need to provide all keys for upsert, so creating a blank metadata template.
-    metadata = { image_metadata: nil, pdf_metadata: nil }
+    metadata = { image_metadata: nil, pdf_metadata: nil, av_metadata: nil }
 
     return metadata if mimetype.nil?
 
@@ -89,10 +95,16 @@ class TechnicalMetadataGenerator
     elsif mimetype == 'application/pdf'
       metadata[:pdf_metadata] = pdf_characterizer.characterize(filepath: filepath)
       metadata[:tool_versions] = { 'poppler' => pdf_characterizer.version }
+    elsif mimetype.start_with?('audio/') || mimetype.start_with?('video/')
+      metadata[:av_metadata],
+          dro_file_part_inserts[filename_for(filepath)] = av_characterizer.characterize(filepath: filepath)
+      metadata[:tool_versions] = { 'mediainfo' => av_characterizer.version }
     end
 
     metadata
   end
+  # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/MethodLength
 
   def filename_for(filepath)
     ::File.basename(filepath)
@@ -122,6 +134,26 @@ class TechnicalMetadataGenerator
     to_delete
   end
 
+  def upsert_dro_file(upsert)
+    dro_file = DroFile.find_by(druid: upsert[:druid], filename: upsert[:filename])
+    if dro_file
+      # Removing all of the existing file parts. They will be re-added.
+      dro_file.dro_file_parts.destroy_all
+      dro_file.update(upsert)
+    else
+      dro_file = DroFile.create(upsert)
+    end
+    dro_file
+  end
+
+  def insert_dro_file_parts(dro_file)
+    return unless dro_file_part_inserts.key?(dro_file.filename)
+
+    # Adding the Dro_file's id to the insert.
+    dro_file_part_inserts[dro_file.filename].each { |part_insert| part_insert[:dro_file_id] = dro_file.id }
+    DroFilePart.insert_all!(dro_file_part_inserts[dro_file.filename])
+  end
+
   def filenames
     @filenames ||= filepaths.map { |filepath| filename_for(filepath) }
   end
@@ -136,5 +168,9 @@ class TechnicalMetadataGenerator
 
   def pdf_characterizer
     @pdf_characterizer ||= PdfCharacterizerService.new
+  end
+
+  def av_characterizer
+    @av_characterizer ||= AvCharacterizerService.new
   end
 end

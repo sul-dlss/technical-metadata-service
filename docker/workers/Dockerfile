@@ -10,7 +10,7 @@ FROM ruby:2.7.0-buster
 RUN curl -sS https://bintray.com/user/downloadSubjectPublicKey?username=bintray | apt-key add - && \
   echo "deb http://dl.bintray.com/siegfried/debian wheezy main" | tee -a /etc/apt/sources.list && \
   apt-get update -qq && \
-  apt-get install -y build-essential postgresql-client siegfried exiftool popper-utils
+  apt-get install -y build-essential postgresql-client siegfried exiftool popper-utils mediainfo
 
 # Get bundler 2.0
 RUN gem install bundler

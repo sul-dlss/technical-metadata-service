@@ -73,11 +73,79 @@ paths:
             $ref: '#/components/schemas/Druid'
 components:
   schemas:
+    AudioMetadata:
+      description: Audio-specific technical metadata
+      type: object
+      properties:
+        format_profile:
+          type: string
+        codec_id:
+          type: string
+        channels:
+          type: string
+        sampling_rate:
+          type: integer
+        bit_depth:
+          type: integer
+        stream_size:
+          type: integer
+    AvMetadata:
+      description: Audio/visual-specific technical metadata
+      type: object
+      properties:
+        video_count:
+          type: integer
+        audio_count:
+          type: integer
+        other_count:
+          type: integer
+        file_extension:
+          type: string
+        format:
+          type: string
+        format_profile:
+          type: string
+        codec_id:
+          type: string
+        duration:
+          type: number
+          format: float
+        frame_rate:
+          type: number
+          format: float
+        encoded_date:
+          type: string
+          format: date-time
     Druid:
       description: Digital Repository Unique Identifier (ID)
       type: string
       pattern: '^druid:[b-df-hjkmnp-tv-z]{2}[0-9]{3}[b-df-hjkmnp-tv-z]{2}[0-9]{4}$'
       example: 'druid:bc123df4567'
+    FilePart:
+      description: Technical metadata for part of a file, e.g., a track
+      type: object
+      properties:
+        part_type:
+          type: string
+          enum:
+            - 'audio'
+            - 'video'
+            - 'text'
+            - 'other'
+        part_id:
+          type: string
+        order:
+          type: integer
+        format:
+          type: string
+        audio_metadata:
+          $ref: '#/components/schemas/AudioMetadata'
+        video_metadata:
+          $ref: '#/components/schemas/VideoMetadata'
+        other_metadata:
+          $ref: '#/components/schemas/OtherAvMetadata'
+      required:
+        - part_type
     FileURI:
       description: File URI for the absolute path of the file
       type: string
@@ -91,6 +159,14 @@ components:
           type: integer
         width:
           type: integer
+    OtherAvMetadata:
+      description: Other technical metadata for a file part
+      type: object
+      properties:
+        other_type:
+          type: string
+        type:
+          type: string
     PdfMetadata:
       description: PDF-specific technical metadata
       type: object
@@ -137,6 +213,41 @@ components:
           $ref: '#/components/schemas/ImageMetadata'
         pdf_metdata:
           $ref: '#/components/schemas/PdfMetadata'
+        av_metadata:
+          $ref: '#/components/schemas/AvMetadata'
       required:
         - druid
         - filename
+    VideoMetadata:
+      description: Video-specific technical metadata
+      type: object
+      properties:
+        format_profile:
+          type: string
+        codec_id:
+          type: string
+        height:
+          type: integer
+        width:
+          type: integer
+        display_aspect_ratio:
+          type: number
+          format: float
+        pixel_aspect_ratio:
+          type: number
+          format: float
+        frame_rate:
+          type: number
+          format: float
+        color_space:
+          type: string
+        chroma_subsampling:
+          type: string
+        bit_depth:
+          type: integer
+        language:
+          type: string
+        stream_size:
+          type: integer
+        standard:
+          type: string

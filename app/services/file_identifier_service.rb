@@ -39,7 +39,8 @@ class FileIdentifierService
       next unless file['filename'] == filepath
 
       file['matches'].each do |match|
-        next unless match['ns'] == 'pronom'
+        # Depending on the version of siegfried, either ns or id field.
+        next unless match['ns'] == 'pronom' || match['id'] == 'pronom'
 
         return [extract_pronom_id(match), extract_mimetype(match)]
       end

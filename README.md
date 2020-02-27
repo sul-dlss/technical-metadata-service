@@ -41,13 +41,20 @@ To install on OS X:
 brew install exiftool
 ```
 
-
 ### Poppler
 [Poppler](https://poppler.freedesktop.org/) is used for PDF characterization.
 
 To install on OS X:
 ```
 brew install poppler
+```
+
+### MediaInfo
+[MediaInfo](https://mediaarea.net/en/MediaInfo) is used for A/V characterization.
+
+To install on OS X:
+```
+brew install mediainfo
 ```
 
 ## Testing
@@ -110,6 +117,15 @@ $ rails c
 > client.workflow_status({druid: 'druid:bc123df4567', workflow: 'accessionWF', process: 'technical-metadata'})
 # should be "completed"
 ```
+
+## Rake
+To generate for an item:
+
+```shell
+$ bundler exec rake techmd:generate['druid:bc123df4567','spec/fixtures/test/0001.html spec/fixtures/test/bar.txt spec/fixtures/test/brief.pdf spec/fixtures/test/foo.jpg spec/fixtures/test/max.webm spec/fixtures/test/noam.ogg']
+Success
+```
+
 
 ## Docker
 
