@@ -15,7 +15,7 @@ class TechnicalMetadataController < ApplicationController
 
   # GET /v1/technical-metadata/druid/{druid}
   def show_by_druid
-    @files = DroFile.where(druid: params[:druid])
+    @files = DroFile.where(druid: params[:druid]).order(:filename)
     return head(:not_found) if @files.empty?
   end
 end

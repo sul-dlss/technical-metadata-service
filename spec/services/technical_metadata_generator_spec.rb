@@ -11,6 +11,8 @@ RSpec.describe TechnicalMetadataGenerator do
 
   let(:image_characterizer_service) { instance_double(ImageCharacterizerService, version: '11.85') }
 
+  let(:pdf_characterizer_service) { instance_double(PdfCharacterizerService, version: '0.85.0') }
+
   before do
     allow(FileIdentifierService).to receive(:new).and_return(file_identifier_service)
     allow(file_identifier_service).to receive(:identify).with(filepath: 'spec/fixtures/test/0001.html')
@@ -19,9 +21,19 @@ RSpec.describe TechnicalMetadataGenerator do
                                                         .and_return(['x-fmt/111', 'text/plain'])
     allow(file_identifier_service).to receive(:identify).with(filepath: 'spec/fixtures/test/foo.jpg')
                                                         .and_return(['fmt/43', 'image/jpeg'])
+    allow(file_identifier_service).to receive(:identify).with(filepath: 'spec/fixtures/test/brief.pdf')
+                                                        .and_return(['fmt/20', 'application/pdf'])
     allow(ImageCharacterizerService).to receive(:new).and_return(image_characterizer_service)
     allow(image_characterizer_service).to receive(:characterize).with(filepath: 'spec/fixtures/test/foo.jpg')
                                                                 .and_return([200, 151])
+    allow(PdfCharacterizerService).to receive(:new).and_return(pdf_characterizer_service)
+    allow(pdf_characterizer_service).to receive(:characterize).with(filepath: 'spec/fixtures/test/brief.pdf').and_return(form: false,
+                                                                                                                         pages: 111,
+                                                                                                                         tagged: false,
+                                                                                                                         encrypted: false,
+                                                                                                                         page_size: '612 x 792 pts (letter)',
+                                                                                                                         pdf_version: '1.6',
+                                                                                                                         text: false)
   end
 
   describe '#generate' do
@@ -30,7 +42,8 @@ RSpec.describe TechnicalMetadataGenerator do
         [
           'spec/fixtures/test/0001.html',
           'spec/fixtures/test/bar.txt',
-          'spec/fixtures/test/foo.jpg'
+          'spec/fixtures/test/foo.jpg',
+          'spec/fixtures/test/brief.pdf'
         ]
       end
 
@@ -65,6 +78,20 @@ RSpec.describe TechnicalMetadataGenerator do
         expect(file3.height).to eq(200)
         expect(file3.width).to eq(151)
         expect(file3.tool_versions).to eq('siegfried' => '1.4.5', 'exiftool' => '11.85')
+
+        file4 = DroFile.find_by!(druid: druid, filename: 'brief.pdf')
+        expect(file4.md5).to eq('0e00380c2a5eea678fcb42b39d913463')
+        expect(file4.filetype).to eq('fmt/20')
+        expect(file4.mimetype).to eq('application/pdf')
+        expect(file4.bytes).to eq(624_716)
+        expect(file4.pdf_metadata).to eq('form' => false,
+                                         'pages' => 111,
+                                         'tagged' => false,
+                                         'encrypted' => false,
+                                         'page_size' => '612 x 792 pts (letter)',
+                                         'pdf_version' => '1.6',
+                                         'text' => false)
+        expect(file4.tool_versions).to eq('siegfried' => '1.4.5', 'poppler' => '0.85.0')
       end
     end
 

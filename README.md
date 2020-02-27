@@ -42,6 +42,14 @@ brew install exiftool
 ```
 
 
+### Poppler
+[Poppler](https://poppler.freedesktop.org/) is used for PDF characterization.
+
+To install on OS X:
+```
+brew install poppler
+```
+
 ## Testing
 
 ### CI build
