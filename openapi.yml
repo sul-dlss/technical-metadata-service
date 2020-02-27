@@ -130,9 +130,6 @@ components:
           type: string
         bytes:
           type: integer
-        file_create:
-          type: string
-          format: date-time
         file_modification:
           type: string
           format: date-time
