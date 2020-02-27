@@ -83,6 +83,14 @@ components:
       type: string
       pattern: '^file:\/\/\/([^\\/]+\/)*[^\\/]+$'
       example: 'file:///foo/bar/baz/quix.jp2'
+    ImageMetadata:
+      description: Image-specific technical metadata
+      type: object
+      properties:
+        height:
+          type: integer
+        width:
+          type: integer
     PdfMetadata:
       description: PDF-specific technical metadata
       type: object
@@ -128,10 +136,8 @@ components:
         file_modification:
           type: string
           format: date-time
-        height:
-          type: integer
-        width:
-          type: integer
+        image_metadata:
+          $ref: '#/components/schemas/ImageMetadata'
         pdf_metdata:
           $ref: '#/components/schemas/PdfMetadata'
       required:
