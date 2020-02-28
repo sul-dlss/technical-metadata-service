@@ -126,6 +126,12 @@ $ bundler exec rake techmd:generate['druid:bc123df4567','spec/fixtures/test/0001
 Success
 ```
 
+To generate for an item from a moab (preservation storage):
+
+```shell
+$ bundler exec rake techmd:generate_moab['druid:bc123df4567']
+Queued
+```
 
 ## Docker
 

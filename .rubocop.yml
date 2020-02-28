@@ -16,6 +16,7 @@ Layout/LineLength:
   Exclude:
     - 'spec/services/technical_metadata_generator_spec.rb'
     - 'spec/services/file_identifier_service_spec.rb'
+    - 'spec/services/moab_processing_service_spec.rb'
 
 Metrics/AbcSize:
   Exclude:

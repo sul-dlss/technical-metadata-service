@@ -13,7 +13,7 @@ RSpec.describe 'Request create technical metadata' do
   let(:jwt) { JWT.encode(payload, Settings.hmac_secret, 'HS256') }
 
   before do
-    allow(TechnicalMetadataJob).to receive(:perform_later)
+    allow(TechnicalMetadataWorkflowJob).to receive(:perform_later)
   end
 
   context 'when authorized' do
@@ -24,8 +24,8 @@ RSpec.describe 'Request create technical metadata' do
 
       filepaths = ['/spec/fixtures/test/0001.html', '/spec/fixtures/test/bar.txt', '/spec/fixtures/test/foo.txt']
       expect(response).to have_http_status(:ok)
-      expect(TechnicalMetadataJob).to have_received(:perform_later).with(druid: 'druid:bc123df4567',
-                                                                         filepaths: filepaths)
+      expect(TechnicalMetadataWorkflowJob).to have_received(:perform_later).with(druid: 'druid:bc123df4567',
+                                                                                 filepaths: filepaths)
     end
   end
 
@@ -36,7 +36,7 @@ RSpec.describe 'Request create technical metadata' do
            headers: { 'Content-Type' => 'application/json' }
 
       expect(response).to be_unauthorized
-      expect(TechnicalMetadataJob).not_to have_received(:perform_later)
+      expect(TechnicalMetadataWorkflowJob).not_to have_received(:perform_later)
     end
   end
 end

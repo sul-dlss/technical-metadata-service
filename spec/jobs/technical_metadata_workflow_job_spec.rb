@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe TechnicalMetadataJob do
+RSpec.describe TechnicalMetadataWorkflowJob do
   let(:job) { described_class.new }
 
   let(:druid) { 'druid:abc123' }
@@ -13,25 +13,27 @@ RSpec.describe TechnicalMetadataJob do
     ]
   end
 
+  let(:client) { instance_double(Dor::Workflow::Client, update_status: nil, update_error_status: nil) }
+
   before do
     allow(TechnicalMetadataGenerator).to receive(:generate).and_return(errors)
-    allow(Honeybadger).to receive(:notify)
+    allow(Dor::Workflow::Client).to receive(:new).and_return(client)
     job.perform(druid: druid, filepaths: filepaths)
   end
 
   context 'when no errors' do
     let(:errors) { [] }
 
-    it('does nothing') do
-      expect(TechnicalMetadataGenerator).to have_received(:generate).with(druid: druid, filepaths: filepaths)
+    it('logs success') do
+      expect(client).to have_received(:update_status)
     end
   end
 
   context 'when an error' do
     let(:errors) { ['Ooops'] }
 
-    it('notifies Honeybadger') do
-      expect(Honeybadger).to have_received(:notify)
+    it('logs error') do
+      expect(client).to have_received(:update_error_status)
     end
   end
 end
