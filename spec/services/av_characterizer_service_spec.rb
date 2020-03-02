@@ -104,7 +104,7 @@ RSpec.describe AvCharacterizerService do
                                            audio_metadata: { channels: '1', sampling_rate: 44_100,
                                                              stream_size: 10_020 },
                                            video_metadata: nil, other_metadata: nil }]])
-        expect(Open3).to have_received(:capture2e).with('mediainfo -f --Output=JSON noam.ogg')
+        expect(Open3).to have_received(:capture2e).with('mediainfo', '-f', '--Output=JSON', 'noam.ogg')
       end
     end
 
@@ -197,7 +197,7 @@ RSpec.describe AvCharacterizerService do
                                            audio_metadata: { codec_id: 'A_OPUS', channels: '2', sampling_rate: 48_000,
                                                              bit_depth: 32 },
                                            video_metadata: nil, other_metadata: nil }]])
-        expect(Open3).to have_received(:capture2e).with('mediainfo -f --Output=JSON max.webm')
+        expect(Open3).to have_received(:capture2e).with('mediainfo', '-f', '--Output=JSON', 'max.webm')
       end
     end
 
@@ -235,7 +235,7 @@ RSpec.describe AvCharacterizerService do
                                         [{ part_type: 'text', part_id: '2', order: 1, format: nil,
                                            audio_metadata: nil,
                                            video_metadata: nil, other_metadata: nil }]])
-        expect(Open3).to have_received(:capture2e).with('mediainfo -f --Output=JSON make_believe.xyz')
+        expect(Open3).to have_received(:capture2e).with('mediainfo', '-f', '--Output=JSON', 'make_believe.xyz')
       end
     end
 
@@ -277,7 +277,7 @@ RSpec.describe AvCharacterizerService do
                                            audio_metadata: nil,
                                            video_metadata: nil,
                                            other_metadata: { title: title } }]])
-        expect(Open3).to have_received(:capture2e).with('mediainfo -f --Output=JSON make_believe.xyz')
+        expect(Open3).to have_received(:capture2e).with('mediainfo', '-f', '--Output=JSON', 'make_believe.xyz')
       end
     end
 

@@ -11,7 +11,7 @@ class FileIdentifierService
   # @return [String,String|nil,nil] pronom id, mimetype of the file or nil, nil if unknown
   # @raise [FileIdentifierService::Error]
   def identify(filepath:)
-    output, status = Open3.capture2e("sf -json #{filepath}")
+    output, status = Open3.capture2e('sf', '-json', filepath)
     raise Error, "Identifying #{filepath} returned #{status.exitstatus}: #{output}" unless status.success?
 
     extract_file_types(output, filepath)

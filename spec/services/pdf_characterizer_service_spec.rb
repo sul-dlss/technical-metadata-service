@@ -102,7 +102,7 @@ RSpec.describe PdfCharacterizerService do
                                        page_size: '612 x 792 pts (letter)',
                                        pdf_version: '1.6',
                                        text: true)
-        expect(Open3).to have_received(:capture2e).with('pdfinfo brief.pdf')
+        expect(Open3).to have_received(:capture2e).with('pdfinfo', 'brief.pdf')
       end
     end
 
