@@ -17,9 +17,30 @@ Layout/LineLength:
     - 'spec/services/technical_metadata_generator_spec.rb'
     - 'spec/services/file_identifier_service_spec.rb'
 
+Metrics/AbcSize:
+  Exclude:
+    - 'app/services/av_characterizer_service.rb'
+
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*'
+
+Metrics/ClassLength:
+  Exclude:
+    - 'app/services/av_characterizer_service.rb'
+    - 'app/services/technical_metadata_generator.rb'
+
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - 'app/services/av_characterizer_service.rb'
+
+Metrics/MethodLength:
+  Exclude:
+    - 'app/services/av_characterizer_service.rb'
+
+Metrics/PerceivedComplexity:
+  Exclude:
+    - 'app/services/av_characterizer_service.rb'
 
 Style/Documentation:
   Exclude:
