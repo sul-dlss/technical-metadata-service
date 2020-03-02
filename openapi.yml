@@ -61,7 +61,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/TechnicalMetadataResponse'
+                  $ref: '#/components/schemas/DroFile'
         '404':
           description: Druid not found
       parameters:
@@ -116,12 +116,38 @@ components:
         encoded_date:
           type: string
           format: date-time
-    Druid:
-      description: Digital Repository Unique Identifier (ID)
-      type: string
-      pattern: '^druid:[b-df-hjkmnp-tv-z]{2}[0-9]{3}[b-df-hjkmnp-tv-z]{2}[0-9]{4}$'
-      example: 'druid:bc123df4567'
-    FilePart:
+    DroFile:
+      description: Technical metadata for a single file
+      type: object
+      properties:
+        druid:
+          $ref: '#/components/schemas/Druid'
+        filename:
+          type: string
+        filetype:
+          description: Pronom id
+          type: string
+        mimetype:
+          type: string
+        bytes:
+          type: integer
+        file_modification:
+          type: string
+          format: date-time
+        image_metadata:
+          $ref: '#/components/schemas/ImageMetadata'
+        pdf_metdata:
+          $ref: '#/components/schemas/PdfMetadata'
+        av_metadata:
+          $ref: '#/components/schemas/AvMetadata'
+        dro_file_parts:
+          type: array
+          items:
+            $ref: '#/components/schemas/DroFilePart'          
+      required:
+        - druid
+        - filename          
+    DroFilePart:
       description: Technical metadata for part of a file, e.g., a track
       type: object
       properties:
@@ -146,6 +172,11 @@ components:
           $ref: '#/components/schemas/OtherAvMetadata'
       required:
         - part_type
+    Druid:
+      description: Digital Repository Unique Identifier (ID)
+      type: string
+      pattern: '^druid:[b-df-hjkmnp-tv-z]{2}[0-9]{3}[b-df-hjkmnp-tv-z]{2}[0-9]{4}$'
+      example: 'druid:bc123df4567'
     FileURI:
       description: File URI for the absolute path of the file
       type: string
@@ -191,33 +222,6 @@ components:
           type: string
         producer:
           type: string
-    TechnicalMetadataResponse:
-      description: Technical metadata for a single file
-      type: object
-      properties:
-        druid:
-          $ref: '#/components/schemas/Druid'
-        filename:
-          type: string
-        filetype:
-          description: Pronom id
-          type: string
-        mimetype:
-          type: string
-        bytes:
-          type: integer
-        file_modification:
-          type: string
-          format: date-time
-        image_metadata:
-          $ref: '#/components/schemas/ImageMetadata'
-        pdf_metdata:
-          $ref: '#/components/schemas/PdfMetadata'
-        av_metadata:
-          $ref: '#/components/schemas/AvMetadata'
-      required:
-        - druid
-        - filename
     VideoMetadata:
       description: Video-specific technical metadata
       type: object
