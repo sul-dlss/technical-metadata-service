@@ -2,3 +2,6 @@ workflow:
   url: 'https://workflow.example.com/workflow'
 
 hmac_secret: 'my$ecretK3y'
+
+storage_root_map: # empty here, override in #{RAILS_ENV}.yml
+  default: {}

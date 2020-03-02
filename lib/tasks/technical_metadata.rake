@@ -10,4 +10,10 @@ namespace :techmd do
       puts "Failed: #{errors}"
     end
   end
+
+  desc 'Generate technical metadata from moab'
+  task :generate_moab, %i[druid] => :environment do |_task, args|
+    MoabProcessingService.process(druid: args[:druid])
+    puts 'Queued'
+  end
 end

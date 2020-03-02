@@ -28,6 +28,7 @@ gem 'bootsnap', '>= 1.4.2', require: false
 
 # SDR specific
 gem 'dor-workflow-client', '~> 3.17'
+gem 'moab-versioning'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
