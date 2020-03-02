@@ -89,13 +89,13 @@ class TechnicalMetadataGenerator
 
     return metadata if mimetype.nil?
 
-    if mimetype.start_with?('image/')
+    if image?(mimetype)
       metadata[:image_metadata] = image_characterizer.characterize(filepath: filepath)
       metadata[:tool_versions] = { 'exiftool' => image_characterizer.version }
-    elsif mimetype == 'application/pdf'
+    elsif pdf?(mimetype)
       metadata[:pdf_metadata] = pdf_characterizer.characterize(filepath: filepath)
       metadata[:tool_versions] = { 'poppler' => pdf_characterizer.version }
-    elsif mimetype.start_with?('audio/') || mimetype.start_with?('video/')
+    elsif av?(mimetype)
       metadata[:av_metadata],
           dro_file_part_inserts[filename_for(filepath)] = av_characterizer.characterize(filepath: filepath)
       metadata[:tool_versions] = { 'mediainfo' => av_characterizer.version }
@@ -172,5 +172,21 @@ class TechnicalMetadataGenerator
 
   def av_characterizer
     @av_characterizer ||= AvCharacterizerService.new
+  end
+
+  def image?(mimetype)
+    mimetype.start_with?('image/')
+  end
+
+  def pdf?(mimetype)
+    mimetype == 'application/pdf'
+  end
+
+  def av?(mimetype)
+    return true if mimetype.start_with?('audio/')
+    return true if mimetype.start_with?('video/')
+    return true if mimetype == 'application/mp4'
+
+    false
   end
 end
