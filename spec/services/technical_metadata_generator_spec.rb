@@ -7,6 +7,12 @@ RSpec.describe TechnicalMetadataGenerator do
 
   let(:druid) { 'druid:abc123' }
 
+  let(:filepaths) do
+    [
+      'spec/fixtures/test/0001.html'
+    ]
+  end
+
   let(:file_identifier_service) { instance_double(FileIdentifierService, version: '1.4.5') }
 
   let(:image_characterizer_service) { instance_double(ImageCharacterizerService, version: '11.85') }
@@ -138,58 +144,81 @@ RSpec.describe TechnicalMetadataGenerator do
         expect(file6_part.part_type).to eq('video')
         expect(file6_part.video_metadata).to eq('width' => 640, 'height' => 480, 'codec_id' => 'V_VP9', 'frame_rate' => 29.97, 'pixel_aspect_ratio' => 1.0, 'display_aspect_ratio' => 1.333)
       end
+
+      context 'when some files do not exist' do
+        let(:filepaths) do
+          [
+            'spec/fixtures/test/0001.html',
+            'spec/fixtures/test/bar.txt',
+            'spec/fixtures/test/foo.jpg',
+            'spec/fixtures/test/does_not_exist.txt'
+          ]
+        end
+
+        it 'returns an error' do
+          expect(errors.length).to eq(1)
+        end
+      end
     end
 
-    context 'when some files do not exist' do
+    context 'when some DroFiles do not exist' do
+      let(:filepaths) do
+        [
+          'spec/fixtures/test/0001.html',
+          'spec/fixtures/test/bar.txt',
+          'spec/fixtures/test/foo.jpg'
+        ]
+      end
+
+      before do
+        DroFile.create(druid: druid, filename: '0002.html', md5: 'e41d8cd98f00b204e9800998ecf8427e', bytes: 0)
+      end
+
+      it 'deletes them' do
+        expect(errors.length).to eq(0)
+        expect(DroFile).not_to exist(filename: '0002.html')
+      end
+    end
+
+    context 'when some DroFiles are 0 bytes' do
       let(:filepaths) do
         [
           'spec/fixtures/test/0001.html',
           'spec/fixtures/test/bar.txt',
           'spec/fixtures/test/foo.jpg',
-          'spec/fixtures/test/does_not_exist.txt'
+          'spec/fixtures/test/zero.txt'
         ]
       end
 
-      it 'returns an error' do
-        expect(errors.length).to eq(1)
+      it 'does not identify them' do
+        expect(errors.length).to eq(0)
+        file = DroFile.find_by!(druid: druid, filename: 'zero.txt')
+        expect(file.bytes).to eq(0)
+        expect(file.filetype).to be_nil
       end
     end
   end
 
-  context 'when some DroFiles do not exist' do
-    let(:filepaths) do
-      [
-        'spec/fixtures/test/0001.html',
-        'spec/fixtures/test/bar.txt',
-        'spec/fixtures/test/foo.jpg'
-      ]
-    end
-
-    before do
-      DroFile.create(druid: druid, filename: '0002.html', md5: 'e41d8cd98f00b204e9800998ecf8427e', bytes: 0)
-    end
-
-    it 'deletes them' do
-      expect(errors.length).to eq(0)
-      expect(DroFile).not_to exist(filename: '0002.html')
+  describe 'image?' do
+    it 'identifies image mimetypes' do
+      expect(service.send(:image?, 'image/png')).to be_truthy
+      expect(service.send(:image?, 'foo/bar')).to be_falsey
     end
   end
 
-  context 'when some DroFiles are 0 bytes' do
-    let(:filepaths) do
-      [
-        'spec/fixtures/test/0001.html',
-        'spec/fixtures/test/bar.txt',
-        'spec/fixtures/test/foo.jpg',
-        'spec/fixtures/test/zero.txt'
-      ]
+  describe 'pdf?' do
+    it 'identifies pdf mimetypes' do
+      expect(service.send(:pdf?, 'application/pdf')).to be_truthy
+      expect(service.send(:pdf?, 'foo/bar')).to be_falsey
     end
+  end
 
-    it 'does not identify them' do
-      expect(errors.length).to eq(0)
-      file = DroFile.find_by!(druid: druid, filename: 'zero.txt')
-      expect(file.bytes).to eq(0)
-      expect(file.filetype).to be_nil
+  describe 'av?' do
+    it 'identifies av mimetypes' do
+      expect(service.send(:av?, 'application/mp4')).to be_truthy
+      expect(service.send(:av?, 'audio/mp4')).to be_truthy
+      expect(service.send(:av?, 'video/quicktime')).to be_truthy
+      expect(service.send(:av?, 'foo/bar')).to be_falsey
     end
   end
 end
