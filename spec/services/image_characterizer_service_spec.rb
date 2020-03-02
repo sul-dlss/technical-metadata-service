@@ -63,7 +63,7 @@ RSpec.describe ImageCharacterizerService do
 
       it 'returns height and width' do
         expect(characterization).to eq(height: 694, width: 1366)
-        expect(Open3).to have_received(:capture2e).with('exiftool -ImageHeight -ImageWidth -json bar.png')
+        expect(Open3).to have_received(:capture2e).with('exiftool', '-ImageHeight', '-ImageWidth', '-json', 'bar.png')
       end
     end
 

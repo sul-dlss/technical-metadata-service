@@ -12,7 +12,7 @@ class PdfCharacterizerService
   #   form, creator, producer
   # @raise [PdfCharacterizerService::Error]
   def characterize(filepath:)
-    output, status = Open3.capture2e("pdfinfo #{filepath}")
+    output, status = Open3.capture2e('pdfinfo', filepath)
     raise Error, "Characterizing #{filepath} returned #{status.exitstatus}: #{output}" unless status.success?
 
     extract_attributes(output).merge(text: text?(filepath))

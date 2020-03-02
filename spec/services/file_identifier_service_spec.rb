@@ -58,7 +58,7 @@ RSpec.describe FileIdentifierService do
 
       it 'returns pronom id and mimetype' do
         expect(identifiers).to eq(['x-fmt/111', 'text/plain'])
-        expect(Open3).to have_received(:capture2e).with('sf -json bar.txt')
+        expect(Open3).to have_received(:capture2e).with('sf', '-json', 'bar.txt')
       end
     end
 
