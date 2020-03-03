@@ -121,25 +121,23 @@ $ rails c
 ```
 
 ## Rake
-To generate for an item:
+To generate for an item, synchronously and not updating workflow service:
 
 ```shell
 $ bundler exec rake techmd:generate['druid:bc123df4567','spec/fixtures/test/0001.html spec/fixtures/test/bar.txt spec/fixtures/test/brief.pdf spec/fixtures/test/foo.jpg spec/fixtures/test/max.webm spec/fixtures/test/noam.ogg']
 Success
 ```
 
-To generate for an item from a moab (preservation storage):
+To generate for an item from a Moab (from preservation storage):
 
 ```shell
-$ bundler exec rake techmd:generate_moab['druid:bc123df4567']
+$ bundler exec rake techmd:generate_for_moab['druid:bc123df4567']
 Queued
 ```
 
 ## Docker
 
-
 Note that this project's continuous integration build will automatically create and publish an updated image whenever there is a passing build from the `master` branch. If you do need to manually create and publish an image, do the following:
-
 
 Build image:
 
