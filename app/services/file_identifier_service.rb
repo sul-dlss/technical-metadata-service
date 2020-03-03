@@ -39,8 +39,8 @@ class FileIdentifierService
       next unless file['filename'] == filepath
 
       file['matches'].each do |match|
-        # Depending on the version of siegfried, either ns or id field.
-        next unless match['ns'] == 'pronom' || match['id'] == 'pronom'
+        # Note that the structure of matches depends on the version of siegfried. Old and new siegfried are handled.
+        next unless pronom_match?(match)
 
         return [extract_pronom_id(match), extract_mimetype(match)]
       end
@@ -50,12 +50,17 @@ class FileIdentifierService
   end
 
   def extract_pronom_id(match)
-    return nil if match['id'] == 'UNKNOWN'
+    id = match['ns'] == 'pronom' ? match['id'] : match['puid']
+    return nil if id == 'UNKNOWN'
 
-    match['id'].presence
+    id.presence
   end
 
   def extract_mimetype(match)
     match['mime'].presence
+  end
+
+  def pronom_match?(match)
+    match['ns'] == 'pronom' || match['id'] == 'pronom'
   end
 end
