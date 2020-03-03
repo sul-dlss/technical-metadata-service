@@ -25,12 +25,14 @@ For more information on configuring and deploying Sidekiq, see this [doc](https:
 
 ### Siegfried
 
-[Siegfried](https://github.com/richardlehane/siegfried) is used for file identification.
+[Siegfried](https://github.com/richardlehane/siegfried) (version 1.8.0+) is used for file identification.
 
 To install on OS X:
 ```
 brew install richardlehane/digipres/siegfried
 ```
+
+Note that if you are using an earlier version, you may encounter problems as the output format has changed.
 
 ### Exiftool
 
