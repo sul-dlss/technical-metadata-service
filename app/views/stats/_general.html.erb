@@ -1,0 +1,13 @@
+<h2>General Statistics</h2>
+<table class="table table-striped">
+<tbody>
+  <tr>
+    <td>Total Files</td>
+    <td><%= number_with_delimiter(DroFile.count) %></td>
+  </tr>
+  <tr>
+    <td>Total Druids</td>
+  <td><%= number_with_delimiter(DroFile.select(:druid).distinct.count) %></td>
+</tr>
+</tbody>
+</table>

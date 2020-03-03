@@ -9,5 +9,9 @@ Rails.application.routes.draw do
     get '/technical-metadata/druid/:druid', to: 'technical_metadata#show_by_druid'
   end
 
+  resources :home, only: [:index]
+  resources :stats, only: [:index]
+  root to: 'stats#index'
+
   mount Sidekiq::Web => '/queues'
 end

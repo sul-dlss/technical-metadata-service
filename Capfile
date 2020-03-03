@@ -13,8 +13,7 @@ require 'capistrano/bundler'
 # These are waiting for dependencies to be used
 require 'capistrano/honeybadger'
 require 'capistrano/passenger'
-# require 'capistrano/rails'
-require 'capistrano/rails/migrations'
+require 'capistrano/rails'
 require 'dlss/capistrano'
 require 'capistrano/sidekiq'
 

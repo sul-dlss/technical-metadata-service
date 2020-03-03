@@ -1,0 +1,21 @@
+<h2>Processing Statistics</h2>
+<table class="table table-striped">
+<tbody>
+  <tr>
+    <td>In last 10 minutes</td>
+    <td><%= number_with_delimiter(DroFile.where(updated_at: (Time.now - 10.minutes)..Time.now).count) %></td>
+  </tr>
+  <tr>
+    <td>In last hour</td>
+    <td><%= number_with_delimiter(DroFile.where(updated_at: (Time.now - 1.hour)..Time.now).count) %></td>
+  </tr>
+  <tr>
+    <td>In last day</td>
+    <td><%= number_with_delimiter(DroFile.where(updated_at: (Time.now - 1.day)..Time.now).count) %></td>
+  </tr>
+  <tr>
+    <td>In last week</td>
+    <td><%= number_with_delimiter(DroFile.where(updated_at: (Time.now - 1.week)..Time.now).count) %></td>
+  </tr>
+</tbody>
+</table>
