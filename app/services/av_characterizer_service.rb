@@ -100,7 +100,7 @@ class AvCharacterizerService
       metadata[:bit_depth] = track['BitDepth'].to_i if track['BitDepth'].present?
       metadata[:language] = track['Language'] if track['Language'].present?
       metadata[:stream_size] = track['StreamSize'].to_i if track['StreamSize'].present?
-      metadata[:standard] = track['Standard'].to_i if track['Standard'].present?
+      metadata[:standard] = track['Standard'] if track['Standard'].present?
     end
     part
   end

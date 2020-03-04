@@ -152,7 +152,8 @@ RSpec.describe AvCharacterizerService do
           "FrameCount": "995",
           "Encoded_Library": "Lavc58.35.100 libvpx-vp9",
           "Default": "Yes",
-          "Forced": "No"
+          "Forced": "No",
+          "Standard": "NTSC"
           },
           {
           "@type": "Audio",
@@ -191,7 +192,7 @@ RSpec.describe AvCharacterizerService do
                                            audio_metadata: nil,
                                            video_metadata: { codec_id: 'V_VP9', height: 480, width: 640,
                                                              display_aspect_ratio: 1.333, pixel_aspect_ratio: 1.0,
-                                                             frame_rate: 29.97 },
+                                                             frame_rate: 29.97, standard: 'NTSC' },
                                            other_metadata: nil },
                                          { part_type: 'audio', part_id: '2', order: 1, format: 'Opus',
                                            audio_metadata: { codec_id: 'A_OPUS', channels: '2', sampling_rate: 48_000,
