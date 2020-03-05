@@ -16,14 +16,16 @@ RSpec.describe TechnicalMetadataJob do
   before do
     allow(TechnicalMetadataGenerator).to receive(:generate).and_return(errors)
     allow(Honeybadger).to receive(:notify)
-    job.perform(druid: druid, filepaths: filepaths)
+    job.perform(druid: druid, filepaths: filepaths, force: true)
   end
 
   context 'when no errors' do
     let(:errors) { [] }
 
     it('does nothing') do
-      expect(TechnicalMetadataGenerator).to have_received(:generate).with(druid: druid, filepaths: filepaths)
+      expect(TechnicalMetadataGenerator).to have_received(:generate).with(druid: druid,
+                                                                          filepaths: filepaths,
+                                                                          force: true)
     end
   end
 

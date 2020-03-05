@@ -2,15 +2,17 @@
 
 # Generates and persists technical metadata.
 class TechnicalMetadataGenerator
-  def self.generate(druid:, filepaths:)
-    new(druid: druid, filepaths: filepaths).generate
+  def self.generate(druid:, filepaths:, force: false)
+    new(druid: druid, filepaths: filepaths, force: force).generate
   end
 
   # @param [String] druid
   # @param [Array<String>] filepaths of files
-  def initialize(druid:, filepaths:)
+  # @param [Boolean] force generation even if md5 match
+  def initialize(druid:, filepaths:, force: false)
     @druid = druid
     @filepaths = filepaths
+    @force = force
     @errors = []
     @dro_file_upserts = []
     @dro_file_part_inserts = {}
@@ -50,7 +52,7 @@ class TechnicalMetadataGenerator
 
   private
 
-  attr_reader :druid, :filepaths, :errors, :dro_file_upserts, :dro_file_part_inserts
+  attr_reader :druid, :filepaths, :errors, :dro_file_upserts, :dro_file_part_inserts, :force
 
   def check_files_exist
     filepaths.each { |filepath| errors << "#{filepath} not found" unless File.exist?(filepath) }
@@ -61,7 +63,7 @@ class TechnicalMetadataGenerator
     md5 = Digest::MD5.file(filepath).hexdigest
     dro_file = dro_file_for(filepath)
     # No need to generate if md5's match.
-    return if dro_file && dro_file.md5 == md5
+    return unless generate?(dro_file, md5)
 
     # Note that when upserting, all object must have same keys
     dro_file_upserts << upsert_for(filepath, md5).merge(generate_metadata(filepath))
@@ -188,5 +190,9 @@ class TechnicalMetadataGenerator
     return true if mimetype == 'application/mp4'
 
     false
+  end
+
+  def generate?(dro_file, md5)
+    dro_file.nil? || dro_file.md5 != md5 || force
   end
 end

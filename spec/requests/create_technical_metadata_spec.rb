@@ -7,7 +7,8 @@ RSpec.describe 'Request create technical metadata' do
         'file:///spec/fixtures/test/0001.html',
         'file:///spec/fixtures/test/bar.txt',
         'file:///spec/fixtures/test/foo.txt'
-      ] }
+      ],
+      force: true }
   end
   let(:payload) { { sub: 'sdr' } }
   let(:jwt) { JWT.encode(payload, Settings.hmac_secret, 'HS256') }
@@ -25,7 +26,7 @@ RSpec.describe 'Request create technical metadata' do
       filepaths = ['/spec/fixtures/test/0001.html', '/spec/fixtures/test/bar.txt', '/spec/fixtures/test/foo.txt']
       expect(response).to have_http_status(:ok)
       expect(TechnicalMetadataWorkflowJob).to have_received(:perform_later).with(druid: 'druid:bc123df4567',
-                                                                                 filepaths: filepaths)
+                                                                                 filepaths: filepaths, force: true)
     end
   end
 

@@ -6,8 +6,9 @@ class TechnicalMetadataJob < ApplicationJob
 
   # @param [String] druid
   # @param [Array<String>] filepaths of files
-  def perform(druid:, filepaths:)
-    errors = TechnicalMetadataGenerator.generate(druid: druid, filepaths: filepaths)
+  # @param [Boolean] force even if md5 match
+  def perform(druid:, filepaths:, force: false)
+    errors = TechnicalMetadataGenerator.generate(druid: druid, filepaths: filepaths, force: force)
 
     Honeybadger.notify("Generating technical metadata for #{druid} failed: #{errors}") unless errors.empty?
   end

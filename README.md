@@ -124,14 +124,14 @@ $ rails c
 To generate for an item, synchronously and not updating workflow service:
 
 ```shell
-$ bundler exec rake techmd:generate['druid:bc123df4567','spec/fixtures/test/0001.html spec/fixtures/test/bar.txt spec/fixtures/test/brief.pdf spec/fixtures/test/foo.jpg spec/fixtures/test/max.webm spec/fixtures/test/noam.ogg']
+$ bundler exec rake techmd:generate['druid:bc123df4567','spec/fixtures/test/0001.html spec/fixtures/test/bar.txt spec/fixtures/test/brief.pdf spec/fixtures/test/foo.jpg spec/fixtures/test/max.webm spec/fixtures/test/noam.ogg', 'true']
 Success
 ```
 
 To generate for an item from a Moab (from preservation storage):
 
 ```shell
-$ bundler exec rake techmd:generate_for_moab['druid:bc123df4567']
+$ bundler exec rake techmd:generate_for_moab['druid:bc123df4567', 'true']
 Queued
 ```
 

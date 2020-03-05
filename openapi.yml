@@ -46,6 +46,8 @@ paths:
                   type: array
                   items:
                     $ref: '#/components/schemas/FileURI'
+                force:
+                  type: boolean
   /v1/technical-metadata/druid/{druid}:
     get:
       tags:
