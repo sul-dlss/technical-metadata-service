@@ -2,22 +2,24 @@
 
 # Queues metadata generation for files stored as moabs.
 class MoabProcessingService
-  def self.process(druid:)
-    new(druid: druid).process
+  def self.process(druid:, force: false)
+    new(druid: druid, force: force).process
   end
 
   # @param [String] druid
-  def initialize(druid:)
+  # @param [Boolean] force even if md5 match
+  def initialize(druid:, force: false)
     @druid = druid
+    @force = force
   end
 
   def process
-    TechnicalMetadataJob.perform_later(druid: druid, filepaths: filepaths)
+    TechnicalMetadataJob.perform_later(druid: druid, filepaths: filepaths, force: force)
   end
 
   private
 
-  attr_reader :druid
+  attr_reader :druid, :force
 
   def filepaths
     storage_object = Moab::StorageServices.find_storage_object(druid)

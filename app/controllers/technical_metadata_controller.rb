@@ -8,7 +8,7 @@ class TechnicalMetadataController < ApplicationController
   def create
     druid, file_uris = params.require(%i[druid files])
     filepaths = file_uris.map { |file_uri| URI(file_uri).path }
-    TechnicalMetadataWorkflowJob.perform_later(druid: druid, filepaths: filepaths)
+    TechnicalMetadataWorkflowJob.perform_later(druid: druid, filepaths: filepaths, force: params[:force] == true)
 
     head :ok
   end

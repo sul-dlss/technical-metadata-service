@@ -43,9 +43,6 @@ ActiveRecord::Schema.define(version: 2020_03_04_012620) do
     t.jsonb "av_metadata"
     t.index ["druid", "filename"], name: "index_dro_files_on_druid_and_filename", unique: true
     t.index ["druid"], name: "index_dro_files_on_druid"
-    t.index ["filetype"], name: "index_dro_files_on_filetype"
-    t.index ["mimetype"], name: "index_dro_files_on_mimetype"
-    t.index ["updated_at"], name: "index_dro_files_on_updated_at"
   end
 
   add_foreign_key "dro_file_parts", "dro_files"
