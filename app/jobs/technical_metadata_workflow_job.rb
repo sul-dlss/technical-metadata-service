@@ -8,9 +8,9 @@ class TechnicalMetadataWorkflowJob < ApplicationJob
 
   # @param [String] druid
   # @param [Array<String>] filepaths of files
-  def perform(druid:, filepaths:)
+  def perform(druid:, filepaths:, force: false)
     start = Time.zone.now
-    errors = TechnicalMetadataGenerator.generate(druid: druid, filepaths: filepaths)
+    errors = TechnicalMetadataGenerator.generate(druid: druid, filepaths: filepaths, force: force)
     if errors.empty?
       log_success(druid: druid, elapsed: Time.zone.now - start)
     else
