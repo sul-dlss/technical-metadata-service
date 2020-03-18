@@ -32,3 +32,10 @@ workflow_service.log
 
 spec/examples.txt
 coverage/*
+
+/public/packs
+/public/packs-test
+/node_modules
+/yarn-error.log
+yarn-debug.log*
+.yarn-integrity

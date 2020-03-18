@@ -49,6 +49,23 @@ jobs:
         paths:
         - vendor/bundle
 
+    # Only necessary if app uses webpacker or yarn in some other way
+    - restore_cache:
+        keys:
+          - technical-metadata-yarn-{{ checksum "yarn.lock" }}
+          - technical-metadata-
+    - run:
+        name: Yarn Install
+        command: yarn install --cache-folder ~/.cache/yarn
+    # Store yarn / webpacker cache
+    - save_cache:
+        key: technical-metadata-yarn-{{ checksum "yarn.lock" }}
+        paths:
+          - ~/.cache/yarn
+    - run:
+        name: Webpacker compile
+        command: NODE_ENV=test bundle exec rails webpacker:compile
+
     - run:
         name: Check styles using rubocop
         command: bundle exec rubocop

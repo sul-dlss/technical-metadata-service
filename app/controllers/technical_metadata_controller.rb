@@ -3,7 +3,7 @@
 require 'uri'
 
 # TechnicalMetadataController provides methods for technical metadata for DRO files.
-class TechnicalMetadataController < ApplicationController
+class TechnicalMetadataController < ApiController
   # POST /v1/technical-metadata
   def create
     druid, file_uris = params.require(%i[druid files])

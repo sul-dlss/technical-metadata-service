@@ -11,7 +11,7 @@ set :deploy_to, '/opt/app/techmd/dor_techmd'
 
 # Since we use webpack rather than sprockets, change the prefix
 # see: http://blog.tap349.com/webpack/2018/05/22/webpack-troubleshooting/
-# set :assets_prefix, 'packs'
+set :assets_prefix, 'packs'
 
 # Default value for :scm is :git
 # set :scm, :git
@@ -29,7 +29,7 @@ set :log_level, :info
 set :linked_files, %w[config/database.yml config/secrets.yml config/honeybadger.yml]
 
 # Default value for linked_dirs is []
-set :linked_dirs, %w[log config/settings public/system tmp/pids]
+set :linked_dirs, %w[log config/settings vendor/bundle public/system tmp/pids]
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }

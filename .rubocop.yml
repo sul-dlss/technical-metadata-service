@@ -10,6 +10,8 @@ AllCops:
     - 'vendor/**/*'
     - 'db/schema.rb'
     - 'db/migrate/*.rb'
+    - 'bin/webpack*'
+    - 'node_modules/**/*'
 
 Layout/LineLength:
   Max: 120
