@@ -7,7 +7,7 @@ class TechnicalMetadataController < ApiController
   # POST /v1/technical-metadata
   def create
     druid, file_uris = params.require(%i[druid files])
-    filepaths = file_uris.map { |file_uri| URI(file_uri).path }
+    filepaths = file_uris.map { |file_uri| CGI.unescape(URI(file_uri).path) }
     TechnicalMetadataWorkflowJob.perform_later(druid: druid, filepaths: filepaths, force: params[:force] == true)
 
     head :ok
