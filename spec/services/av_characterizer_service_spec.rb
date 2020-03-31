@@ -66,7 +66,7 @@ RSpec.describe AvCharacterizerService do
           "OverallBitRate_Mode": "VBR",
           "OverallBitRate": "84735",
           "StreamSize": "593",
-          "Encoded_Date": "UTC 2020-02-27 18:23:48",
+          "Encoded_Date": #{encoded_date},
           "File_Modified_Date": "UTC 2020-02-27 18:23:48",
           "File_Modified_Date_Local": "2020-02-27 10:23:48"
           },
@@ -97,14 +97,32 @@ RSpec.describe AvCharacterizerService do
 
       let(:status) { instance_double(Process::Status, success?: true) }
 
-      it 'returns av_metadata and track metadata' do
-        expect(characterization).to eq([{ audio_count: 1, file_extension: 'ogg', format: 'Ogg', duration: 1.002,
-                                          encoded_date: '2020-02-27T18:23:48+00:00' },
-                                        [{ part_type: 'audio', part_id: '28470', order: nil, format: 'Vorbis',
-                                           audio_metadata: { channels: '1', sampling_rate: 44_100,
-                                                             stream_size: 10_020 },
-                                           video_metadata: nil, other_metadata: nil }]])
-        expect(Open3).to have_received(:capture2e).with('mediainfo', '-f', '--Output=JSON', 'noam.ogg')
+      context 'when date is UTC' do
+        let(:encoded_date) { '"UTC 2020-02-27 18:23:48"' }
+
+        it 'returns av_metadata and track metadata' do
+          expect(characterization).to eq([{ audio_count: 1, file_extension: 'ogg', format: 'Ogg', duration: 1.002,
+                                            encoded_date: '2020-02-27T18:23:48+00:00' },
+                                          [{ part_type: 'audio', part_id: '28470', order: nil, format: 'Vorbis',
+                                             audio_metadata: { channels: '1', sampling_rate: 44_100,
+                                                               stream_size: 10_020 },
+                                             video_metadata: nil, other_metadata: nil }]])
+          expect(Open3).to have_received(:capture2e).with('mediainfo', '-f', '--Output=JSON', 'noam.ogg')
+        end
+      end
+
+      context 'when date does not have a timezone' do
+        let(:encoded_date) { '"2020-02-27 18:23:48"' }
+
+        it 'returns av_metadata and track metadata' do
+          expect(characterization).to eq([{ audio_count: 1, file_extension: 'ogg', format: 'Ogg', duration: 1.002,
+                                            encoded_date: '2020-02-27T18:23:48' },
+                                          [{ part_type: 'audio', part_id: '28470', order: nil, format: 'Vorbis',
+                                             audio_metadata: { channels: '1', sampling_rate: 44_100,
+                                                               stream_size: 10_020 },
+                                             video_metadata: nil, other_metadata: nil }]])
+          expect(Open3).to have_received(:capture2e).with('mediainfo', '-f', '--Output=JSON', 'noam.ogg')
+        end
       end
     end
 
