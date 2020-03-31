@@ -126,8 +126,12 @@ class AvCharacterizerService
     }
   end
 
+  # @param [String] time a date with format like 'UTC 2020-02-27 06:06:04' - although sometimes UTC doesn't come through
   def to_iso_time(time)
-    # UTC 2020-02-27 06:06:04
+    unless time.start_with?('UTC')
+      return Time.strptime("#{time}+0000", '%Y-%m-%d %H:%M:%S%z').iso8601.delete_suffix('+00:00')
+    end
+
     Time.strptime("#{time}+0000", 'UTC %Y-%m-%d %H:%M:%S%z').iso8601
   end
 end
