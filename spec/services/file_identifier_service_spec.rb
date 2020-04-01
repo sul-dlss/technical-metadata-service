@@ -88,5 +88,22 @@ RSpec.describe FileIdentifierService do
         expect { identifiers }.to raise_error(FileIdentifierService::Error)
       end
     end
+
+    context 'when siegfried reports an error' do
+      let(:identifiers) { service.identify(filepath: 'bar.zip') }
+
+      let(:output) do
+        <<~OUTPUT
+          [ERROR] zip: not a valid zip file
+          {"siegfried":"1.8.0","scandate":"2020-04-01T07:04:16-07:00","signature":"default.sig","created":"2020-01-21T23:30:42+01:00","identifiers":[{"name":"pronom","details":"DROID_SignatureFile_V96.xml; container-signature-20200121.xml"}],"files":[{"filename":"bar.zip","filesize": 8372334239,"modified":"2020-03-30T22:43:14-07:00","errors": "zip: not a valid zip file","matches": [{"ns":"pronom","id":"x-fmt/263","format":"ZIP Format","version":"","mime":"application/zip","basis":"extension match zip; byte match at [[0 4] [8372334131 3] [8372334217 4]]","warning":""}]}]}
+        OUTPUT
+      end
+
+      let(:status) { instance_double(Process::Status, success?: true) }
+
+      it 'returns pronom id and mimetype' do
+        expect(identifiers).to eq(['x-fmt/263', 'application/zip'])
+      end
+    end
   end
 end
