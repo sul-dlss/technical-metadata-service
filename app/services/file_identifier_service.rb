@@ -34,7 +34,7 @@ class FileIdentifierService
   private
 
   def extract_file_types(output, filepath)
-    json_output = JSON.parse(output)
+    json_output = output_to_json(output, filepath)
     json_output['files'].each do |file|
       next unless file['filename'] == filepath
 
@@ -56,5 +56,12 @@ class FileIdentifierService
 
   def extract_mimetype(match)
     match['mime'].presence
+  end
+
+  def output_to_json(output, filepath)
+    json_match = output.match(/\{.+\}/)
+    raise Error, "Unable to find results for #{filepath} in: #{output}" if json_match.nil?
+
+    JSON.parse(json_match[0])
   end
 end
