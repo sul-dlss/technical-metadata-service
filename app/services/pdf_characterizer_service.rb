@@ -35,7 +35,7 @@ class PdfCharacterizerService
   private
 
   def text?(filepath)
-    output, status = Open3.capture2e("pdftotext #{filepath} -")
+    output, status = Open3.capture2e('pdftotext', filepath, '-')
     raise Error, "Extracting text from #{filepath} returned #{status.exitstatus}: #{output}" unless status.success?
 
     output.present?
