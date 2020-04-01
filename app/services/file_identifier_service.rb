@@ -11,8 +11,8 @@ class FileIdentifierService
   # @return [String,String|nil,nil] pronom id, mimetype of the file or nil, nil if unknown
   # @raise [FileIdentifierService::Error]
   def identify(filepath:)
-    output, status = Open3.capture2e('sf', '-json', filepath)
-    raise Error, "Identifying #{filepath} returned #{status.exitstatus}: #{output}" unless status.success?
+    output, err, status = Open3.capture3('sf', '-json', filepath)
+    raise Error, "Identifying #{filepath} returned #{status.exitstatus}: #{err}\n#{output}" unless status.success?
 
     extract_file_types(output, filepath)
   end
@@ -34,7 +34,7 @@ class FileIdentifierService
   private
 
   def extract_file_types(output, filepath)
-    json_output = output_to_json(output, filepath)
+    json_output = JSON.parse(output)
     json_output['files'].each do |file|
       next unless file['filename'] == filepath
 
@@ -56,12 +56,5 @@ class FileIdentifierService
 
   def extract_mimetype(match)
     match['mime'].presence
-  end
-
-  def output_to_json(output, filepath)
-    json_match = output.match(/\{.+\}/)
-    raise Error, "Unable to find results for #{filepath} in: #{output}" if json_match.nil?
-
-    JSON.parse(json_match[0])
   end
 end
