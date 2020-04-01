@@ -103,6 +103,7 @@ RSpec.describe PdfCharacterizerService do
                                        pdf_version: '1.6',
                                        text: true)
         expect(Open3).to have_received(:capture2e).with('pdfinfo', 'brief.pdf')
+        expect(Open3).to have_received(:capture2e).with('pdftotext', 'brief.pdf', '-')
       end
     end
 
