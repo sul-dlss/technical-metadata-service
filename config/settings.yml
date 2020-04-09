@@ -5,3 +5,5 @@ hmac_secret: 'my$ecretK3y'
 
 storage_root_map: # empty here, override in #{RAILS_ENV}.yml
   default: {}
+
+redis_url: redis://localhost:6379/

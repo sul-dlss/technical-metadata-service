@@ -46,4 +46,6 @@ before 'deploy:restart', 'shared_configs:update'
 # Sidekiq configuration (run three processes)
 # see sidekiq.yml for concurrency and queue settings
 set :sidekiq_env, 'production'
+set :sidekiq_roles, :worker
+set :passenger_roles, :web
 set :sidekiq_processes, 3
