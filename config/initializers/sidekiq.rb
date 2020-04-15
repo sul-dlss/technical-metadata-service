@@ -2,8 +2,8 @@
 
 Sidekiq.configure_server do |config|
   config.redis = { url: Settings.redis_url }
-  ActiveRecord::Base.logger = Sidekiq::Logging.logger
-  Rails.logger = Sidekiq::Logging.logger
+  ActiveRecord::Base.logger = Sidekiq.logger
+  Rails.logger = Sidekiq.logger
 end
 
 Sidekiq.configure_client do |config|
