@@ -85,9 +85,6 @@ GEM
       capistrano (~> 3.1)
       capistrano-bundler (~> 1.1)
     capistrano-shared_configs (0.2.2)
-    capistrano-sidekiq (1.0.3)
-      capistrano (>= 3.9.0)
-      sidekiq (>= 3.4, < 6.0)
     committee (3.3.0)
       json_schema (~> 0.14, >= 0.14.3)
       openapi_parser (>= 0.6.1)
@@ -211,7 +208,7 @@ GEM
     pg (1.2.3)
     puma (4.3.3)
       nio4r (~> 2.0)
-    rack (2.0.9)
+    rack (2.2.2)
     rack-protection (2.0.8.1)
       rack
     rack-proxy (0.6.5)
@@ -284,11 +281,11 @@ GEM
       rubocop (>= 0.68.1)
     ruby-progressbar (1.10.1)
     ruby_dep (1.5.0)
-    sidekiq (5.2.8)
-      connection_pool (~> 2.2, >= 2.2.2)
-      rack (< 2.1.0)
-      rack-protection (>= 1.5.0)
-      redis (>= 3.3.5, < 5)
+    sidekiq (6.0.6)
+      connection_pool (>= 2.2.2)
+      rack (~> 2.0)
+      rack-protection (>= 2.0.0)
+      redis (>= 4.1.0)
     sidekiq-statistic (1.4.0)
       sidekiq (>= 5.0)
       tilt (~> 2.0)
@@ -334,7 +331,6 @@ DEPENDENCIES
   byebug
   capistrano-passenger
   capistrano-rails
-  capistrano-sidekiq
   committee
   config
   dlss-capistrano
@@ -353,7 +349,7 @@ DEPENDENCIES
   rubocop (~> 0.79.0)
   rubocop-rails
   rubocop-rspec
-  sidekiq (~> 5.2)
+  sidekiq (~> 6.0)
   sidekiq-statistic
   simplecov (~> 0.17.1)
   spring

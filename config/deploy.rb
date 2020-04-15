@@ -40,12 +40,12 @@ set :linked_dirs, %w[log config/settings vendor/bundle public/system tmp/pids]
 # honeybadger_env otherwise defaults to rails_env
 set :honeybadger_env, fetch(:stage)
 
+set :passenger_roles, :web
+
 # update shared_configs before restarting app
 before 'deploy:restart', 'shared_configs:update'
-
-# Sidekiq configuration (run three processes)
-# see sidekiq.yml for concurrency and queue settings
-set :sidekiq_env, 'production'
-set :sidekiq_roles, :worker
-set :passenger_roles, :web
-set :sidekiq_processes, 3
+# These hooks are from capistrano-sidekiq but the sidekiq tasks themselves are defined in dor-services-app
+after 'deploy:starting',  'sidekiq:quiet'
+after 'deploy:updated',   'sidekiq:stop'
+after 'deploy:published', 'sidekiq:start'
+after 'deploy:failed', 'sidekiq:restart'
