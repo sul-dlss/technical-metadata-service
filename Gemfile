@@ -13,7 +13,7 @@ gem 'jbuilder'
 gem 'jwt'
 gem 'okcomputer'
 gem 'pg'
-gem 'sidekiq', '~> 5.2'
+gem 'sidekiq', '~> 6.0'
 gem 'sidekiq-statistic'
 gem 'webpacker', '~> 4.0'
 
@@ -52,6 +52,5 @@ end
 group :deployment do
   gem 'capistrano-passenger', require: false
   gem 'capistrano-rails', require: false
-  gem 'capistrano-sidekiq', require: false
   gem 'dlss-capistrano', require: false
 end
