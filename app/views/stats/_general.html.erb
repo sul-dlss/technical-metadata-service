@@ -5,9 +5,6 @@
     <td>Total Files</td>
     <td><%= number_with_delimiter(DroFile.count) %></td>
   </tr>
-  <tr>
-    <td>Total Druids</td>
-  <td><%= number_with_delimiter(DroFile.select(:druid).distinct.count) %></td>
 </tr>
 </tbody>
 </table>
