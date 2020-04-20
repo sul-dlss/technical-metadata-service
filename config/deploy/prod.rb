@@ -5,4 +5,3 @@ server 'dor-techmd-worker-prod-a.stanford.edu', user: 'techmd', roles: %w[app wo
 
 Capistrano::OneTimeKey.generate_one_time_key!
 set :rails_env, 'production'
-set :bundle_without, %w[deployment test development].join(' ')
