@@ -8,7 +8,9 @@ class TechnicalMetadataController < ApiController
   def create
     druid, file_uris = params.require(%i[druid files])
     filepaths = file_uris.map { |file_uri| CGI.unescape(URI(file_uri).path) }
-    TechnicalMetadataWorkflowJob.perform_later(druid: druid, filepaths: filepaths, force: params[:force] == true)
+    queue = params['lane-id'] == 'low' ? :low : :default
+    force = params[:force] == true
+    TechnicalMetadataWorkflowJob.set(queue: queue).perform_later(druid: druid, filepaths: filepaths, force: force)
 
     head :ok
   end
