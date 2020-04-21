@@ -52,5 +52,5 @@ end
 group :deployment do
   gem 'capistrano-passenger', require: false
   gem 'capistrano-rails', require: false
-  gem 'dlss-capistrano', require: false
+  gem 'dlss-capistrano', '~> 3.6', require: false
 end
