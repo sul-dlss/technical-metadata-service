@@ -128,7 +128,7 @@ class AvCharacterizerService
   end
 
   # @param [String,nil] time a date with format like 'UTC 2020-02-27 06:06:04' or nil if blank or unparseable.
-  # Note that time may not include UTC.
+  # @note time may not include UTC.
   def to_iso_time(time)
     return nil if time.blank?
 
