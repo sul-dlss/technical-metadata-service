@@ -152,6 +152,19 @@ RSpec.describe AvCharacterizerService do
           expect(Open3).to have_received(:capture2e).with('mediainfo', '-f', '--Output=JSON', 'noam.ogg')
         end
       end
+
+      context 'when unparseable date' do
+        let(:encoded_date) { '"2017.05.10 193630+0000"' }
+
+        it 'returns av_metadata and track metadata' do
+          expect(characterization).to eq([{ audio_count: 1, file_extension: 'ogg', format: 'Ogg', duration: 1.002 },
+                                          [{ part_type: 'audio', part_id: '28470', order: nil, format: 'Vorbis',
+                                             audio_metadata: { channels: '1', sampling_rate: 44_100,
+                                                               stream_size: 10_020 },
+                                             video_metadata: nil, other_metadata: nil }]])
+          expect(Open3).to have_received(:capture2e).with('mediainfo', '-f', '--Output=JSON', 'noam.ogg')
+        end
+      end
     end
 
     context 'when video file is characterized' do

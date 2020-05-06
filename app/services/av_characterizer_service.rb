@@ -68,7 +68,8 @@ class AvCharacterizerService
       metadata[:codec_id] = track['CodecID'] if track['CodecID'].present?
       metadata[:duration] = track['Duration'].to_f if track['Duration'].present?
       metadata[:frame_rate] = track['FrameRate'].to_f if track['FrameRate'].present?
-      metadata[:encoded_date] = to_iso_time(track['Encoded_Date']) if track['Encoded_Date'].present?
+      encoded_date = to_iso_time(track['Encoded_Date'])
+      metadata[:encoded_date] = encoded_date if encoded_date
     end
   end
 
@@ -126,12 +127,17 @@ class AvCharacterizerService
     }
   end
 
-  # @param [String] time a date with format like 'UTC 2020-02-27 06:06:04' - although sometimes UTC doesn't come through
+  # @param [String,nil] time a date with format like 'UTC 2020-02-27 06:06:04' or nil if blank or unparseable.
+  # @note time may not include UTC.
   def to_iso_time(time)
+    return nil if time.blank?
+
     time.gsub!(/[:-]/, '') # strips : or - in date and time parts to handle cases where the date has colons or dashes
     date_format = '%Y%m%d %H%M%S%z'
     return Time.strptime("#{time}+0000", date_format).iso8601.delete_suffix('+00:00') unless time.start_with?('UTC')
 
     Time.strptime("#{time}+0000", "UTC #{date_format}").iso8601
+  rescue ArgumentError
+    nil
   end
 end
