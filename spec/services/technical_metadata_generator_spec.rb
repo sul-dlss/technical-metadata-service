@@ -199,6 +199,38 @@ RSpec.describe TechnicalMetadataGenerator do
         expect(file.filetype).to be_nil
       end
     end
+
+    context 'when metadata includes a null character' do
+      let(:filepaths) do
+        [
+          'spec/fixtures/test/brief.pdf'
+        ]
+      end
+
+      before do
+        allow(pdf_characterizer_service).to receive(:characterize).with(filepath: 'spec/fixtures/test/brief.pdf').and_return(form: false,
+                                                                                                                             pages: 111,
+                                                                                                                             tagged: false,
+                                                                                                                             encrypted: false,
+                                                                                                                             page_size: '612 x 792 pts (letter)',
+                                                                                                                             pdf_version: '1.6',
+                                                                                                                             text: false,
+                                                                                                                             creator: "Null character\u0000")
+      end
+
+      it 'removes the null character' do
+        expect(errors.length).to eq(0)
+        file = DroFile.find_by!(druid: druid, filename: 'brief.pdf')
+        expect(file.pdf_metadata).to eq('form' => false,
+                                        'pages' => 111,
+                                        'tagged' => false,
+                                        'encrypted' => false,
+                                        'page_size' => '612 x 792 pts (letter)',
+                                        'pdf_version' => '1.6',
+                                        'text' => false,
+                                        'creator' => 'Null character')
+      end
+    end
   end
 
   context 'when forcing' do

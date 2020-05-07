@@ -66,7 +66,7 @@ class TechnicalMetadataGenerator
     return unless generate?(dro_file, md5)
 
     # Note that when upserting, all object must have same keys
-    dro_file_upserts << upsert_for(filepath, md5).merge(generate_metadata(filepath))
+    dro_file_upserts << merged_upsert(upsert_for(filepath, md5), generate_metadata(filepath))
   rescue StandardError => e
     errors << "Error generating for #{filepath} (#{druid}): #{e.message}"
     raise
@@ -114,6 +114,13 @@ class TechnicalMetadataGenerator
 
   def dro_file_for(filepath)
     DroFile.find_by(druid: druid, filename: filename_for(filepath))
+  end
+
+  def merged_upsert(dro_upsert, metadata_upsert)
+    upsert = dro_upsert.merge(metadata_upsert)
+    # Removing null character, which causes ActiveRecord::StatementInvalid: PG::UntranslatableCharacter:
+    # ERROR: unsupported Unicode escape sequence DETAIL: \u0000 cannot be converted to text.
+    upsert.deep_transform_values { |value| value.is_a?(String) ? value.gsub("\u0000", '') : value }
   end
 
   def upsert_for(filepath, md5)
