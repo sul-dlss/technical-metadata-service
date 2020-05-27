@@ -38,7 +38,7 @@ jobs:
     - restore_cache:
         keys:
         - technical-metadata-bundle-v2-{{ checksum "Gemfile.lock" }}
-        - technical-metadata--bundle-v2-
+        - technical-metadata-bundle-v2-
 
     - run:
         name: Bundle Install
@@ -57,6 +57,7 @@ jobs:
     - run:
         name: Yarn Install
         command: yarn install --cache-folder ~/.cache/yarn
+
     # Store yarn / webpacker cache
     - save_cache:
         key: technical-metadata-yarn-{{ checksum "yarn.lock" }}
