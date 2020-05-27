@@ -2,6 +2,7 @@
   "name": "technical_metadata",
   "private": true,
   "dependencies": {
+    "@babel/preset-env": "=7.9.0",
     "@github/time-elements": "^3.1.0",
     "@rails/webpacker": "4.2.2",
     "bootstrap": "^4.4.1",
