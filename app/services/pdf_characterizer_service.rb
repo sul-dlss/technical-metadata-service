@@ -39,6 +39,13 @@ class PdfCharacterizerService
     raise Error, "Extracting text from #{filepath} returned #{status.exitstatus}: #{output}" unless status.success?
 
     output.present?
+  rescue ArgumentError => e
+    # Some ETDs have PDFs with encoding problems, which means they don't have
+    # text we can meaningfully interact with. Andrew Berger says this should
+    # return `false` in these instances.
+    return false if e.message.match?('invalid byte sequence')
+
+    raise e
   end
 
   # rubocop:disable Metrics/AbcSize
