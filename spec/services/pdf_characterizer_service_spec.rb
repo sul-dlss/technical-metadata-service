@@ -4,9 +4,7 @@ require 'open3'
 
 RSpec.describe PdfCharacterizerService do
   let(:service) { described_class.new }
-
   let(:text_output) { '   ' }
-
   let(:text_status) { instance_double(Process::Status, success?: true) }
 
   before do
@@ -24,7 +22,6 @@ RSpec.describe PdfCharacterizerService do
           Copyright 1996-2011 Glyph & Cog, LLC
         OUTPUT
       end
-
       let(:status) { instance_double(Process::Status, success?: true) }
 
       it 'returns version' do
@@ -75,7 +72,6 @@ RSpec.describe PdfCharacterizerService do
           PDF version:    1.6
         OUTPUT
       end
-
       let(:text_output) do
         <<~OUTPUT
           319
@@ -89,7 +85,6 @@ RSpec.describe PdfCharacterizerService do
           contacts with witnesses with the potential to influence their testimony.” Id., Vol. II at 157.
         OUTPUT
       end
-
       let(:status) { instance_double(Process::Status, success?: true) }
 
       it 'returns pdf attributes' do
@@ -113,11 +108,77 @@ RSpec.describe PdfCharacterizerService do
           Creator:        Acrobat PDFMaker 5.0 for Word
         OUTPUT
       end
-
       let(:status) { instance_double(Process::Status, success?: true) }
 
       it 'returns false for text attribute' do
         expect(characterization[:text]).to be_falsey
+      end
+    end
+
+    context 'when file is not valid UTF-8' do
+      let(:output) do
+        <<~OUTPUT
+          Creator:        Acrobat PDFMaker 5.0 for Word
+          Producer:       Mac OS X 10.9.5 Quartz PDFContext
+          CreationDate:   2020-01-18T16:55:26-05
+          ModDate:        2020-01-18T16:55:26-05
+          Tagged:         no
+          UserProperties: no
+          Suspects:       no
+          Form:           none
+          JavaScript:     no
+          Pages:          111
+          Encrypted:      no
+          Page size:      612 x 792 pts (letter)
+          Page rot:       0
+          File size:      624716 bytes
+          Optimized:      yes
+          PDF version:    1.6
+        OUTPUT
+      end
+      let(:status) { instance_double(Process::Status, success?: true) }
+      let(:text_output) { instance_double(String) }
+
+      before do
+        allow(text_output).to receive(:present?).and_raise(ArgumentError, 'invalid byte sequence in UTF-8')
+      end
+
+      it 'returns false for text attribute' do
+        expect(characterization[:text]).to be false
+      end
+    end
+
+    context 'when file is problematic in unforeseen ways' do
+      let(:error_message) { 'this is not something we have encountered before' }
+      let(:output) do
+        <<~OUTPUT
+          Creator:        Acrobat PDFMaker 5.0 for Word
+          Producer:       Mac OS X 10.9.5 Quartz PDFContext
+          CreationDate:   2020-01-18T16:55:26-05
+          ModDate:        2020-01-18T16:55:26-05
+          Tagged:         no
+          UserProperties: no
+          Suspects:       no
+          Form:           none
+          JavaScript:     no
+          Pages:          111
+          Encrypted:      no
+          Page size:      612 x 792 pts (letter)
+          Page rot:       0
+          File size:      624716 bytes
+          Optimized:      yes
+          PDF version:    1.6
+        OUTPUT
+      end
+      let(:status) { instance_double(Process::Status, success?: true) }
+      let(:text_output) { instance_double(String) }
+
+      before do
+        allow(text_output).to receive(:present?).and_raise(ArgumentError, error_message)
+      end
+
+      it 'returns false for text attribute' do
+        expect { characterization }.to raise_error(ArgumentError, error_message)
       end
     end
 
