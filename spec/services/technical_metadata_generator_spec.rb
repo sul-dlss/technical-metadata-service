@@ -288,4 +288,17 @@ RSpec.describe TechnicalMetadataGenerator do
       expect(service.send(:av?, 'foo/bar')).to be_falsey
     end
   end
+
+  describe 'zero tracks for an av file' do
+    before do
+      DroFile.create(druid: druid, filename: 'not_audio.tar', md5: 'asdfas9000lkjds;alfj34jk', bytes: 0,
+                     filetype: 'test', mimetype: 'audio/mp4')
+      service.instance_variable_set(:@dro_file_part_inserts, 'not_audio.tar': [])
+    end
+
+    it 'insert_dro_file_parts return nil when file has zero tracks' do
+      file1 = DroFile.find_by!(druid: druid, filename: 'not_audio.tar')
+      expect(service.send(:insert_dro_file_parts, file1)).to be_nil
+    end
+  end
 end
