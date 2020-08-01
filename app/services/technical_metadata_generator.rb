@@ -156,7 +156,7 @@ class TechnicalMetadataGenerator
   end
 
   def insert_dro_file_parts(dro_file)
-    return unless dro_file_part_inserts.key?(dro_file.filename)
+    return if dro_file_part_inserts[dro_file.filename].blank?
 
     # Adding the Dro_file's id to the insert.
     dro_file_part_inserts[dro_file.filename].each { |part_insert| part_insert[:dro_file_id] = dro_file.id }
