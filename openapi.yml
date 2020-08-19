@@ -48,6 +48,7 @@ paths:
                     $ref: '#/components/schemas/FileURI'
                 force:
                   type: boolean
+                  description: Extract the technical metadata even if a record already exists with that checksum
                 lane-id:
                   type: string
                   enum:
@@ -151,10 +152,10 @@ components:
         dro_file_parts:
           type: array
           items:
-            $ref: '#/components/schemas/DroFilePart'          
+            $ref: '#/components/schemas/DroFilePart'
       required:
         - druid
-        - filename          
+        - filename
     DroFilePart:
       description: Technical metadata for part of a file, e.g., a track
       type: object
