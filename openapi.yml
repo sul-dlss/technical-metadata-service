@@ -195,10 +195,11 @@ components:
       description: Image-specific technical metadata
       type: object
       properties:
+        # Some image formats, e.g., SVG return floats for height and width, hence type: number
         height:
-          type: integer
+          type: number
         width:
-          type: integer
+          type: number
     OtherAvMetadata:
       description: Other technical metadata for a file part
       type: object
