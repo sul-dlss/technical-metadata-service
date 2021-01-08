@@ -4,4 +4,4 @@ storage_root01 is structured to mimic a preservation storage root. It contains a
 
 This is a complete moab; the whole moab is provided as a fixture as introspecting the moab is handled by the moab-versioning gem.
 
-This was originally copied from https://github.com/sul-dlss/preservation_catalog/tree/master/spec/fixtures.
+This was originally copied from https://github.com/sul-dlss/preservation_catalog/tree/main/spec/fixtures.
