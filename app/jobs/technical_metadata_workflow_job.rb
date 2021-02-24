@@ -38,6 +38,6 @@ class TechnicalMetadataWorkflowJob < ApplicationJob
   end
 
   def client
-    @client ||= Dor::Workflow::Client.new(url: Settings.workflow.url)
+    @client ||= Dor::Workflow::Client.new(url: Settings.workflow.url, logger: Rails.logger)
   end
 end
