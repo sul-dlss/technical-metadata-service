@@ -120,7 +120,7 @@ class TechnicalMetadataGenerator
     upsert = dro_upsert.merge(metadata_upsert)
     # Removing null character, which causes ActiveRecord::StatementInvalid: PG::UntranslatableCharacter:
     # ERROR: unsupported Unicode escape sequence DETAIL: \u0000 cannot be converted to text.
-    upsert.deep_transform_values { |value| value.is_a?(String) ? value.gsub("\u0000", '') : value }
+    upsert.deep_transform_values { |value| value.is_a?(String) ? value.delete("\u0000") : value }
   end
 
   def upsert_for(filepath, md5)

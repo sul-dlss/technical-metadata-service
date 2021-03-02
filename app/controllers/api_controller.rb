@@ -18,8 +18,8 @@ class ApiController < ActionController::API
     @decoded_auth_token ||= begin
       body = JWT.decode(http_auth_header, Settings.hmac_secret, true, algorithm: 'HS256').first
       HashWithIndifferentAccess.new body
-                            rescue StandardError
-                              nil
+    rescue StandardError
+      nil
     end
   end
 
@@ -27,6 +27,6 @@ class ApiController < ActionController::API
     return if request.headers[TOKEN_HEADER].blank?
 
     field = request.headers[TOKEN_HEADER]
-    field.split(' ').last
+    field.split.last
   end
 end
