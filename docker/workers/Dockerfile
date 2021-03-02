@@ -4,7 +4,7 @@
 #
 # NOTE: This uses a Debian-based image rather than an Alpine-based image so that
 #       we can install Debian packages. In particular: siegfried.
-FROM ruby:2.7.1-buster
+FROM ruby:2.7.2-buster
 
 # postgresql-client is required for invoke.sh
 RUN curl -sS https://bintray.com/user/downloadSubjectPublicKey?username=bintray | apt-key add - && \

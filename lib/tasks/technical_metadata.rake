@@ -4,7 +4,7 @@ namespace :techmd do
   desc 'Generate technical metadata (synchronously) from druid + filepaths'
   task :generate, %i[druid filepaths force] => :environment do |_task, args|
     errors = TechnicalMetadataGenerator.generate(druid: args[:druid],
-                                                 filepaths: args[:filepaths].split(' '),
+                                                 filepaths: args[:filepaths].split,
                                                  force: args[:force] == 'true')
     if errors.empty?
       puts 'Success'
