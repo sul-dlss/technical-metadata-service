@@ -122,7 +122,9 @@ jobs:
     executor: docker-publisher
     steps:
     - checkout
-    - setup_remote_docker
+    - setup_remote_docker:
+        # Setting docker version per https://support.circleci.com/hc/en-us/articles/360050934711-Docker-build-fails-with-EPERM-operation-not-permitted-copyfile-when-using-node-14-9-0-or-later-
+        version: 19.03.13
     - run:
         name: Build Docker image
         command: |
@@ -140,7 +142,9 @@ jobs:
     steps:
     - attach_workspace:
         at: /tmp/workspace
-    - setup_remote_docker
+    - setup_remote_docker:
+        # Setting docker version per https://support.circleci.com/hc/en-us/articles/360050934711-Docker-build-fails-with-EPERM-operation-not-permitted-copyfile-when-using-node-14-9-0-or-later-
+        version: 19.03.13
     - run:
         name: Load archived Docker image
         command: |
@@ -155,7 +159,9 @@ jobs:
     steps:
     - attach_workspace:
         at: /tmp/workspace
-    - setup_remote_docker
+    - setup_remote_docker:
+        # Setting docker version per https://support.circleci.com/hc/en-us/articles/360050934711-Docker-build-fails-with-EPERM-operation-not-permitted-copyfile-when-using-node-14-9-0-or-later-
+        version: 19.03.13
     - run:
         name: Load archived Docker image
         command: |
