@@ -14,7 +14,7 @@ gem 'okcomputer'
 gem 'pg'
 gem 'sidekiq', '~> 6.0'
 gem 'sidekiq-statistic'
-gem 'webpacker', '~> 4.0'
+gem 'webpacker', '6.0.0.beta7'
 
 # Use Puma as the app server
 gem 'puma', '~> 4.3'
