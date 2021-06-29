@@ -12,7 +12,7 @@ AllCops:
     - 'vendor/**/*'
     - 'db/schema.rb'
     - 'db/migrate/*.rb'
-    - 'bin/webpack*'
+    - 'bin/**/*'
     - 'node_modules/**/*'
 
 Layout/LineLength:
