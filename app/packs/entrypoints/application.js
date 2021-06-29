@@ -17,4 +17,4 @@
 
 import 'bootstrap'
 import '@github/time-elements'
-import './stylesheets/application.scss'
+import './application.scss'
