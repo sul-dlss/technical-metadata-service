@@ -17,7 +17,6 @@ gem 'sidekiq-statistic'
 
 gem 'cssbundling-rails', '~> 0.2.4'
 gem 'jsbundling-rails', '~> 0.1.9'
-gem 'webpacker', '6.0.0.beta7'
 
 # Use Puma as the app server
 gem 'puma', '~> 4.3'

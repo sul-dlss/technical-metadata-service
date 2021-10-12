@@ -64,8 +64,8 @@ jobs:
         paths:
           - ~/.cache/yarn
     - run:
-        name: Webpacker compile
-        command: NODE_ENV=test bundle exec rails webpacker:compile
+        name: Compile assets
+        command: NODE_ENV=test bundle exec rails assets:precompile
 
     - run:
         name: Check styles using rubocop

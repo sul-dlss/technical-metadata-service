@@ -38,7 +38,7 @@ RSpec.describe PdfCharacterizerService do
       end
     end
 
-    context 'when popper produces unexpected results' do
+    context 'when poppler produces unexpected results' do
       let(:status) { instance_double(Process::Status, success?: true) }
       let(:output) { 'What??' }
 
