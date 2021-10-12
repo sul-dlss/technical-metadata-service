@@ -99,6 +99,8 @@ GEM
       dry-validation (~> 1.0, >= 1.0.0)
     connection_pool (2.2.5)
     crass (1.0.6)
+    cssbundling-rails (0.2.4)
+      railties (>= 6.0.0)
     deep_merge (1.2.1)
     deprecation (1.1.0)
       activesupport
@@ -361,6 +363,7 @@ DEPENDENCIES
   capistrano-rails
   committee
   config
+  cssbundling-rails (~> 0.2.4)
   dlss-capistrano (~> 3.6)
   dor-workflow-client (~> 3.17)
   honeybadger
