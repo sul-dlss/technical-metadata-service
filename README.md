@@ -142,6 +142,20 @@ $ rails c
 # should be "completed"
 ```
 
+## Run locally
+
+First install foreman (foreman is not supposed to be in the Gemfile, See this [wiki article](https://github.com/ddollar/foreman/wiki/Don't-Bundle-Foreman) ):
+
+```
+gem install foreman
+```
+
+Then you can run
+```
+bin/dev
+```
+This starts css/js bundling and the development server
+
 ## Docker
 
 Note that this project's continuous integration build will automatically create and publish an updated image whenever there is a passing build from the `main` branch. If you do need to manually create and publish an image, do the following:
