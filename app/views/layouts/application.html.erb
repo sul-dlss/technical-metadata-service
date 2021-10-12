@@ -5,10 +5,8 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
-
-    <meta name="turbolinks-cache-control" content="no-preview">
     <%= stylesheet_link_tag "application" %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
   </head>
 
   <body>
