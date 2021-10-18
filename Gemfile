@@ -19,7 +19,7 @@ gem 'cssbundling-rails', '~> 0.2.4'
 gem 'jsbundling-rails', '~> 0.1.9'
 
 # Use Puma as the app server
-gem 'puma', '~> 4.3'
+gem 'puma', '~> 5.5'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.7'
 # Use Redis adapter to run Action Cable in production
