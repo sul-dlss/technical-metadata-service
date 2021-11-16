@@ -43,7 +43,6 @@ set :honeybadger_env, fetch(:stage)
 set :passenger_roles, :web
 set :sidekiq_systemd_role, :worker
 set :sidekiq_systemd_use_hooks, true
-set :bundler2_config_use_hook, true
 
 # update shared_configs before restarting app
 before 'deploy:restart', 'shared_configs:update'
