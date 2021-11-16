@@ -54,6 +54,6 @@ end
 group :deployment do
   gem 'capistrano-passenger', require: false
   gem 'capistrano-rails', require: false
-  gem 'capistrano-rvm' # for Ubuntu deployments
+  gem 'capistrano-rvm', require: false # for Ubuntu deployments
   gem 'dlss-capistrano', '~> 3.6', require: false
 end
