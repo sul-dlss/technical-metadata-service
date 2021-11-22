@@ -46,3 +46,7 @@ set :sidekiq_systemd_use_hooks, true
 
 # update shared_configs before restarting app
 before 'deploy:restart', 'shared_configs:update'
+
+# Workaround for "Rails assets manifest file not found"
+# error thrown when deploying the web role to Ubuntu
+Rake::Task['deploy:assets:backup_manifest'].clear_actions
