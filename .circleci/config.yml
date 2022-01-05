@@ -9,7 +9,6 @@ orbs:
       validate-api:
         description: Validate openapi specification
         steps:
-          - checkout
           - run:
               name: Validate API specification
               command: |
@@ -36,6 +35,65 @@ orbs:
           - ruby/install-deps
           - node/install-packages:
               pkg-manager: yarn
+      lint:
+        parameters:
+          tag:
+            default: '2.7.1'
+            description: The `cimg/ruby` Docker image version tag.
+            type: string
+        docker:
+          - image: 'cimg/ruby:<< parameters.tag >>-node'
+        steps:
+          - checkout
+          - ruby/install-deps
+          - ruby/rubocop-check:
+              format: progress
+              label: Inspecting with Rubocop
+      test:
+        parameters:
+          tag:
+            default: '2.7.1'
+            description: The `cimg/ruby` Docker image version tag.
+            type: string
+          postgres-tag:
+            default: '11'
+            description: The `cimg/postgres` Docker image version tag.
+            type: string
+        docker:
+          - image: 'cimg/ruby:<< parameters.tag >>-node'
+          - image: 'cimg/postgres:<< parameters.postgres-tag >>'
+            environment:
+              POSTGRES_USER: postgres
+              POSTGRES_PASSWORD: sekret
+        environment:
+          BUNDLE_JOBS: '3'
+          BUNDLE_RETRY: '3'
+          PGHOST: 127.0.0.1
+          PGPASSWORD: sekret
+          PGUSER: circleci
+          RAILS_ENV: test
+        parallelism: 3
+        steps:
+          - checkout
+          - ruby/install-deps
+          - node/install-packages:
+              pkg-manager: yarn
+          - run:
+              command: 'dockerize -wait tcp://localhost:5432 -timeout 1m'
+              name: Wait for DB
+          - run:
+              name: Test prepare
+              command: bin/rails db:test:prepare
+          - run:
+              name: Setup Code Climate test-reporter
+              command: |
+                curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+                chmod +x ./cc-test-reporter
+                ./cc-test-reporter before-build
+          - ruby/rspec-test
+          - run:
+              name: upload test coverage report to Code Climate
+              command: ./cc-test-reporter after-build --coverage-input-type simplecov --exit-code $?
       validate-api:
         description: Validate openapi specification
         executor: node/default
@@ -79,66 +137,6 @@ orbs:
           - docker/push:
               image: <<parameters.image>>
               tag: <<parameters.tag>>
-      lint:
-        parameters:
-          tag:
-            default: '2.7.1'
-            description: The `cimg/ruby` Docker image version tag.
-            type: string
-        docker:
-          - image: 'cimg/ruby:<< parameters.tag >>-node'
-        steps:
-          - checkout
-          - ruby/install-deps
-          - ruby/rubocop-check:
-              format: progress
-              label: Inspecting with Rubocop
-      test:
-        parameters:
-          tag:
-            default: '2.7.1'
-            description: The `cimg/ruby` Docker image version tag.
-            type: string
-          postgres-tag:
-            default: '11'
-            description: The `FIXME` Docker image version tag.
-            type: string
-        docker:
-          - image: 'cimg/ruby:<< parameters.tag >>-node'
-          - image: 'circleci/postgres:<< parameters.postgres-tag >>'
-            environment:
-              POSTGRES_USER: postgres
-              # POSTGRES_DB: technical_metadata_test
-              POSTGRES_PASSWORD: sekret
-        environment:
-          BUNDLE_JOBS: '3'
-          BUNDLE_RETRY: '3'
-          PGHOST: 127.0.0.1
-          PGPASSWORD: sekret
-          PGUSER: circleci
-          RAILS_ENV: test
-        parallelism: 3
-        steps:
-          - checkout
-          - ruby/install-deps
-          - node/install-packages:
-              pkg-manager: yarn
-          - run:
-              command: 'dockerize -wait tcp://localhost:5432 -timeout 1m'
-              name: Wait for DB
-          - run:
-              name: Test prepare
-              command: bin/rails db:test:prepare
-          - run:
-              name: Setup Code Climate test-reporter
-              command: |
-                curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-                chmod +x ./cc-test-reporter
-                ./cc-test-reporter before-build
-          - ruby/rspec-test
-          - run:
-              name: upload test coverage report to Code Climate
-              command: ./cc-test-reporter after-build --coverage-input-type simplecov --exit-code $?
 workflows:
   build:
     jobs:
@@ -166,4 +164,4 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - main
