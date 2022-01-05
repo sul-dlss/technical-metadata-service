@@ -56,7 +56,7 @@ orbs:
             description: The `cimg/ruby` Docker image version tag.
             type: string
           postgres-tag:
-            default: '11'
+            default: '11.13'
             description: The `cimg/postgres` Docker image version tag.
             type: string
         docker:
