@@ -1,104 +1,164 @@
 version: 2.1
 orbs:
-  ruby: circleci/ruby@1.2.0
-  node: circleci/node@5.0.0
-  docker: circleci/docker@2.0.1
-parameters:
-  ruby-version:
-    type: string
-    default: "2.7.1"
-executors:
-  default:
-    docker:
-      - image: 'cimg/ruby:<< pipeline.parameters.ruby-version >>-node'
-jobs:
-  build:
-    executor: default
-    steps:
-      - checkout
-      - ruby/install-deps
-      - node/install-packages:
-          pkg-manager: yarn
-  lint:
-    executor: default
-    steps:
-      - checkout
-      - ruby/install-deps
-      - ruby/rubocop-check:
-          format: progress
-          label: Inspecting with Rubocop
-  test:
-    docker:
-      - image: 'cimg/ruby:<< pipeline.parameters.ruby-version >>-node'
-      - image: circleci/postgres:11
+  ruby-rails:
+    orbs:
+      docker: circleci/docker@2.0.1
+      node: circleci/node@3.0
+      ruby: circleci/ruby@1.2.0
+    commands:
+      validate-api:
+        description: Validate openapi specification
+        steps:
+          - checkout
+          - run:
+              name: Validate API specification
+              command: |
+                sudo npm install -g openapi-enforcer-cli
+                result=$(openapi-enforcer validate openapi.yml)
+                [[ $result =~ "Document is valid" ]] && {
+                echo "Validation good"
+                exit 0
+                } || {
+                echo $result
+                exit 1
+                }
+    jobs:
+      build:
+        parameters:
+          tag:
+            default: '2.7.1'
+            description: The `cimg/ruby` Docker image version tag.
+            type: string
+        docker:
+          - image: 'cimg/ruby:<< parameters.tag >>-node'
+        steps:
+          - checkout
+          - ruby/install-deps
+          - node/install-packages:
+              pkg-manager: yarn
+      validate-api:
+        description: Validate openapi specification
+        executor: node/default
+        steps:
+          - checkout
+          - validate-api
+      docker-publish:
+        description: Build and deploy a Docker image
+        executor: docker/machine
+        parameters:
+          docker-password:
+            default: DOCKER_PASS
+            description: |
+              Name of environment variable storing your Docker password
+            type: env_var_name
+          docker-username:
+            default: DOCKER_USER
+            description: |
+              Name of environment variable storing your Docker username
+            type: env_var_name
+          dockerfile:
+            default: Dockerfile
+            description: 'Name of dockerfile to use, defaults to Dockerfile'
+            type: string
+          image:
+            description: Name of image to build
+            type: string
+          tag:
+            default: latest
+            description: 'Comma-separated list of image tags, defaults to latest'
+            type: string
+        steps:
+          - checkout
+          - docker/check:
+              docker-password: <<parameters.docker-password>>
+              docker-username: <<parameters.docker-username>>
+          - docker/build:
+              dockerfile: <<parameters.dockerfile>>
+              image: <<parameters.image>>
+              tag: <<parameters.tag>>
+          - docker/push:
+              image: <<parameters.image>>
+              tag: <<parameters.tag>>
+      lint:
+        parameters:
+          tag:
+            default: '2.7.1'
+            description: The `cimg/ruby` Docker image version tag.
+            type: string
+        docker:
+          - image: 'cimg/ruby:<< parameters.tag >>-node'
+        steps:
+          - checkout
+          - ruby/install-deps
+          - ruby/rubocop-check:
+              format: progress
+              label: Inspecting with Rubocop
+      test:
+        parameters:
+          tag:
+            default: '2.7.1'
+            description: The `cimg/ruby` Docker image version tag.
+            type: string
+          postgres-tag:
+            default: '11'
+            description: The `FIXME` Docker image version tag.
+            type: string
+        docker:
+          - image: 'cimg/ruby:<< parameters.tag >>-node'
+          - image: 'circleci/postgres:<< parameters.postgres-tag >>'
+            environment:
+              POSTGRES_USER: postgres
+              # POSTGRES_DB: technical_metadata_test
+              POSTGRES_PASSWORD: sekret
         environment:
-          POSTGRES_USER: postgres
-          POSTGRES_DB: technical_metadata_test
-          POSTGRES_PASSWORD: sekret
-    environment:
-      BUNDLE_JOBS: '3'
-      BUNDLE_RETRY: '3'
-      PGHOST: 127.0.0.1
-      PGPASSWORD: sekret
-      PGUSER: circleci-demo-ruby
-      RAILS_ENV: test
-    parallelism: 3
-    steps:
-      - checkout
-      - ruby/install-deps
-      - node/install-packages:
-          pkg-manager: yarn
-      - run:
-          command: 'dockerize -wait tcp://localhost:5432 -timeout 1m'
-          name: Wait for DB
-      - run:
-          name: Test prepare
-          command: bin/rails db:test:prepare
-      - run:
-          name: Setup Code Climate test-reporter
-          command: |
-            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-            chmod +x ./cc-test-reporter
-            ./cc-test-reporter before-build
-      - ruby/rspec-test
-      - run:
-          name: upload test coverage report to Code Climate
-          command: ./cc-test-reporter after-build --coverage-input-type simplecov --exit-code $?
-  validate:
-    executor: default
-    steps:
-      - checkout
-      - run:
-          name: Validate API specification
-          command: |
-            sudo npm install -g openapi-enforcer-cli
-            result=$(openapi-enforcer validate openapi.yml)
-            [[ $result =~ "Document is valid" ]] && {
-            echo "Validation good"
-            exit 0
-            } || {
-            echo $result
-            exit 1
-            }
+          BUNDLE_JOBS: '3'
+          BUNDLE_RETRY: '3'
+          PGHOST: 127.0.0.1
+          PGPASSWORD: sekret
+          PGUSER: circleci
+          RAILS_ENV: test
+        parallelism: 3
+        steps:
+          - checkout
+          - ruby/install-deps
+          - node/install-packages:
+              pkg-manager: yarn
+          - run:
+              command: 'dockerize -wait tcp://localhost:5432 -timeout 1m'
+              name: Wait for DB
+          - run:
+              name: Test prepare
+              command: bin/rails db:test:prepare
+          - run:
+              name: Setup Code Climate test-reporter
+              command: |
+                curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+                chmod +x ./cc-test-reporter
+                ./cc-test-reporter before-build
+          - ruby/rspec-test
+          - run:
+              name: upload test coverage report to Code Climate
+              command: ./cc-test-reporter after-build --coverage-input-type simplecov --exit-code $?
 workflows:
   build:
     jobs:
-      - build
-      - validate
-      - lint:
+      - ruby-rails/build:
+          name: build
+      - ruby-rails/validate-api:
+          name: validate
+      - ruby-rails/lint:
+          name: lint
           requires:
             - build
-      - test:
+      - ruby-rails/test:
+          name: test
           requires:
             - build
-      - docker/publish:
+      - ruby-rails/docker-publish:
           context: dlss
-          docker-password: DOCKER_PASS
-          docker-username: DOCKER_USER
           dockerfile: docker/app/Dockerfile
           name: publish-latest
           image: suldlss/technical-metadata-service
-          tag: latest
           requires:
             - validate
             - lint
@@ -106,4 +166,4 @@ workflows:
           filters:
             branches:
               only:
-                - circle
+                - master
