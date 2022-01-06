@@ -140,18 +140,18 @@ orbs:
 workflows:
   build:
     jobs:
-      - ruby-rails/build:
-          name: build
+      # - ruby-rails/build:
+      #     name: build
       - ruby-rails/validate-api:
           name: validate
       - ruby-rails/lint:
           name: lint
-          requires:
-            - build
+          # requires:
+          #   - build
       - ruby-rails/test:
           name: test
-          requires:
-            - build
+          # requires:
+          #   - build
       - ruby-rails/docker-publish:
           context: dlss
           dockerfile: docker/app/Dockerfile
