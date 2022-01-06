@@ -7,6 +7,31 @@ orbs:
       ruby: circleci/ruby@1.2.0
       browser-tools: circleci/browser-tools@1.2.3
     commands:
+      gem-install-deps:
+        description: Install dependencies without using deployment mode (suitable for gems)
+        steps:
+          - run:
+              name: Bundle Install
+              command: bundle check || bundle install
+      test:
+        description: Runs rspec wrapped with code climate
+        parameters:
+          cc-test-reporter-id:
+            default: CC_TEST_REPORTER_ID
+            description: |
+              Name of environment variable storing your Code Climate reporter test id
+            type: env_var_name
+        steps:
+          - run:
+              name: Setup Code Climate test-reporter
+              command: |
+                curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+                chmod +x ./cc-test-reporter
+                ./cc-test-reporter before-build
+          - ruby/rspec-test
+          - run:
+              name: upload test coverage report to Code Climate
+              command: ./cc-test-reporter after-build --coverage-input-type simplecov --exit-code $? -r $<< parameters.cc-test-reporter-id >>
       validate-api:
         description: Validate openapi specification
         steps:
@@ -30,12 +55,31 @@ orbs:
             description: The `cimg/ruby` Docker image version tag.
             type: string
         docker:
-          - image: 'cimg/ruby:<< parameters.ruby-tag >>-node'
+          - image: 'cimg/ruby:<< parameters.ruby-tag >>-node'        
         steps:
           - checkout
-          - ruby/install-deps
+          - gem-install-deps
           - ruby/rubocop-check
-      test:
+      test-gem:
+        parameters:
+          ruby-tag:
+            default: '2.7.5'
+            description: The `cimg/ruby` Docker image version tag.
+            type: string
+        docker:
+          - image: 'cimg/ruby:<< parameters.ruby-tag >>-node'
+        environment:
+          BUNDLE_JOBS: '3'
+          BUNDLE_RETRY: '3'
+        parallelism: 3
+        steps:
+          - checkout
+          - gem-install-deps
+          - run:
+              name: Install rspec_junit_formatter
+              command: bundle add rspec_junit_formatter
+          - test
+      test-rails:
         parameters:
           ruby-tag:
             default: '2.7.5'
@@ -86,16 +130,7 @@ orbs:
           - run:
               name: Test prepare
               command: bin/rails db:test:prepare
-          - run:
-              name: Setup Code Climate test-reporter
-              command: |
-                curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-                chmod +x ./cc-test-reporter
-                ./cc-test-reporter before-build
-          - ruby/rspec-test
-          - run:
-              name: upload test coverage report to Code Climate
-              command: ./cc-test-reporter after-build --coverage-input-type simplecov --exit-code $?
+          - test
       validate-api:
         description: Validate openapi specification
         executor: node/default
@@ -146,7 +181,7 @@ workflows:
           name: validate
       - ruby-rails/lint:
           name: lint
-      - ruby-rails/test:
+      - ruby-rails/test-rails:
           name: test
       - ruby-rails/docker-publish:
           context: dlss
