@@ -85,7 +85,7 @@ brew install mediainfo
 
 ### CI build
 
-Spin up all the database using docker-compose:
+Spin up the database using docker-compose:
 
 ```shell
 $ docker-compose up db # use -d to run in background
