@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-gem 'rails', '~> 6.1.0'
+gem 'rails', '~> 7.0.1'
 
 gem 'committee' # validates Open API spec (OAS)
 gem 'config'
@@ -14,9 +14,7 @@ gem 'okcomputer'
 gem 'pg'
 gem 'sidekiq', '~> 6.0'
 gem 'sidekiq-statistic'
-
-gem 'cssbundling-rails', '~> 0.2.4'
-gem 'jsbundling-rails', '~> 0.1.9'
+gem 'sprockets-rails'
 
 # Use Puma as the app server
 gem 'puma', '~> 5.5'
@@ -57,3 +55,5 @@ group :deployment do
   gem 'capistrano-rvm', require: false # for Ubuntu deployments
   gem 'dlss-capistrano', '~> 3.6', require: false
 end
+
+gem 'importmap-rails', '~> 1.0'
