@@ -108,8 +108,6 @@ GEM
       dry-validation (~> 1.0, >= 1.0.0)
     connection_pool (2.2.5)
     crass (1.0.6)
-    cssbundling-rails (0.2.8)
-      railties (>= 6.0.0)
     deep_merge (1.2.2)
     deprecation (1.1.0)
       activesupport
@@ -194,12 +192,13 @@ GEM
     honeybadger (4.9.0)
     i18n (1.8.11)
       concurrent-ruby (~> 1.0)
+    importmap-rails (1.0.1)
+      actionpack (>= 6.0.0)
+      railties (>= 6.0.0)
     io-wait (0.2.1)
     jbuilder (2.11.5)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
-    jsbundling-rails (0.1.9)
-      railties (>= 6.0.0)
     json (2.6.1)
     json_schema (0.21.0)
     jwt (2.3.0)
@@ -389,12 +388,11 @@ DEPENDENCIES
   capistrano-rvm
   committee
   config
-  cssbundling-rails (~> 0.2.4)
   dlss-capistrano (~> 3.6)
   dor-workflow-client (~> 3.17)
   honeybadger
+  importmap-rails (~> 1.0)
   jbuilder
-  jsbundling-rails (~> 0.1.9)
   jwt
   listen (~> 3.7)
   moab-versioning

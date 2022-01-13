@@ -16,9 +16,6 @@ gem 'sidekiq', '~> 6.0'
 gem 'sidekiq-statistic'
 gem 'sprockets-rails'
 
-gem 'cssbundling-rails', '~> 0.2.4'
-gem 'jsbundling-rails', '~> 0.1.9'
-
 # Use Puma as the app server
 gem 'puma', '~> 5.5'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
@@ -58,3 +55,5 @@ group :deployment do
   gem 'capistrano-rvm', require: false # for Ubuntu deployments
   gem 'dlss-capistrano', '~> 3.6', require: false
 end
+
+gem 'importmap-rails', '~> 1.0'
