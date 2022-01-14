@@ -34,7 +34,7 @@ class TechnicalMetadataWorkflowJob < ApplicationJob
                                workflow: 'accessionWF',
                                process: 'technical-metadata',
                                error_msg: 'Problem with technical-metadata-service on ' \
-                                                      "#{Socket.gethostname}: #{errors}")
+                                          "#{Socket.gethostname}: #{errors}")
   end
 
   def client
