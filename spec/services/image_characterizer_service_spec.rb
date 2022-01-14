@@ -97,7 +97,7 @@ RSpec.describe ImageCharacterizerService do
       let(:status) { instance_double(Process::Status, success?: true) }
       let(:err) do
         'Deep recursion on subroutine "Image::ExifTool::ProcessDirectory" ' \
-        'at /usr/share/perl5/vendor_perl/Image/ExifTool/Exif.pm line 6340'
+          'at /usr/share/perl5/vendor_perl/Image/ExifTool/Exif.pm line 6340'
       end
       let(:output) do
         <<~OUTPUT
