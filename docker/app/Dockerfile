@@ -8,19 +8,17 @@ RUN apk add --update --no-cache  \
   build-base \
   postgresql-dev \
   postgresql-client \
-  tzdata \
-  yarn
+  tzdata
 
 # Get latest bundler
 RUN gem install bundler
 
 WORKDIR /app
 
-COPY Gemfile Gemfile.lock package.json yarn.lock ./
+COPY Gemfile Gemfile.lock ./
 
 RUN bundle config set without 'production' && \
-  bundle install && \
-  yarn install
+  bundle install
 
 COPY . .
 
