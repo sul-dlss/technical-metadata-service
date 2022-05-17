@@ -148,6 +148,35 @@ RSpec.describe PdfCharacterizerService do
       end
     end
 
+    context 'when metadata is not valid UTF-8' do
+      let(:output) do
+        <<~OUTPUT
+          Creator:        Acrobat PDFMaker 5.0 for Word
+          Producer:       Mac OS X 10.9.5 Quartz PDFContext
+          CreationDate:   \xFE\xFF
+          ModDate:        2020-01-18T16:55:26-05
+          Tagged:         no
+          UserProperties: no
+          Suspects:       no
+          Form:           none
+          JavaScript:     no
+          Pages:          111
+          Encrypted:      no
+          Page size:      612 x 792 pts (letter)
+          Page rot:       0
+          File size:      624716 bytes
+          Optimized:      yes
+          PDF version:    1.6
+        OUTPUT
+      end
+      let(:status) { instance_double(Process::Status, success?: true) }
+      let(:text_output) { instance_double(String) }
+
+      it 'does not raise' do
+        expect { characterization }.not_to raise_error(ArgumentError)
+      end
+    end
+
     context 'when file is problematic in unforeseen ways' do
       let(:error_message) { 'this is not something we have encountered before' }
       let(:output) do
