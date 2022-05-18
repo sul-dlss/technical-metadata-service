@@ -53,7 +53,7 @@ class PdfCharacterizerService
   # rubocop:disable Metrics/MethodLength
   def extract_attributes(output)
     attributes = {}
-    output.each_line(chomp: true) do |line|
+    output.encode('UTF-8', invalid: :replace, undef: :replace, replace: '').each_line(chomp: true) do |line|
       key, value = line.split(/: */)
       case key
       when 'PDF version'
