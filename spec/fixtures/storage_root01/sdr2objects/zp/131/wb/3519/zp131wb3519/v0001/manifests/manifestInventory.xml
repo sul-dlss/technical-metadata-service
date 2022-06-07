@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fileInventory type="manifests" objectId="druid:zp131wb3519" versionId="1" inventoryDatetime="2020-12-10T17:22:38Z" fileCount="4" byteCount="10250" blockCount="13">
+  <fileGroup groupId="manifests" dataSource="/services-disk-stage/store2/sdr2objects/zp/131/wb/3519/zp131wb3519/v0001/manifests" fileCount="4" byteCount="10250" blockCount="13">
+    <file>
+      <fileSignature size="3147" md5="df5d876c9403c137db597a9eea76f161" sha1="3b1e81b861da8ae4a33476cc25c5499eee686dcc" sha256="18add58196ffa78d0f78baa3bcceeb58dbe9a6f8f0205854912b077db9126f85"/>
+      <fileInstance path="fileInventoryDifference.xml" datetime="2020-12-10T17:22:38Z"/>
+    </file>
+    <file>
+      <fileSignature size="2215" md5="afffb9362b3d508933ab8e8114bcf7ef" sha1="cf8ea2df39d95e1b6d8b720b701eb6df0f3e9408" sha256="62d167ea4dbdaf6c2417fa3e2edbce2b217aaf8008176b85cbf125727cc4228c"/>
+      <fileInstance path="signatureCatalog.xml" datetime="2020-12-10T17:22:38Z"/>
+    </file>
+    <file>
+      <fileSignature size="2420" md5="b26b6c7ea15aecd1c25af827b249bf6a" sha1="faa0f9cd9aa7bb044b2286ca5c32f27e521874cb" sha256="50fb6d9d67d42bd296bed20f18c083f5a2ed99885399fb6d174df1d97ba74cdf"/>
+      <fileInstance path="versionAdditions.xml" datetime="2020-12-10T17:22:36Z"/>
+    </file>
+    <file>
+      <fileSignature size="2468" md5="3e6b79c07ad27f8e3771fe590de53eee" sha1="a1e187a7c266647c720da2d162a49bbd7fe54738" sha256="d1cc88f35bdbccc404d30c08823c28f16dc898363ce72594371eb099f722fd7d"/>
+      <fileInstance path="versionInventory.xml" datetime="2020-12-10T17:22:36Z"/>
+    </file>
+  </fileGroup>
+</fileInventory>

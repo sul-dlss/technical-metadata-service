@@ -31,6 +31,14 @@ $ bundler exec rake techmd:generate_for_moab['druid:bc123df4567', 'true']
 Queued
 ```
 
+Or from a list of druids (`druid.txt`):
+
+```shell
+$ bundler exec rake techmd:generate_for_moab_list
+Queued druid:bc123df4567
+```
+
+
 
 ## Background processing
 

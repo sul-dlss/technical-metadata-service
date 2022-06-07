@@ -30,6 +30,7 @@ Metrics/AbcSize:
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*'
+    - 'lib/tasks/technical_metadata.rake'
 
 Metrics/ClassLength:
   Exclude:
