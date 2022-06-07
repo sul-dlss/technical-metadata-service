@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fileInventory type="additions" objectId="druid:zp131wb3519" versionId="1" inventoryDatetime="2020-12-10T17:22:36Z" fileCount="7" byteCount="4927" blockCount="9">
+  <fileGroup groupId="metadata" dataSource="" fileCount="7" byteCount="4927" blockCount="9">
+    <file>
+      <fileSignature size="344" md5="9a1eb7a3afc1a4468b58d9e7e4d036f2" sha1="4bd1752d346f6685cbd49ef8a60ab66f20ce921b" sha256="3a391a96801a8492cbb383504d981d11ce735dd02b68f8fc69fa43700f0e6d73"/>
+      <fileInstance path="descMetadata.xml" datetime="2020-12-10T17:22:36Z"/>
+    </file>
+    <file>
+      <fileSignature size="208" md5="f6391143eeb110784f8d5dcd7d8c7840" sha1="ddb079969e74597fef64fae15c1d3fa475eb05b3" sha256="4ef108e137b2d730c9d7cf8bfc85f8e5ccdd6fb9f78c8d695d2429458879b97a"/>
+      <fileInstance path="identityMetadata.xml" datetime="2020-12-10T17:22:36Z"/>
+    </file>
+    <file>
+      <fileSignature size="263" md5="f36424cb3eedad4d31706a25c10388a6" sha1="abe6c194beba9c1092ff31d9b197b3d0a1dd035c" sha256="c56a7be4f62720610a6504ac98c2a9e34881dd5ebc8555f14acf406f18c98c1a"/>
+      <fileInstance path="provenanceMetadata.xml" datetime="2020-12-10T17:22:36Z"/>
+    </file>
+    <file>
+      <fileSignature size="464" md5="3ed4d0f28d80882931adeb7fd383cc49" sha1="f28ab240a6604efbcf7a16d6d6acece8268bd594" sha256="da1993f0c786cd19ffcad2aee22faec30608a1390fe1655736617de478cc6e49"/>
+      <fileInstance path="relationshipMetadata.xml" datetime="2020-12-10T17:22:36Z"/>
+    </file>
+    <file>
+      <fileSignature size="639" md5="84ff198d9695640363d4d38712ec1212" sha1="79a7abee5e8eeca312f2955261b2114596658bea" sha256="a1922b7c9127a78226a898bb03665c7147a59998e06d78a0c2962299e77ebe90"/>
+      <fileInstance path="rightsMetadata.xml" datetime="2020-12-10T17:22:36Z"/>
+    </file>
+    <file>
+      <fileSignature size="134" md5="4748af432b1a1131216bbc64fb6eeea7" sha1="1a0c31ae15e477ee4ff135a3691c25c753c31753" sha256="fb206337b553dbc2cf5da35ef08388661aadda52b1cbf6667fad260a0e90c915"/>
+      <fileInstance path="versionMetadata.xml" datetime="2020-12-10T17:22:36Z"/>
+    </file>
+    <file>
+      <fileSignature size="2875" md5="04dba63ae3998172f5275d7258acc88b" sha1="27c8459dacd8fab73ddccb3a367dc02a1f91b0ba" sha256="9b51ed98432736cf1abdeb504568adef39926f627c966b177b6024d8975b9cc2"/>
+      <fileInstance path="workflows.xml" datetime="2020-12-10T17:22:36Z"/>
+    </file>
+  </fileGroup>
+</fileInventory>

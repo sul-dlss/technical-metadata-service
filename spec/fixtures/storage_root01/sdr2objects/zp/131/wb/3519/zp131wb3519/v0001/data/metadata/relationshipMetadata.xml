@@ -1,0 +1,7 @@
+
+<rdf:RDF xmlns:fedora-model="info:fedora/fedora-system:def/model#" xmlns:hydra="http://projecthydra.org/ns/relations#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Description rdf:about="info:fedora/druid:zp131wb3519">
+    <hydra:isGovernedBy rdf:resource="info:fedora/druid:zx485kb6348"></hydra:isGovernedBy>
+    <fedora-model:hasModel rdf:resource="info:fedora/afmodel:Dor_Collection"></fedora-model:hasModel>
+  </rdf:Description>
+</rdf:RDF>

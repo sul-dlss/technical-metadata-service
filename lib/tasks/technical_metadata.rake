@@ -13,9 +13,23 @@ namespace :techmd do
     end
   end
 
-  desc 'Generate technical metadata from Moab'
+  desc 'Create job to generate technical metadata from Moab'
   task :generate_for_moab, %i[druid force] => :environment do |_task, args|
     MoabProcessingService.process(druid: args[:druid], force: args[:force] == 'true')
     puts 'Queued'
+  end
+
+  desc 'Create jobs to generate technical metadata from Moabs by druid list (druids.txt)'
+  task :generate_for_moab_list, %i[force] => :environment do |_task, args|
+    force = args[:force] == 'true'
+    File.foreach('druids.txt').map(&:strip).each_with_index do |druid, index|
+      if !force && DroFile.exists?(druid: druid)
+        puts "Skipped #{druid} (#{index + 1}) since already has technical metadata"
+      elsif MoabProcessingService.process(druid: druid, force: force)
+        puts "Queued #{druid} (#{index + 1})"
+      else
+        puts "Skipped #{druid} (#{index + 1}) since no content"
+      end
+    end
   end
 end

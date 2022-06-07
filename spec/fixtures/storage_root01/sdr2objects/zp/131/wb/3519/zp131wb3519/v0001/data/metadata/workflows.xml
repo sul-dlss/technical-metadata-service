@@ -1,0 +1,20 @@
+<workflows objectId="druid:zp131wb3519">
+  <workflow objectId="druid:zp131wb3519" id="accessionWF">
+    <process version="1" note="" lifecycle="submitted" laneId="low" elapsed="" attempts="0" datetime="2020-12-10T17:22:33+00:00" status="completed" name="start-accession"/>
+    <process version="1" note="No descMetadata.xml was provided" lifecycle="described" laneId="low" elapsed="0.033" attempts="0" datetime="2020-12-10T17:22:33+00:00" status="skipped" name="descriptive-metadata"/>
+    <process version="1" note="No rightsMetadata.xml was provided" lifecycle="" laneId="low" elapsed="0.0" attempts="0" datetime="2020-12-10T17:22:33+00:00" status="skipped" name="rights-metadata"/>
+    <process version="1" note="common-accessioning-qa-b.stanford.edu" lifecycle="" laneId="low" elapsed="0.247" attempts="0" datetime="2020-12-10T17:22:34+00:00" status="completed" name="content-metadata"/>
+    <process version="1" note="object is not an item" lifecycle="" laneId="low" elapsed="0.213" attempts="0" datetime="2020-12-10T17:22:34+00:00" status="skipped" name="technical-metadata"/>
+    <process version="1" note="common-accessioning-qa-b.stanford.edu" lifecycle="" laneId="low" elapsed="0.0" attempts="0" datetime="2020-12-10T17:22:34+00:00" status="completed" name="remediate-object"/>
+    <process version="1" note="Not an item/DRO, nothing to do" lifecycle="" laneId="low" elapsed="0.229" attempts="0" datetime="2020-12-10T17:22:35+00:00" status="skipped" name="shelve"/>
+    <process version="1" note="Completed Job 371 on dor-services-app" lifecycle="published" laneId="low" elapsed="1.0" attempts="0" datetime="2020-12-10T17:22:35+00:00" status="completed" name="publish"/>
+    <process version="1" note="common-accessioning-qa-a.stanford.edu" lifecycle="" laneId="low" elapsed="0.092" attempts="0" datetime="2020-12-10T17:22:36+00:00" status="completed" name="provenance-metadata"/>
+    <process version="1" note="common-accessioning-qa-a.stanford.edu" lifecycle="" laneId="low" elapsed="1.0" attempts="0" datetime="2020-12-10T17:22:36+00:00" status="started" name="sdr-ingest-transfer"/>
+    <process version="1" note="" lifecycle="deposited" laneId="low" elapsed="" attempts="0" datetime="2020-12-10T17:22:33+00:00" status="waiting" name="sdr-ingest-received"/>
+    <process version="1" note="" lifecycle="" laneId="low" elapsed="" attempts="0" datetime="2020-12-10T17:22:33+00:00" status="waiting" name="reset-workspace"/>
+    <process version="1" note="" lifecycle="accessioned" laneId="low" elapsed="" attempts="0" datetime="2020-12-10T17:22:33+00:00" status="waiting" name="end-accession"/>
+  </workflow>
+  <workflow objectId="druid:zp131wb3519" id="registrationWF">
+    <process version="1" note="" lifecycle="registered" laneId="low" elapsed="" attempts="0" datetime="2020-12-10T17:22:33+00:00" status="completed" name="register"/>
+  </workflow>
+</workflows>
