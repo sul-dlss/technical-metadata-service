@@ -81,7 +81,7 @@ RSpec.describe ImageCharacterizerService do
       let(:status) { instance_double(Process::Status, success?: true) }
 
       it 'returns nil' do
-        expect(characterization).to eq(nil)
+        expect(characterization).to be_nil
       end
     end
 
