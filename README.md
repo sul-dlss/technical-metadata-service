@@ -179,3 +179,10 @@ Publish:
 ```
 docker push suldlss/technical-metadata-service:latest
 ```
+
+## Deploy
+There is a separate production deploy environment called "retro" that deploys to dor-techmd-worker-prod-b.stanford.edu.
+
+The workers on this server only take jobs from the "retro" queue; these jobs require reading from preservation storage.
+Due to permissions issues, this must be performed as the "pres" user. Due to limitations in capistrano, this requires
+a separate deploy environment.
