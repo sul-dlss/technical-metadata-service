@@ -27,7 +27,7 @@ gem 'puma', '~> 5.6'
 gem 'bootsnap', '>= 1.4.2', require: false
 
 # SDR specific
-gem 'dor-workflow-client', '~> 3.17'
+gem 'dor-workflow-client', '~> 4.0'
 gem 'moab-versioning'
 
 group :development, :test do
