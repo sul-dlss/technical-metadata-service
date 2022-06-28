@@ -119,11 +119,11 @@ GEM
       capistrano-one_time_key
       capistrano-shared_configs
     docile (1.4.0)
-    dor-workflow-client (3.24.0)
+    dor-workflow-client (4.1.0)
       activesupport (>= 3.2.1, < 8)
       deprecation (>= 0.99.0)
-      faraday (>= 0.9.2, < 2.0)
-      faraday_middleware
+      faraday (~> 2.0)
+      faraday-retry (~> 1.0)
       nokogiri (~> 1.6)
       zeitwerk (~> 2.1)
     druid-tools (2.2.1)
@@ -161,31 +161,11 @@ GEM
       dry-initializer (~> 3.0)
       dry-schema (~> 1.8, >= 1.8.0)
     erubi (1.10.0)
-    faraday (1.10.0)
-      faraday-em_http (~> 1.0)
-      faraday-em_synchrony (~> 1.0)
-      faraday-excon (~> 1.1)
-      faraday-httpclient (~> 1.0)
-      faraday-multipart (~> 1.0)
-      faraday-net_http (~> 1.0)
-      faraday-net_http_persistent (~> 1.0)
-      faraday-patron (~> 1.0)
-      faraday-rack (~> 1.0)
-      faraday-retry (~> 1.0)
+    faraday (2.3.0)
+      faraday-net_http (~> 2.0)
       ruby2_keywords (>= 0.0.4)
-    faraday-em_http (1.0.0)
-    faraday-em_synchrony (1.0.0)
-    faraday-excon (1.1.0)
-    faraday-httpclient (1.0.1)
-    faraday-multipart (1.0.4)
-      multipart-post (~> 2)
-    faraday-net_http (1.0.1)
-    faraday-net_http_persistent (1.2.0)
-    faraday-patron (1.0.0)
-    faraday-rack (1.0.0)
+    faraday-net_http (2.0.3)
     faraday-retry (1.0.3)
-    faraday_middleware (1.2.0)
-      faraday (~> 1.0)
     ffi (1.15.5)
     globalid (1.0.0)
       activesupport (>= 5.0)
@@ -220,7 +200,6 @@ GEM
       nokogiri
       nokogiri-happymapper
     msgpack (1.5.2)
-    multipart-post (2.2.3)
     net-imap (0.2.3)
       digest
       net-protocol
@@ -388,7 +367,7 @@ DEPENDENCIES
   committee
   config
   dlss-capistrano
-  dor-workflow-client (~> 3.17)
+  dor-workflow-client (~> 4.0)
   honeybadger
   importmap-rails (~> 1.0)
   jbuilder
