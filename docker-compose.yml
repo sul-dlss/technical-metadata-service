@@ -13,6 +13,7 @@ services:
       DATABASE_PORT: 5432
       RAILS_LOG_TO_STDOUT: "true"
       REDIS_URL: redis://redis:6379/
+      SETTINGS__REDIS_URL: redis://redis:6379/
     volumes:
        - .:/app
     working_dir: /app
@@ -33,6 +34,7 @@ services:
       DATABASE_PORT: 5432
       RAILS_LOG_TO_STDOUT: "true"
       REDIS_URL: redis://redis:6379/
+      SETTINGS__REDIS_URL: redis://redis:6379/
       SETTINGS__WORKFLOW__URL: http://workflow:3000
     volumes:
       - .:/app
