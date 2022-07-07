@@ -67,6 +67,19 @@ RSpec.describe FileIdentifierService do
       end
     end
 
+    context 'when file is a gzipped WARC' do
+      let(:identifiers) { service.identify(filepath: 'bar.warc.gz') }
+
+      let(:output) { '{"siegfried":"1.8.0","scandate":"2020-02-18T16:44:36-05:00","signature":"default.sig","created":"2020-01-21T23:30:42+01:00","identifiers":[{"name":"pronom","details":"DROID_SignatureFile_V96.xml; container-signature-20200121.xml"}],"files":[{"filename":"bar.warc.gz","filesize": 4,"modified":"2020-02-18T15:36:15-05:00","errors": "","matches": [{"ns":"pronom","id":"x-fmt/266","format":"GZIP Format","version":"","mime":"application/gzip","basis":"extension match txt; text match ASCII","warning":""}]}]}' }
+
+      let(:status) { instance_double(Process::Status, success?: true) }
+
+      it 'returns pronom id and mimetype of a non-gzipped WARC' do
+        expect(identifiers).to eq(['fmt/1355', 'application/warc'])
+        expect(Open3).to have_received(:capture3).with('sf', '-json', 'bar.warc.gz')
+      end
+    end
+
     context 'when file is not identified' do
       let(:output) { '{"siegfried":"1.8.0","scandate":"2020-02-18T16:44:36-05:00","signature":"default.sig","created":"2020-01-21T23:30:42+01:00","identifiers":[{"name":"pronom","details":"DROID_SignatureFile_V96.xml; container-signature-20200121.xml"}],"files":[{"filename":"bar.txt","filesize": 933521532,"modified":"2020-02-18T12:25:17-05:00","errors": "","matches": [{"ns":"pronom","id":"UNKNOWN","format":"","version":"","mime":"","basis":"","warning":"no match"}]}]}' }
 

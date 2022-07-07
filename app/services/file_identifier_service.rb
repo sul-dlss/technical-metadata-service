@@ -14,7 +14,12 @@ class FileIdentifierService
     output, err, status = Open3.capture3('sf', '-json', filepath)
     raise Error, "Identifying #{filepath} returned #{status.exitstatus}: #{err}\n#{output}" unless status.success?
 
-    extract_file_types(output, filepath)
+    pronom_id, mimetype = extract_file_types(output, filepath)
+    return [pronom_id, mimetype] unless pronom_id == 'x-fmt/266' &&
+                                        mimetype == 'application/gzip' &&
+                                        filepath.match?(/warc\.gz\Z/i)
+
+    ['fmt/1355', 'application/warc']
   end
 
   # @return [String] version of Siegfried
