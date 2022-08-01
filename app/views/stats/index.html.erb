@@ -1,6 +1,20 @@
 <h1>Technical Metadata Statistics</h1>
 <div>
-  <%= render 'general' %>
-  <%= render 'processing' %>
-  <%= render 'formats' %>
+  <h2>General Statistics</h2>
+  <turbo-frame id="general_stats" src="<%= general_stats_path %>">
+    Loading ...
+  </turbo-frame>
+  <h2>Processing Statistics</h2>
+  <turbo-frame id="processing_stats" src="<%= processing_stats_path %>">
+    Loading ...
+  </turbo-frame>
+  <h2>Top formats</h2>
+  <h3>By mime type</h3>
+  <turbo-frame id="mimetype_stats" src="<%= mimetype_stats_path %>">
+    Loading ...
+  </turbo-frame>
+  <h3>By Pronom ID</h3>
+  <turbo-frame id="pronom_stats" src="<%= pronom_stats_path %>">
+    Loading ...
+  </turbo-frame>
 </div>

@@ -1,0 +1,12 @@
+<turbo-frame id="pronom_stats">
+  <table class="table table-striped">
+    <tbody>
+      <% DroFile.group(:filetype).order('count_all desc').limit(10).count.each do |filetype, count| %>
+        <tr>
+          <td><%= filetype || 'unknown' %></td>
+          <td><%= number_with_delimiter(count) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</turbo-frame>
