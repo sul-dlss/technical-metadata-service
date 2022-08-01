@@ -15,6 +15,7 @@ gem 'pg'
 gem 'sidekiq', '~> 6.0'
 gem 'sidekiq-statistic'
 gem 'sprockets-rails'
+gem 'turbo-rails'
 
 # Use Puma as the app server
 gem 'puma', '~> 5.6'

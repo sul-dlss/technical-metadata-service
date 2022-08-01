@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_04_012620) do
-
+ActiveRecord::Schema[7.0].define(version: 2020_03_04_012620) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -34,12 +33,12 @@ ActiveRecord::Schema.define(version: 2020_03_04_012620) do
     t.bigint "bytes", null: false
     t.string "filetype"
     t.jsonb "tool_versions"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "mimetype"
     t.jsonb "pdf_metadata"
     t.jsonb "image_metadata"
-    t.datetime "file_modification"
+    t.datetime "file_modification", precision: nil
     t.jsonb "av_metadata"
     t.index ["druid", "filename"], name: "index_dro_files_on_druid_and_filename", unique: true
     t.index ["druid"], name: "index_dro_files_on_druid"
