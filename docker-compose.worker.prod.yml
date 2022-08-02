@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  worker:
+    build:
+      context: .
+      dockerfile: docker/workers/Dockerfile
+      args:
+       - GID=${TECHMD_GID-1000}
+       - UID=${TECHMD_UID-1000}
+    environment:
+      - DATABASE_NAME=techmd
+      - DATABASE_USERNAME
+      - DATABASE_PASSWORD
+      - DATABASE_HOSTNAME
+      - SIDEKIQ_ID=${SIDEKIQ_ID-techmd}
+    volumes:
+      - /opt/app/techmd/dor_techmd/shared/log:/app/log
+      - /dor:/dor
+    restart: on-failure
+    deploy:
+      replicas: ${SIDEKIQ_COUNT-1}
