@@ -193,7 +193,7 @@ GEM
     mini_mime (1.1.2)
     mini_portile2 (2.8.0)
     minitest (5.16.2)
-    moab-versioning (5.1.0)
+    moab-versioning (5.2.0)
       druid-tools (>= 1.0.0)
       json
       nokogiri
