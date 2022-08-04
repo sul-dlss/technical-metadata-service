@@ -62,6 +62,7 @@ module TechnicalMetadataService
                           query_hash_key: 'action_dispatch.request.query_parameters'
     config.middleware.use Committee::Middleware::ResponseValidation,
                           schema_path: 'openapi.yml',
-                          parse_response_by_content_type: false
+                          parse_response_by_content_type: false,
+                          query_hash_key: 'rack.request.query_hash'
   end
 end
