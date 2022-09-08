@@ -5,20 +5,19 @@ RSpec.describe TechnicalMetadataWorkflowJob do
 
   let(:druid) { 'druid:abc123' }
 
-  let(:filepaths) do
+  let(:file_infos) do
     [
-      'spec/fixtures/test/0001.html',
-      'spec/fixtures/test/bar.txt',
-      'spec/fixtures/test/foo.txt'
+      FileInfo.new(filepath: 'spec/fixtures/test/0001.html', md5: '1711cb9f08a0504e1035d198d08edda9'),
+      FileInfo.new(filepath: 'spec/fixtures/test/bar.txt', md5: 'c157a79031e1c40f85931829bc5fc552')
     ]
   end
 
   let(:client) { instance_double(Dor::Workflow::Client, update_status: nil, update_error_status: nil) }
 
   before do
-    allow(TechnicalMetadataGenerator).to receive(:generate).and_return(errors)
+    allow(TechnicalMetadataGenerator).to receive(:generate_with_file_info).and_return(errors)
     allow(Dor::Workflow::Client).to receive(:new).and_return(client)
-    job.perform(druid: druid, filepaths: filepaths)
+    job.perform(druid: druid, file_infos: file_infos)
   end
 
   context 'when no errors' do

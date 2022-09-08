@@ -45,7 +45,7 @@ paths:
                 files:
                   type: array
                   items:
-                    $ref: '#/components/schemas/FileURI'
+                    $ref: '#/components/schemas/FileInfo'
                 force:
                   type: boolean
                   description: Extract the technical metadata even if a record already exists with that checksum
@@ -191,6 +191,17 @@ components:
       type: string
       pattern: '^file:\/\/\/([^\\/]+\/)*[^\\/]+$'
       example: 'file:///foo/bar/baz/quix.jp2'
+    FileInfo:
+      description: Information about a file.
+      type: object
+      properties:
+        uri:
+          $ref: '#/components/schemas/FileURI'
+        md5:
+          type: string
+      required:
+        - uri
+        - md5
     ImageMetadata:
       description: Image-specific technical metadata
       type: object

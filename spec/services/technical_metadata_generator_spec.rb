@@ -1,18 +1,8 @@
 # frozen_string_literal: true
 
 RSpec.describe TechnicalMetadataGenerator do
-  let(:service) { described_class.new(druid: druid, filepaths: filepaths, force: force) }
-
-  let(:errors) { service.generate }
-
+  let(:service) { described_class.new(druid: druid, force: force) }
   let(:druid) { 'druid:abc123' }
-
-  let(:filepaths) do
-    [
-      'spec/fixtures/test/0001.html'
-    ]
-  end
-
   let(:force) { false }
 
   let(:file_identifier_service) { instance_double(FileIdentifierService, version: '1.4.5') }
@@ -63,6 +53,14 @@ RSpec.describe TechnicalMetadataGenerator do
   end
 
   describe '#generate' do
+    let(:errors) { service.generate(filepaths) }
+
+    let(:filepaths) do
+      [
+        'spec/fixtures/test/0001.html'
+      ]
+    end
+
     context 'when all files exist' do
       let(:filepaths) do
         [
@@ -146,20 +144,20 @@ RSpec.describe TechnicalMetadataGenerator do
         expect(file6_part.part_type).to eq('video')
         expect(file6_part.video_metadata).to eq('width' => 640, 'height' => 480, 'codec_id' => 'V_VP9', 'frame_rate' => 29.97, 'pixel_aspect_ratio' => 1.0, 'display_aspect_ratio' => 1.333)
       end
+    end
 
-      context 'when some files do not exist' do
-        let(:filepaths) do
-          [
-            'spec/fixtures/test/0001.html',
-            'spec/fixtures/test/bar.txt',
-            'spec/fixtures/test/foo.jpg',
-            'spec/fixtures/test/does_not_exist.txt'
-          ]
-        end
+    context 'when some files do not exist' do
+      let(:filepaths) do
+        [
+          'spec/fixtures/test/0001.html',
+          'spec/fixtures/test/bar.txt',
+          'spec/fixtures/test/foo.jpg',
+          'spec/fixtures/test/does_not_exist.txt'
+        ]
+      end
 
-        it 'returns an error' do
-          expect(errors.length).to eq(1)
-        end
+      it 'returns an error' do
+        expect(errors.length).to eq(1)
       end
     end
 
@@ -231,38 +229,110 @@ RSpec.describe TechnicalMetadataGenerator do
                                         'creator' => 'Null character')
       end
     end
+
+    context 'when forcing' do
+      let(:filepaths) do
+        [
+          'spec/fixtures/test/0001.html',
+          'spec/fixtures/test/bar.txt'
+        ]
+      end
+
+      let(:force) { true }
+
+      before do
+        # Unchanged
+        DroFile.create(druid: druid, filename: '0001.html', md5: '1711cb9f08a0504e1035d198d08edda9', bytes: 0,
+                       filetype: 'test', mimetype: 'text/test')
+        # MD5 mismatch
+        DroFile.create(druid: druid, filename: 'bar.txt', md5: 'xc157a79031e1c40f85931829bc5fc552', bytes: 0,
+                       filetype: 'test', mimetype: 'text/test')
+      end
+
+      it 'generates technical metadata for files' do
+        expect(errors.length).to eq(0)
+        file1 = DroFile.find_by!(druid: druid, filename: '0001.html')
+        expect(file1.md5).to eq('1711cb9f08a0504e1035d198d08edda9')
+        expect(file1.filetype).to eq('fmt/96')
+        expect(file1.mimetype).to eq('text/html')
+
+        file2 = DroFile.find_by!(druid: druid, filename: 'bar.txt')
+        expect(file2.md5).to eq('c157a79031e1c40f85931829bc5fc552')
+        expect(file2.filetype).to eq('x-fmt/111')
+        expect(file2.mimetype).to eq('text/plain')
+      end
+    end
   end
 
-  context 'when forcing' do
-    let(:filepaths) do
+  describe '#generate_with_file_info' do
+    let(:errors) { service.generate_with_file_info(file_infos) }
+
+    let(:file_infos) do
       [
-        'spec/fixtures/test/0001.html',
-        'spec/fixtures/test/bar.txt'
+        FileInfo.new(filepath: 'spec/fixtures/test/0001.html', md5: '1711cb9f08a0504e1035d198d08edda9')
       ]
     end
 
-    let(:force) { true }
+    # When no existing DroFile and file exists
+    # When no existing DroFile and file does not exist
+    # Deletes DroFiles that do not exist
 
-    before do
-      # Unchanged
-      DroFile.create(druid: druid, filename: '0001.html', md5: '1711cb9f08a0504e1035d198d08edda9', bytes: 0,
-                     filetype: 'test', mimetype: 'text/test')
-      # MD5 mismatch
-      DroFile.create(druid: druid, filename: 'bar.txt', md5: 'xc157a79031e1c40f85931829bc5fc552', bytes: 0,
-                     filetype: 'test', mimetype: 'text/test')
+    context 'when there is an existing DroFile with MD5 match' do
+      let!(:dro_file) do
+        DroFile.create(druid: druid, filename: '0001.html', md5: '1711cb9f08a0504e1035d198d08edda9', bytes: 0,
+                       filetype: 'test', mimetype: 'text/test')
+      end
+
+      it 'does not generate technical metadata for files' do
+        expect(errors.length).to eq(0)
+        expect(dro_file.reload.md5).to eq('1711cb9f08a0504e1035d198d08edda9')
+        expect(file_identifier_service).not_to have_received(:identify)
+      end
     end
 
-    it 'generates technical metadata for files' do
-      expect(errors.length).to eq(0)
-      file1 = DroFile.find_by!(druid: druid, filename: '0001.html')
-      expect(file1.md5).to eq('1711cb9f08a0504e1035d198d08edda9')
-      expect(file1.filetype).to eq('fmt/96')
-      expect(file1.mimetype).to eq('text/html')
+    context 'when there is an existing DroFile with MD5 mismatch' do
+      let!(:dro_file) do
+        DroFile.create(druid: druid, filename: '0001.html', md5: 'x1711cb9f08a0504e1035d198d08edda9', bytes: 0,
+                       filetype: 'test', mimetype: 'text/test')
+      end
 
-      file2 = DroFile.find_by!(druid: druid, filename: 'bar.txt')
-      expect(file2.md5).to eq('c157a79031e1c40f85931829bc5fc552')
-      expect(file2.filetype).to eq('x-fmt/111')
-      expect(file2.mimetype).to eq('text/plain')
+      it 'generates technical metadata for files' do
+        expect(errors.length).to eq(0)
+        expect(dro_file.reload.md5).to eq('1711cb9f08a0504e1035d198d08edda9')
+        expect(file_identifier_service).to have_received(:identify)
+      end
+    end
+
+    context 'when there is not an existing DroFile and file exists' do
+      it 'does not generate technical metadata for files' do
+        expect(errors.length).to eq(0)
+        dro_file = DroFile.find_by!(druid: druid, filename: '0001.html')
+        expect(dro_file.md5).to eq('1711cb9f08a0504e1035d198d08edda9')
+        expect(file_identifier_service).to have_received(:identify)
+      end
+    end
+
+    context 'when there is not an existing DroFile and files do not exist' do
+      let(:file_infos) do
+        [
+          FileInfo.new(filepath: 'spec/fixtures/test/does_not_exist.html', md5: '1711cb9f08a0504e1035d198d08edda9')
+        ]
+      end
+
+      it 'returns an error' do
+        expect(errors.length).to eq(1)
+      end
+    end
+
+    context 'when some DroFiles do not exist' do
+      before do
+        DroFile.create(druid: druid, filename: '0002.html', md5: 'e41d8cd98f00b204e9800998ecf8427e', bytes: 0)
+      end
+
+      it 'deletes them' do
+        expect(errors.length).to eq(0)
+        expect(DroFile).not_to exist(filename: '0002.html')
+      end
     end
   end
 

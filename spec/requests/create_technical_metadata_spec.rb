@@ -4,10 +4,10 @@ RSpec.describe 'Request create technical metadata' do
   let(:data) do
     { druid: 'druid:bc123df4567',
       files: [
-        'file:///spec/fixtures/test/0001.html',
-        'file:///spec/fixtures/test/bar.txt',
-        'file:///spec/fixtures/test/foo.txt',
-        'file:///spec/fixtures/test/one%20space.txt'
+        { uri: 'file:///spec/fixtures/test/0001.html', md5: '1711cb9f08a0504e1035d198d08edda9' },
+        { uri: 'file:///spec/fixtures/test/bar.txt', md5: 'c157a79031e1c40f85931829bc5fc552' },
+        { uri: 'file:///spec/fixtures/test/foo.txt', md5: '4be1a9f251bb9c7dd3343abb94e6e9e1' },
+        { uri: 'file:///spec/fixtures/test/one%20space.txt', md5: 'bec8c64f3ade34fe1aa1914c075ba8e9' }
       ],
       force: true }
   end
@@ -20,11 +20,13 @@ RSpec.describe 'Request create technical metadata' do
   end
 
   context 'when authorized' do
-    let(:filepaths) do
-      ['/spec/fixtures/test/0001.html',
-       '/spec/fixtures/test/bar.txt',
-       '/spec/fixtures/test/foo.txt',
-       '/spec/fixtures/test/one space.txt']
+    let(:file_infos) do
+      [
+        FileInfo.new(filepath: '/spec/fixtures/test/0001.html', md5: '1711cb9f08a0504e1035d198d08edda9'),
+        FileInfo.new(filepath: '/spec/fixtures/test/bar.txt', md5: 'c157a79031e1c40f85931829bc5fc552'),
+        FileInfo.new(filepath: '/spec/fixtures/test/foo.txt', md5: '4be1a9f251bb9c7dd3343abb94e6e9e1'),
+        FileInfo.new(filepath: '/spec/fixtures/test/one space.txt', md5: 'bec8c64f3ade34fe1aa1914c075ba8e9')
+      ]
     end
 
     context 'when lane-id not provided' do
@@ -36,7 +38,7 @@ RSpec.describe 'Request create technical metadata' do
         expect(response).to have_http_status(:ok)
         expect(TechnicalMetadataWorkflowJob).to have_received(:set).with(queue: :default)
         expect(job).to have_received(:perform_later).with(druid: 'druid:bc123df4567',
-                                                          filepaths: filepaths, force: true)
+                                                          file_infos: file_infos, force: true)
       end
     end
 
@@ -49,7 +51,7 @@ RSpec.describe 'Request create technical metadata' do
         expect(response).to have_http_status(:ok)
         expect(TechnicalMetadataWorkflowJob).to have_received(:set).with(queue: :default)
         expect(job).to have_received(:perform_later).with(druid: 'druid:bc123df4567',
-                                                          filepaths: filepaths, force: true)
+                                                          file_infos: file_infos, force: true)
       end
     end
 
@@ -62,7 +64,7 @@ RSpec.describe 'Request create technical metadata' do
         expect(response).to have_http_status(:ok)
         expect(TechnicalMetadataWorkflowJob).to have_received(:set).with(queue: :low)
         expect(job).to have_received(:perform_later).with(druid: 'druid:bc123df4567',
-                                                          filepaths: filepaths, force: true)
+                                                          file_infos: file_infos, force: true)
       end
     end
   end

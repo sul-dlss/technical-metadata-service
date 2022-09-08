@@ -6,11 +6,8 @@ require 'uri'
 class TechnicalMetadataController < ApiController
   # POST /v1/technical-metadata
   def create
-    druid, file_uris = params.require(%i[druid files])
-    filepaths = file_uris.map { |file_uri| CGI.unescape(URI(file_uri).path) }
-    queue = params['lane-id'] == 'low' ? :low : :default
-    force = params[:force] == true
-    TechnicalMetadataWorkflowJob.set(queue: queue).perform_later(druid: druid, filepaths: filepaths, force: force)
+    TechnicalMetadataWorkflowJob.set(queue: queue).perform_later(druid: params[:druid], file_infos: file_infos,
+                                                                 force: force?)
 
     head :ok
   end
@@ -19,5 +16,21 @@ class TechnicalMetadataController < ApiController
   def show_by_druid
     @files = DroFile.where(druid: params[:druid]).order(:filename)
     return head(:not_found) if @files.empty?
+  end
+
+  private
+
+  def file_infos
+    params[:files].map do |file|
+      FileInfo.new(filepath: CGI.unescape(URI(file[:uri]).path), md5: file[:md5])
+    end
+  end
+
+  def queue
+    params['lane-id'] == 'low' ? :low : :default
+  end
+
+  def force?
+    params[:force] == true
   end
 end

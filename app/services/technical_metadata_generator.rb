@@ -3,31 +3,33 @@
 # Generates and persists technical metadata.
 class TechnicalMetadataGenerator
   def self.generate(druid:, filepaths:, force: false)
-    new(druid: druid, filepaths: filepaths, force: force).generate
+    new(druid: druid, force: force).generate(filepaths)
+  end
+
+  def self.generate_with_file_info(druid:, file_infos:, force: false)
+    new(druid: druid, force: force).generate_with_file_info(file_infos)
   end
 
   # @param [String] druid
-  # @param [Array<String>] filepaths of files
   # @param [Boolean] force generation even if md5 match
-  def initialize(druid:, filepaths:, force: false)
+  def initialize(druid:, force: false)
     @druid = druid
-    @filepaths = filepaths
     @force = force
     @errors = []
     @dro_file_upserts = []
     @dro_file_part_inserts = {}
+    @dro_file_deletes = []
   end
 
   # Generate and persist technical metadata.
   # If any errors are returned, then no changes were made to the existing file model objects.
   # Will exit early after checking that files exist. Otherwise, will return errors after generating technical metadata
   # for all files.
+  # @param [Array<String>] filepaths of files
   # @return [Array<String>] errors
-  # rubocop:disable Metrics/AbcSize
-  # rubocop:disable Metrics/MethodLength
-  def generate
+  def generate(filepaths)
     # Check that file exists for every filepath. If it doesn't, add to errors and fail.
-    check_files_exist
+    check_files_exist(filepaths)
     return errors unless errors.empty?
 
     # Generate technical metadata for each file. If any errors, fail.
@@ -35,27 +37,54 @@ class TechnicalMetadataGenerator
     return errors unless errors.empty?
 
     # Find DroFiles that should be deleted.
-    to_delete = dro_files_to_delete
+    filenames = filepaths.map { |filepath| filename_for(filepath) }
+    generate_dro_files_deletes(filenames)
 
-    ApplicationRecord.transaction do
-      to_delete.each(&:destroy)
-      dro_file_upserts.each do |upsert|
-        dro_file = upsert_dro_file(upsert)
-        insert_dro_file_parts(dro_file)
-      end
-    end
+    persist!
 
     errors
   end
-  # rubocop:enable Metrics/AbcSize
-  # rubocop:enable Metrics/MethodLength
+
+  # Generate and persist technical metadata.
+  # Similar to generate() but uses the provided MD5 checksum to determine if the technical metadata
+  # needs to be generated.
+  # It is not required that all files be present on disk.
+  # @param [Array<FileInfo>] info (filepath, md5) on files
+  # @return [Array<String>] errors
+  def generate_with_file_info(file_infos)
+    # Find names without an existing DroFile (matching MD5, filename, druid).
+    filepaths = filepaths_to_generate_for(file_infos)
+
+    # Check that file exists for every filepath. If it doesn't, add to errors and fail.
+    check_files_exist(filepaths)
+    return errors unless errors.empty?
+
+    # Generate technical metadata for each file. If any errors, fail.
+    filepaths.each { |filepath| generate_for_file(filepath) }
+    return errors unless errors.empty?
+
+    # Find DroFiles that should be deleted.
+    filenames = file_infos.map { |file_info| filename_for(file_info.filepath) }
+    generate_dro_files_deletes(filenames)
+
+    persist!
+
+    errors
+  end
 
   private
 
-  attr_reader :druid, :filepaths, :errors, :dro_file_upserts, :dro_file_part_inserts, :force
+  attr_reader :druid, :errors, :dro_file_upserts, :dro_file_part_inserts, :force, :dro_file_deletes
 
-  def check_files_exist
+  def check_files_exist(filepaths)
     filepaths.each { |filepath| errors << "#{filepath} not found" unless File.exist?(filepath) }
+  end
+
+  def filepaths_to_generate_for(file_infos)
+    file_infos_to_generate = file_infos.reject do |file_info|
+      DroFile.exists?(druid: druid, filename: filename_for(file_info.filepath), md5: file_info.md5)
+    end
+    file_infos_to_generate.map(&:filepath)
   end
 
   def generate_for_file(filepath)
@@ -135,12 +164,10 @@ class TechnicalMetadataGenerator
     }
   end
 
-  def dro_files_to_delete
-    to_delete = []
+  def generate_dro_files_deletes(filenames)
     DroFile.where(druid: druid).find_each do |dro_file|
-      to_delete << dro_file unless filenames.include?(dro_file.filename)
+      dro_file_deletes << dro_file unless filenames.include?(dro_file.filename)
     end
-    to_delete
   end
 
   def upsert_dro_file(upsert)
@@ -161,10 +188,6 @@ class TechnicalMetadataGenerator
     # Adding the Dro_file's id to the insert.
     dro_file_part_inserts[dro_file.filename].each { |part_insert| part_insert[:dro_file_id] = dro_file.id }
     DroFilePart.insert_all!(dro_file_part_inserts[dro_file.filename])
-  end
-
-  def filenames
-    @filenames ||= filepaths.map { |filepath| filename_for(filepath) }
   end
 
   def file_identifier
@@ -201,5 +224,15 @@ class TechnicalMetadataGenerator
 
   def generate?(dro_file, md5)
     dro_file.nil? || dro_file.md5 != md5 || force
+  end
+
+  def persist!
+    ApplicationRecord.transaction do
+      dro_file_deletes.each(&:destroy)
+      dro_file_upserts.each do |upsert|
+        dro_file = upsert_dro_file(upsert)
+        insert_dro_file_parts(dro_file)
+      end
+    end
   end
 end

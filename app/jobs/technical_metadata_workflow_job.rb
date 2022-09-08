@@ -7,10 +7,10 @@ class TechnicalMetadataWorkflowJob < ApplicationJob
   queue_as :default
 
   # @param [String] druid
-  # @param [Array<String>] filepaths of files
-  def perform(druid:, filepaths:, force: false)
+  # @param [Array<FileInfo>] info (filepath, md5) on files
+  def perform(druid:, file_infos:, force: false)
     start = Time.zone.now
-    errors = TechnicalMetadataGenerator.generate(druid: druid, filepaths: filepaths, force: force)
+    errors = TechnicalMetadataGenerator.generate_with_file_info(druid: druid, file_infos: file_infos, force: force)
     if errors.empty?
       log_success(druid: druid, elapsed: Time.zone.now - start)
     else
