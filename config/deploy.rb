@@ -40,10 +40,6 @@ set :linked_dirs, %w[log config/settings vendor/bundle public/system tmp/pids]
 # honeybadger_env otherwise defaults to rails_env
 set :honeybadger_env, fetch(:stage)
 
-# the honeybadger gem should integrate automatically with capistrano-rvm but it
-# doesn't appear to do so on our new Ubuntu boxes :shrug:
-set :rvm_map_bins, fetch(:rvm_map_bins, []).push('honeybadger')
-
 set :passenger_roles, :web
 set :sidekiq_systemd_role, :worker
 set :sidekiq_systemd_use_hooks, true
