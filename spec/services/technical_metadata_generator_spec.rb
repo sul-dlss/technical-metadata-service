@@ -93,7 +93,7 @@ RSpec.describe TechnicalMetadataGenerator do
         expect(file2.filetype).to eq('x-fmt/111')
         expect(file2.mimetype).to eq('text/plain')
         expect(file2.bytes).to eq(4)
-        expect(file2.file_modification).to be_a_kind_of(Time)
+        expect(file2.file_modification).to be_a(Time)
 
         file3 = DroFile.find_by!(druid: druid, filename: 'foo.jpg')
         expect(file3.md5).to eq('5959c720af38282ea0926190e1161ddd')
