@@ -17,7 +17,7 @@ class ApiController < ActionController::API
   def decoded_auth_token
     @decoded_auth_token ||= begin
       body = JWT.decode(http_auth_header, Settings.hmac_secret, true, algorithm: 'HS256').first
-      HashWithIndifferentAccess.new body
+      ActiveSupport::HashWithIndifferentAccess.new body
     rescue StandardError
       nil
     end
