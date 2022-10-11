@@ -138,7 +138,8 @@ class TechnicalMetadataGenerator
   # rubocop:enable Metrics/MethodLength
 
   def filename_for(filepath)
-    ::File.basename(filepath)
+    # For example, /dor/workspace/cy/002/pz/9778/cy002pz9778/content/dir/file.txt
+    filepath.gsub(%r{^.+?/content/}, '')
   end
 
   def dro_file_for(filepath)

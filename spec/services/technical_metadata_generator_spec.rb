@@ -15,41 +15,41 @@ RSpec.describe TechnicalMetadataGenerator do
 
   before do
     allow(FileIdentifierService).to receive(:new).and_return(file_identifier_service)
-    allow(file_identifier_service).to receive(:identify).with(filepath: 'spec/fixtures/test/0001.html')
+    allow(file_identifier_service).to receive(:identify).with(filepath: 'spec/fixtures/content/0001.html')
                                                         .and_return(['fmt/96', 'text/html'])
-    allow(file_identifier_service).to receive(:identify).with(filepath: 'spec/fixtures/test/bar.txt')
+    allow(file_identifier_service).to receive(:identify).with(filepath: 'spec/fixtures/content/bar.txt')
                                                         .and_return(['x-fmt/111', 'text/plain'])
-    allow(file_identifier_service).to receive(:identify).with(filepath: 'spec/fixtures/test/foo.jpg')
+    allow(file_identifier_service).to receive(:identify).with(filepath: 'spec/fixtures/content/foo.jpg')
                                                         .and_return(['fmt/43', 'image/jpeg'])
-    allow(file_identifier_service).to receive(:identify).with(filepath: 'spec/fixtures/test/brief.pdf')
+    allow(file_identifier_service).to receive(:identify).with(filepath: 'spec/fixtures/content/dir/brief.pdf')
                                                         .and_return(['fmt/20', 'application/pdf'])
-    allow(file_identifier_service).to receive(:identify).with(filepath: 'spec/fixtures/test/noam.ogg')
+    allow(file_identifier_service).to receive(:identify).with(filepath: 'spec/fixtures/content/noam.ogg')
                                                         .and_return(['fmt/203', 'audio/ogg'])
-    allow(file_identifier_service).to receive(:identify).with(filepath: 'spec/fixtures/test/max.webm')
+    allow(file_identifier_service).to receive(:identify).with(filepath: 'spec/fixtures/content/max.webm')
                                                         .and_return(['fmt/573', 'video/webm'])
 
     allow(ImageCharacterizerService).to receive(:new).and_return(image_characterizer_service)
-    allow(image_characterizer_service).to receive(:characterize).with(filepath: 'spec/fixtures/test/foo.jpg')
+    allow(image_characterizer_service).to receive(:characterize).with(filepath: 'spec/fixtures/content/foo.jpg')
                                                                 .and_return(height: 200, width: 151)
     allow(PdfCharacterizerService).to receive(:new).and_return(pdf_characterizer_service)
-    allow(pdf_characterizer_service).to receive(:characterize).with(filepath: 'spec/fixtures/test/brief.pdf').and_return(form: false,
-                                                                                                                         pages: 111,
-                                                                                                                         tagged: false,
-                                                                                                                         encrypted: false,
-                                                                                                                         page_size: '612 x 792 pts (letter)',
-                                                                                                                         pdf_version: '1.6',
-                                                                                                                         text: false)
+    allow(pdf_characterizer_service).to receive(:characterize).with(filepath: 'spec/fixtures/content/dir/brief.pdf').and_return(form: false,
+                                                                                                                                pages: 111,
+                                                                                                                                tagged: false,
+                                                                                                                                encrypted: false,
+                                                                                                                                page_size: '612 x 792 pts (letter)',
+                                                                                                                                pdf_version: '1.6',
+                                                                                                                                text: false)
     allow(AvCharacterizerService).to receive(:new).and_return(av_characterizer_service)
-    allow(av_characterizer_service).to receive(:characterize).with(filepath: 'spec/fixtures/test/noam.ogg')
+    allow(av_characterizer_service).to receive(:characterize).with(filepath: 'spec/fixtures/content/noam.ogg')
                                                              .and_return([
                                                                            { audio_count: 1, file_extension: 'ogg', format: 'Ogg', duration: 1.002 },
                                                                            [{ part_type: 'audio', part_id: '28470', order: false, format: 'Vorbis', audio_metadata: { channels: '1', sampling_rate: 44_100, stream_size: 10_020 }, video_metadata: nil, other_metadata: nil }]
                                                                          ])
-    allow(av_characterizer_service).to receive(:characterize).with(filepath: 'spec/fixtures/test/max.webm').and_return([
-                                                                                                                         { video_count: 1, audio_count: 1, file_extension: 'webm', format: 'WebM', duration: 33.234, frame_rate: 29.97 },
-                                                                                                                         [{ part_type: 'video', part_id: '1', order: true, format: 'VP9', audio_metadata: nil, video_metadata: { codec_id: 'V_VP9', height: 480, width: 640, display_aspect_ratio: 1.333, pixel_aspect_ratio: 1.0, frame_rate: 29.97 }, other_metadata: nil },
-                                                                                                                          { part_type: 'audio', part_id: '2', order: true, format: 'Opus', audio_metadata: { codec_id: 'A_OPUS', channels: '2', sampling_rate: 48_000, bit_depth: 32 }, video_metadata: nil, other_metadata: nil }]
-                                                                                                                       ])
+    allow(av_characterizer_service).to receive(:characterize).with(filepath: 'spec/fixtures/content/max.webm').and_return([
+                                                                                                                            { video_count: 1, audio_count: 1, file_extension: 'webm', format: 'WebM', duration: 33.234, frame_rate: 29.97 },
+                                                                                                                            [{ part_type: 'video', part_id: '1', order: true, format: 'VP9', audio_metadata: nil, video_metadata: { codec_id: 'V_VP9', height: 480, width: 640, display_aspect_ratio: 1.333, pixel_aspect_ratio: 1.0, frame_rate: 29.97 }, other_metadata: nil },
+                                                                                                                             { part_type: 'audio', part_id: '2', order: true, format: 'Opus', audio_metadata: { codec_id: 'A_OPUS', channels: '2', sampling_rate: 48_000, bit_depth: 32 }, video_metadata: nil, other_metadata: nil }]
+                                                                                                                          ])
   end
 
   describe '#generate' do
@@ -57,19 +57,19 @@ RSpec.describe TechnicalMetadataGenerator do
 
     let(:filepaths) do
       [
-        'spec/fixtures/test/0001.html'
+        'spec/fixtures/content/0001.html'
       ]
     end
 
     context 'when all files exist' do
       let(:filepaths) do
         [
-          'spec/fixtures/test/0001.html',
-          'spec/fixtures/test/bar.txt',
-          'spec/fixtures/test/foo.jpg',
-          'spec/fixtures/test/brief.pdf',
-          'spec/fixtures/test/noam.ogg',
-          'spec/fixtures/test/max.webm'
+          'spec/fixtures/content/0001.html',
+          'spec/fixtures/content/bar.txt',
+          'spec/fixtures/content/foo.jpg',
+          'spec/fixtures/content/dir/brief.pdf',
+          'spec/fixtures/content/noam.ogg',
+          'spec/fixtures/content/max.webm'
         ]
       end
 
@@ -104,7 +104,7 @@ RSpec.describe TechnicalMetadataGenerator do
         expect(file3.image_metadata['width']).to eq(151)
         expect(file3.tool_versions).to eq('siegfried' => '1.4.5', 'exiftool' => '11.85')
 
-        file4 = DroFile.find_by!(druid: druid, filename: 'brief.pdf')
+        file4 = DroFile.find_by!(druid: druid, filename: 'dir/brief.pdf')
         expect(file4.md5).to eq('0e00380c2a5eea678fcb42b39d913463')
         expect(file4.filetype).to eq('fmt/20')
         expect(file4.mimetype).to eq('application/pdf')
@@ -149,10 +149,10 @@ RSpec.describe TechnicalMetadataGenerator do
     context 'when some files do not exist' do
       let(:filepaths) do
         [
-          'spec/fixtures/test/0001.html',
-          'spec/fixtures/test/bar.txt',
-          'spec/fixtures/test/foo.jpg',
-          'spec/fixtures/test/does_not_exist.txt'
+          'spec/fixtures/content/0001.html',
+          'spec/fixtures/content/bar.txt',
+          'spec/fixtures/content/foo.jpg',
+          'spec/fixtures/content/does_not_exist.txt'
         ]
       end
 
@@ -164,9 +164,9 @@ RSpec.describe TechnicalMetadataGenerator do
     context 'when some DroFiles do not exist' do
       let(:filepaths) do
         [
-          'spec/fixtures/test/0001.html',
-          'spec/fixtures/test/bar.txt',
-          'spec/fixtures/test/foo.jpg'
+          'spec/fixtures/content/0001.html',
+          'spec/fixtures/content/bar.txt',
+          'spec/fixtures/content/foo.jpg'
         ]
       end
 
@@ -183,10 +183,10 @@ RSpec.describe TechnicalMetadataGenerator do
     context 'when some DroFiles are 0 bytes' do
       let(:filepaths) do
         [
-          'spec/fixtures/test/0001.html',
-          'spec/fixtures/test/bar.txt',
-          'spec/fixtures/test/foo.jpg',
-          'spec/fixtures/test/zero.txt'
+          'spec/fixtures/content/0001.html',
+          'spec/fixtures/content/bar.txt',
+          'spec/fixtures/content/foo.jpg',
+          'spec/fixtures/content/zero.txt'
         ]
       end
 
@@ -201,24 +201,24 @@ RSpec.describe TechnicalMetadataGenerator do
     context 'when metadata includes a null character' do
       let(:filepaths) do
         [
-          'spec/fixtures/test/brief.pdf'
+          'spec/fixtures/content/dir/brief.pdf'
         ]
       end
 
       before do
-        allow(pdf_characterizer_service).to receive(:characterize).with(filepath: 'spec/fixtures/test/brief.pdf').and_return(form: false,
-                                                                                                                             pages: 111,
-                                                                                                                             tagged: false,
-                                                                                                                             encrypted: false,
-                                                                                                                             page_size: '612 x 792 pts (letter)',
-                                                                                                                             pdf_version: '1.6',
-                                                                                                                             text: false,
-                                                                                                                             creator: "Null character\u0000")
+        allow(pdf_characterizer_service).to receive(:characterize).with(filepath: 'spec/fixtures/content/dir/brief.pdf').and_return(form: false,
+                                                                                                                                    pages: 111,
+                                                                                                                                    tagged: false,
+                                                                                                                                    encrypted: false,
+                                                                                                                                    page_size: '612 x 792 pts (letter)',
+                                                                                                                                    pdf_version: '1.6',
+                                                                                                                                    text: false,
+                                                                                                                                    creator: "Null character\u0000")
       end
 
       it 'removes the null character' do
         expect(errors.length).to eq(0)
-        file = DroFile.find_by!(druid: druid, filename: 'brief.pdf')
+        file = DroFile.find_by!(druid: druid, filename: 'dir/brief.pdf')
         expect(file.pdf_metadata).to eq('form' => false,
                                         'pages' => 111,
                                         'tagged' => false,
@@ -233,8 +233,8 @@ RSpec.describe TechnicalMetadataGenerator do
     context 'when forcing' do
       let(:filepaths) do
         [
-          'spec/fixtures/test/0001.html',
-          'spec/fixtures/test/bar.txt'
+          'spec/fixtures/content/0001.html',
+          'spec/fixtures/content/bar.txt'
         ]
       end
 
@@ -269,7 +269,7 @@ RSpec.describe TechnicalMetadataGenerator do
 
     let(:file_infos) do
       [
-        FileInfo.new(filepath: 'spec/fixtures/test/0001.html', md5: '1711cb9f08a0504e1035d198d08edda9')
+        FileInfo.new(filepath: 'spec/fixtures/content/0001.html', md5: '1711cb9f08a0504e1035d198d08edda9')
       ]
     end
 
@@ -315,7 +315,7 @@ RSpec.describe TechnicalMetadataGenerator do
     context 'when there is not an existing DroFile and files do not exist' do
       let(:file_infos) do
         [
-          FileInfo.new(filepath: 'spec/fixtures/test/does_not_exist.html', md5: '1711cb9f08a0504e1035d198d08edda9')
+          FileInfo.new(filepath: 'spec/fixtures/content/does_not_exist.html', md5: '1711cb9f08a0504e1035d198d08edda9')
         ]
       end
 
