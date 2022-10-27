@@ -5,7 +5,7 @@
       <file change="identical" basisPath="eric-smith-dissertation.pdf" otherPath="same">
         <fileSignature size="1000217" md5="aead2f6f734355c59af2d5b2689e4fb3" sha1="22dc6464e25dc9a7d600b1de6e3848bf63970595" sha256="e49957d53fb2a46e3652f4d399bd14d019600cf496b98d11ebcdf2d10a8ffd2f"/>
       </file>
-      <file change="identical" basisPath="eric-smith-dissertation-augmented.pdf" otherPath="same">
+      <file change="identical" basisPath="dir1/eric-smith-dissertation-augmented.pdf" otherPath="same">
         <fileSignature size="905566" md5="93802f1a639bc9215c6336ff5575ee22" sha1="32f7129a81830004f0360424525f066972865221" sha256="a67276820853ddd839ba614133f1acd7330ece13f1082315d40219bed10009de"/>
       </file>
     </subset>

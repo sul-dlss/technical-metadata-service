@@ -5,7 +5,7 @@
   </resource>
   <resource type="main-augmented" objectId="druid:kw095zh6093" data="content" id="main">
     <attr name="label">Body of dissertation</attr>
-    <file deliver="yes" preserve="yes" size="905566" mimetype="application/pdf" id="eric-smith-dissertation-augmented.pdf" shelve="yes">
+    <file deliver="yes" preserve="yes" size="905566" mimetype="application/pdf" id="dir1/eric-smith-dissertation-augmented.pdf" shelve="yes">
       <location type="url">https://stacks.stanford.edu/file/druid:bj102hs9687/eric-smith-dissertation-augmented.pdf</location>
     <checksum type="md5">93802f1a639bc9215c6336ff5575ee22</checksum><checksum type="sha1">32f7129a81830004f0360424525f066972865221</checksum></file>
   </resource>

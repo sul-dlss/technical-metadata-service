@@ -3,10 +3,10 @@
 RSpec.describe FileInfoSerializer do
   let(:serializer) { described_class.new }
 
-  let(:file_info) { FileInfo.new(filepath: 'foo.txt', md5: '123') }
+  let(:file_info) { FileInfo.new(filepath: 'spec/foo.txt', md5: '123', filename: 'foo.txt') }
 
   let(:hash) do
-    { '_aj_serialized' => 'FileInfoSerializer', 'filepath' => 'foo.txt', 'md5' => '123' }
+    { '_aj_serialized' => 'FileInfoSerializer', 'filepath' => 'spec/foo.txt', 'md5' => '123', 'filename' => 'foo.txt' }
   end
 
   describe '#serialize?' do

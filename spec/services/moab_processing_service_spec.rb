@@ -19,8 +19,8 @@ RSpec.describe MoabProcessingService do
       expect(TechnicalMetadataJob).to have_received(:set).with(queue: :retro)
       expect(job).to have_received(:perform_later)
         .with(druid: druid,
-              filepaths: ['spec/fixtures/storage_root01/sdr2objects/bj/102/hs/9687/bj102hs9687/v0001/data/content/eric-smith-dissertation.pdf',
-                          'spec/fixtures/storage_root01/sdr2objects/bj/102/hs/9687/bj102hs9687/v0001/data/content/eric-smith-dissertation-augmented.pdf'],
+              filepath_map: { 'spec/fixtures/storage_root01/sdr2objects/bj/102/hs/9687/bj102hs9687/v0001/data/content/eric-smith-dissertation.pdf' => 'eric-smith-dissertation.pdf',
+                              'spec/fixtures/storage_root01/sdr2objects/bj/102/hs/9687/bj102hs9687/v0001/data/content/dir1/eric-smith-dissertation-augmented.pdf' => 'dir1/eric-smith-dissertation-augmented.pdf' },
               force: true)
     end
   end

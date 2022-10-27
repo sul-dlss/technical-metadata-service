@@ -5,10 +5,10 @@ class TechnicalMetadataJob < ApplicationJob
   queue_as :default
 
   # @param [String] druid
-  # @param [Array<String>] filepaths of files
+  # @param [Hash<String, String>] map of filepaths of files to filenames
   # @param [Boolean] force even if md5 match
-  def perform(druid:, filepaths:, force: false)
-    errors = TechnicalMetadataGenerator.generate(druid: druid, filepaths: filepaths, force: force)
+  def perform(druid:, filepath_map:, force: false)
+    errors = TechnicalMetadataGenerator.generate(druid: druid, filepath_map: filepath_map, force: force)
 
     Honeybadger.notify("Generating technical metadata for #{druid} failed: #{errors}") unless errors.empty?
   end

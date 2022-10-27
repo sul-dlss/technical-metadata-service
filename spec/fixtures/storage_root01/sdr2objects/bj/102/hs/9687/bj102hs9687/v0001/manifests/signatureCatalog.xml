@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <signatureCatalog objectId="druid:bj102hs9687" versionId="1" catalogDatetime="2013-01-25T01:33:08Z" fileCount="9" byteCount="1913780" blockCount="1874">
-  <entry originalVersion="1" groupId="content" storagePath="eric-smith-dissertation-augmented.pdf">
+  <entry originalVersion="1" groupId="content" storagePath="dir1/eric-smith-dissertation-augmented.pdf">
     <fileSignature size="905566" md5="93802f1a639bc9215c6336ff5575ee22" sha1="32f7129a81830004f0360424525f066972865221" sha256="a67276820853ddd839ba614133f1acd7330ece13f1082315d40219bed10009de"/>
   </entry>
   <entry originalVersion="1" groupId="content" storagePath="eric-smith-dissertation.pdf">

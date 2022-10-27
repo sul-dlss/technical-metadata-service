@@ -4,6 +4,7 @@ RSpec.describe TechnicalMetadataGenerator do
   let(:service) { described_class.new(druid: druid, force: force) }
   let(:druid) { 'druid:abc123' }
   let(:force) { false }
+  let(:filepath_map) { FilepathSupport.filepath_map_for(filepaths: filepaths, basepath: 'spec/fixtures/content') }
 
   let(:file_identifier_service) { instance_double(FileIdentifierService, version: '1.4.5') }
 
@@ -53,7 +54,7 @@ RSpec.describe TechnicalMetadataGenerator do
   end
 
   describe '#generate' do
-    let(:errors) { service.generate(filepaths) }
+    let(:errors) { service.generate(filepath_map) }
 
     let(:filepaths) do
       [
@@ -269,7 +270,7 @@ RSpec.describe TechnicalMetadataGenerator do
 
     let(:file_infos) do
       [
-        FileInfo.new(filepath: 'spec/fixtures/content/0001.html', md5: '1711cb9f08a0504e1035d198d08edda9')
+        FileInfo.new(filepath: 'spec/fixtures/content/0001.html', md5: '1711cb9f08a0504e1035d198d08edda9', filename: '0001.html')
       ]
     end
 
@@ -315,7 +316,7 @@ RSpec.describe TechnicalMetadataGenerator do
     context 'when there is not an existing DroFile and files do not exist' do
       let(:file_infos) do
         [
-          FileInfo.new(filepath: 'spec/fixtures/content/does_not_exist.html', md5: '1711cb9f08a0504e1035d198d08edda9')
+          FileInfo.new(filepath: 'spec/fixtures/content/does_not_exist.html', md5: '1711cb9f08a0504e1035d198d08edda9', filename: 'does_not_exist.html')
         ]
       end
 
