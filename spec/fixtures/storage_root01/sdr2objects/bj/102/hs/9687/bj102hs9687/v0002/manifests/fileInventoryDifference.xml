@@ -2,7 +2,7 @@
 <fileInventoryDifference objectId="druid:bj102hs9687" differenceCount="9" basis="v1" other="v2-contentMetadata-preserve|/dor/workspace/bj/102/hs/9687/bj102hs9687/metadata" reportDatetime="2013-06-18T19:19:47Z">
   <fileGroupDifference groupId="content" differenceCount="0" identical="2" renamed="0" modified="0" deleted="0" added="0">
     <subset change="identical" count="2">
-      <file change="identical" basisPath="eric-smith-dissertation-augmented.pdf" otherPath="same">
+      <file change="identical" basisPath="dir1/eric-smith-dissertation-augmented.pdf" otherPath="same">
         <fileSignature size="905566" md5="93802f1a639bc9215c6336ff5575ee22" sha1="32f7129a81830004f0360424525f066972865221" sha256="a67276820853ddd839ba614133f1acd7330ece13f1082315d40219bed10009de"/>
       </file>
       <file change="identical" basisPath="eric-smith-dissertation.pdf" otherPath="same">

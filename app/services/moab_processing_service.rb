@@ -17,10 +17,10 @@ class MoabProcessingService
 
   # @return [Boolean] true if a job was queued.
   def process
-    filepaths = find_filepaths
-    return false if filepaths.empty?
+    filepath_map = generate_filepath_map
+    return false if filepath_map.empty?
 
-    TechnicalMetadataJob.set(queue: queue).perform_later(druid: druid, filepaths: filepaths, force: force)
+    TechnicalMetadataJob.set(queue: queue).perform_later(druid: druid, filepath_map: filepath_map, force: force)
     true
   end
 
@@ -30,24 +30,24 @@ class MoabProcessingService
 
   # rubocop:disable Metrics/AbcSize
   # rubocop:disable Metrics/MethodLength
-  def find_filepaths
+  def generate_filepath_map
     storage_object = Moab::StorageServices.find_storage_object(druid)
     unless storage_object.object_pathname.exist?
       Honeybadger.notify("Generating technical metadata for #{druid} failed: Moab not found")
-      return []
+      return {}
     end
 
     storage_object_version = storage_object.find_object_version
     file_inventory = storage_object_version.file_inventory('version')
     content_group = file_inventory.group('content')
     # A collection or no content.
-    return [] unless content_group
+    return {} unless content_group
 
-    content_group.files.map do |file|
+    content_group.files.flat_map do |file|
       file.paths.map do |path|
-        storage_object_version.find_filepath('content', path).to_s
+        [storage_object_version.find_filepath('content', path).to_s, path]
       end
-    end.flatten
+    end.to_h
   end
   # rubocop:enable Metrics/AbcSize
   # rubocop:enable Metrics/MethodLength

@@ -2,8 +2,8 @@
 
 # Generates and persists technical metadata.
 class TechnicalMetadataGenerator
-  def self.generate(druid:, filepaths:, force: false)
-    new(druid: druid, force: force).generate(filepaths)
+  def self.generate(druid:, filepath_map:, force: false)
+    new(druid: druid, force: force).generate(filepath_map)
   end
 
   def self.generate_with_file_info(druid:, file_infos:, force: false)
@@ -25,20 +25,19 @@ class TechnicalMetadataGenerator
   # If any errors are returned, then no changes were made to the existing file model objects.
   # Will exit early after checking that files exist. Otherwise, will return errors after generating technical metadata
   # for all files.
-  # @param [Array<String>] filepaths of files
+  # @param [Hash<String,String>] map of filepaths of files to filenames
   # @return [Array<String>] errors
-  def generate(filepaths)
+  def generate(filepath_map)
     # Check that file exists for every filepath. If it doesn't, add to errors and fail.
-    check_files_exist(filepaths)
+    check_files_exist(filepath_map.keys)
     return errors unless errors.empty?
 
     # Generate technical metadata for each file. If any errors, fail.
-    filepaths.each { |filepath| generate_for_file(filepath) }
+    filepath_map.each { |filepath, filename| generate_for_file(filepath, filename) }
     return errors unless errors.empty?
 
     # Find DroFiles that should be deleted.
-    filenames = filepaths.map { |filepath| filename_for(filepath) }
-    generate_dro_files_deletes(filenames)
+    generate_dro_files_deletes(filepath_map.values)
 
     persist!
 
@@ -53,18 +52,18 @@ class TechnicalMetadataGenerator
   # @return [Array<String>] errors
   def generate_with_file_info(file_infos)
     # Find names without an existing DroFile (matching MD5, filename, druid).
-    filepaths = filepaths_to_generate_for(file_infos)
+    filepath_map = filepaths_to_generate_for(file_infos)
 
     # Check that file exists for every filepath. If it doesn't, add to errors and fail.
-    check_files_exist(filepaths)
+    check_files_exist(filepath_map.keys)
     return errors unless errors.empty?
 
     # Generate technical metadata for each file. If any errors, fail.
-    filepaths.each { |filepath| generate_for_file(filepath) }
+    filepath_map.each { |filepath, filename| generate_for_file(filepath, filename) }
     return errors unless errors.empty?
 
     # Find DroFiles that should be deleted.
-    filenames = file_infos.map { |file_info| filename_for(file_info.filepath) }
+    filenames = file_infos.map(&:filename)
     generate_dro_files_deletes(filenames)
 
     persist!
@@ -82,26 +81,26 @@ class TechnicalMetadataGenerator
 
   def filepaths_to_generate_for(file_infos)
     file_infos_to_generate = file_infos.reject do |file_info|
-      DroFile.exists?(druid: druid, filename: filename_for(file_info.filepath), md5: file_info.md5)
+      DroFile.exists?(druid: druid, filename: file_info.filename, md5: file_info.md5)
     end
-    file_infos_to_generate.map(&:filepath)
+    file_infos_to_generate.to_h { |file_info| [file_info.filepath, file_info.filename] }
   end
 
-  def generate_for_file(filepath)
+  def generate_for_file(filepath, filename)
     #   Generate md5 file
     md5 = Digest::MD5.file(filepath).hexdigest
-    dro_file = dro_file_for(filepath)
+    dro_file = dro_file_for(filename)
     # No need to generate if md5's match.
     return unless generate?(dro_file, md5)
 
     # Note that when upserting, all object must have same keys
-    dro_file_upserts << merged_upsert(upsert_for(filepath, md5), generate_metadata(filepath))
+    dro_file_upserts << merged_upsert(upsert_for(filepath, filename, md5), generate_metadata(filepath, filename))
   rescue StandardError => e
     errors << "Error generating for #{filepath} (#{druid}): #{e.message}"
     raise
   end
 
-  def generate_metadata(filepath)
+  def generate_metadata(filepath, filename)
     # Need to provide all keys for upsert, so creating a blank metadata template.
     metadata = { filetype: nil, mimetype: nil, tool_versions: {} }
 
@@ -110,12 +109,12 @@ class TechnicalMetadataGenerator
       metadata[:tool_versions]['siegfried'] = file_identifier.version
     end
 
-    metadata.deep_merge(generate_metadata_for_mimetype(metadata[:mimetype], filepath))
+    metadata.deep_merge(generate_metadata_for_mimetype(metadata[:mimetype], filepath, filename))
   end
 
   # rubocop:disable Metrics/AbcSize
   # rubocop:disable Metrics/MethodLength
-  def generate_metadata_for_mimetype(mimetype, filepath)
+  def generate_metadata_for_mimetype(mimetype, filepath, filename)
     metadata = { image_metadata: nil, pdf_metadata: nil, av_metadata: nil }
 
     return metadata if mimetype.nil?
@@ -128,7 +127,7 @@ class TechnicalMetadataGenerator
       metadata[:tool_versions] = { 'poppler' => pdf_characterizer.version }
     elsif av?(mimetype)
       metadata[:av_metadata],
-          dro_file_part_inserts[filename_for(filepath)] = av_characterizer.characterize(filepath: filepath)
+          dro_file_part_inserts[filename] = av_characterizer.characterize(filepath: filepath)
       metadata[:tool_versions] = { 'mediainfo' => av_characterizer.version }
     end
 
@@ -137,13 +136,8 @@ class TechnicalMetadataGenerator
   # rubocop:enable Metrics/AbcSize
   # rubocop:enable Metrics/MethodLength
 
-  def filename_for(filepath)
-    # For example, /dor/workspace/cy/002/pz/9778/cy002pz9778/content/dir/file.txt
-    filepath.gsub(%r{^.+?/content/}, '')
-  end
-
-  def dro_file_for(filepath)
-    DroFile.find_by(druid: druid, filename: filename_for(filepath))
+  def dro_file_for(filename)
+    DroFile.find_by(druid: druid, filename: filename)
   end
 
   def merged_upsert(dro_upsert, metadata_upsert)
@@ -153,10 +147,10 @@ class TechnicalMetadataGenerator
     upsert.deep_transform_values { |value| value.is_a?(String) ? value.delete("\u0000") : value }
   end
 
-  def upsert_for(filepath, md5)
+  def upsert_for(filepath, filename, md5)
     {
       druid: druid,
-      filename: filename_for(filepath),
+      filename: filename,
       md5: md5,
       bytes: ::File.size(filepath),
       file_modification: ::File.mtime(filepath),

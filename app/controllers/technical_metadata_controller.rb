@@ -22,7 +22,9 @@ class TechnicalMetadataController < ApiController
 
   def file_infos
     params[:files].map do |file|
-      FileInfo.new(filepath: CGI.unescape(URI(file[:uri]).path), md5: file[:md5])
+      filepath = CGI.unescape(URI(file[:uri]).path)
+      filename = FilepathSupport.filename_for(filepath: filepath, basepath: params[:basepath])
+      FileInfo.new(filepath: filepath, md5: file[:md5], filename: filename)
     end
   end
 

@@ -7,8 +7,9 @@ RSpec.describe TechnicalMetadataWorkflowJob do
 
   let(:file_infos) do
     [
-      FileInfo.new(filepath: 'spec/fixtures/test/0001.html', md5: '1711cb9f08a0504e1035d198d08edda9'),
-      FileInfo.new(filepath: 'spec/fixtures/test/bar.txt', md5: 'c157a79031e1c40f85931829bc5fc552')
+      FileInfo.new(filepath: 'spec/fixtures/test/0001.html', md5: '1711cb9f08a0504e1035d198d08edda9',
+                   filename: '0001.html'),
+      FileInfo.new(filepath: 'spec/fixtures/test/bar.txt', md5: 'c157a79031e1c40f85931829bc5fc552', filename: 'bar.txt')
     ]
   end
 

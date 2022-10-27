@@ -39,6 +39,7 @@ paths:
               required:
                 - druid
                 - files
+                - basepath
               properties:
                 druid:
                     $ref: '#/components/schemas/Druid'
@@ -46,6 +47,9 @@ paths:
                   type: array
                   items:
                     $ref: '#/components/schemas/FileInfo'
+                basepath:
+                  type: string
+                  description: Path to be removed from filepath to get filename
                 force:
                   type: boolean
                   description: Extract the technical metadata even if a record already exists with that checksum
