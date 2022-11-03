@@ -14,7 +14,6 @@ gem 'okcomputer'
 gem 'pg'
 gem 'propshaft'
 gem 'sidekiq', '~> 6.0'
-gem 'sidekiq-statistic'
 gem 'turbo-rails'
 
 # Use Puma as the app server
