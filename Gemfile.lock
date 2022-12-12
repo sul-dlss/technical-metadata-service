@@ -105,6 +105,7 @@ GEM
       dry-validation (~> 1.0, >= 1.0.0)
     connection_pool (2.3.0)
     crass (1.0.6)
+    date (3.3.1)
     deep_merge (1.2.2)
     deprecation (1.1.0)
       activesupport
@@ -173,7 +174,7 @@ GEM
     jbuilder (2.11.5)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
-    json (2.6.2)
+    json (2.6.3)
     json_schema (0.21.0)
     jwt (2.5.0)
     listen (3.7.1)
@@ -198,11 +199,12 @@ GEM
       nokogiri
       nokogiri-happymapper
     msgpack (1.6.0)
-    net-imap (0.3.1)
+    net-imap (0.3.2)
+      date
       net-protocol
     net-pop (0.1.2)
       net-protocol
-    net-protocol (0.2.0)
+    net-protocol (0.2.1)
       timeout
     net-scp (4.0.0)
       net-ssh (>= 2.6.5, < 8.0.0)
@@ -275,7 +277,7 @@ GEM
     rspec-expectations (3.12.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.12.0)
-    rspec-mocks (3.12.0)
+    rspec-mocks (3.12.1)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.12.0)
     rspec-rails (6.0.1)
@@ -289,7 +291,7 @@ GEM
     rspec-support (3.12.0)
     rspec_junit_formatter (0.6.0)
       rspec-core (>= 2, < 4, != 2.12.0)
-    rubocop (1.39.0)
+    rubocop (1.40.0)
       json (~> 2.3)
       parallel (~> 1.10)
       parser (>= 3.1.2.1)
