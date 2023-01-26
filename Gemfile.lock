@@ -193,7 +193,7 @@ GEM
     mini_mime (1.1.2)
     mini_portile2 (2.8.1)
     minitest (5.17.0)
-    moab-versioning (5.2.0)
+    moab-versioning (6.0.0)
       druid-tools (>= 1.0.0)
       json
       nokogiri
@@ -367,7 +367,7 @@ DEPENDENCIES
   jbuilder
   jwt
   listen (~> 3.7)
-  moab-versioning
+  moab-versioning (~> 6.0)
   okcomputer
   pg
   propshaft
@@ -386,4 +386,4 @@ DEPENDENCIES
   turbo-rails
 
 BUNDLED WITH
-   2.3.25
+   2.4.4
