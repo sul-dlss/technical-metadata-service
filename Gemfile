@@ -13,7 +13,7 @@ gem 'jwt'
 gem 'okcomputer'
 gem 'pg'
 gem 'propshaft'
-gem 'sidekiq', '~> 6.0'
+gem 'sidekiq', '~> 7.0'
 gem 'turbo-rails'
 
 # Use Puma as the app server
