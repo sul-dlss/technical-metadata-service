@@ -11,9 +11,11 @@ default: &default
 
 development:
   <<: *default
+  database: "<%= ENV.fetch('DATABASE_NAME', 'technical_metadata_development') %>"
 
 test:
   <<: *default
+  database: "<%= ENV.fetch('DATABASE_NAME', 'technical_metadata_test') %>"
 
 production:
   <<: *default
