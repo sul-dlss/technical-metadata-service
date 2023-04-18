@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'open3'
+require 'shellwords'
 
 # Characterizes a PDF using Poppler.
 class PdfCharacterizerService
@@ -12,7 +13,7 @@ class PdfCharacterizerService
   #   form, creator, producer
   # @raise [PdfCharacterizerService::Error]
   def characterize(filepath:)
-    output, status = Open3.capture2e('pdfinfo', filepath)
+    output, status = Open3.capture2e('pdfinfo', Shellwords.escape(filepath))
     raise Error, "Characterizing #{filepath} returned #{status.exitstatus}: #{output}" unless status.success?
 
     extract_attributes(output).merge(text: text?(filepath))
@@ -35,7 +36,7 @@ class PdfCharacterizerService
   private
 
   def text?(filepath)
-    output, status = Open3.capture2e('pdftotext', filepath, '-')
+    output, status = Open3.capture2e('pdftotext', Shellwords.escape(filepath), '-')
     raise Error, "Extracting text from #{filepath} returned #{status.exitstatus}: #{output}" unless status.success?
 
     output.present?

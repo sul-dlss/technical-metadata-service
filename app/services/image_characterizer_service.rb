@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'open3'
+require 'shellwords'
 
 # Characterizes an image using exiftool.
 class ImageCharacterizerService
@@ -11,7 +12,9 @@ class ImageCharacterizerService
   # @return [Hash] attributes including height and width
   # @raise [ImageCharacterizerService::Error]
   def characterize(filepath:)
-    output, err, status = Open3.capture3('exiftool', '-ImageHeight', '-ImageWidth', '-json', filepath)
+    output, err, status = Open3.capture3(
+      'exiftool', '-ImageHeight', '-ImageWidth', '-json', Shellwords.escape(filepath)
+    )
     raise Error, "Characterizing #{filepath} returned #{status.exitstatus}: #{err}\n#{output}" unless status.success?
 
     extract_attributes(output, filepath)
