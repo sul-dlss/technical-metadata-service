@@ -16,6 +16,9 @@ class TechnicalMetadataWorkflowJob < ApplicationJob
     else
       log_failure(druid: druid, errors: errors)
     end
+  rescue StandardError => e # put workflow step into an error state before sending to HB
+    log_failure(druid: druid, errors: e.message)
+    Honeybadger.notify(e)
   end
 
   private
