@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'open3'
+require 'shellwords'
 
 # Characterizes an A/V file using mediainfo.
 class AvCharacterizerService
@@ -11,7 +12,7 @@ class AvCharacterizerService
   # @return [Hash, Array<Hash>] attributes, array of file part attributes.
   # @raise [AvCharacterizerService::Error]
   def characterize(filepath:)
-    output, status = Open3.capture2e('mediainfo', '-f', '--Output=JSON', filepath)
+    output, status = Open3.capture2e('mediainfo', '-f', '--Output=JSON', Shellwords.escape(filepath))
     raise Error, "Characterizing #{filepath} returned #{status.exitstatus}: #{output}" unless status.success?
 
     extract(output, filepath)
