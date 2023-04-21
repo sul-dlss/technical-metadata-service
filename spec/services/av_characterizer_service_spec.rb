@@ -262,14 +262,14 @@ RSpec.describe AvCharacterizerService do
     end
 
     context 'when file with text track is characterized' do
-      let(:characterization) { service.characterize(filepath: 'make_believe[1].xyz') }
+      let(:characterization) { service.characterize(filepath: 'make_believe.xyz') }
 
       # This output is made up and should be replaced once we have a sample file with a text track.
       let(:output) do
         <<~OUTPUT
           {
           "media": {
-          "@ref": "make_believe[1].xyz",
+          "@ref": "make_believe.xyz",
           "track": [
           {
           "@type": "General",
@@ -295,7 +295,7 @@ RSpec.describe AvCharacterizerService do
                                         [{ part_type: 'text', part_id: '2', order: 1, format: nil,
                                            audio_metadata: nil,
                                            video_metadata: nil, other_metadata: nil }]])
-        expect(Open3).to have_received(:capture2e).with('mediainfo', '-f', '--Output=JSON', 'make_believe\[1\].xyz')
+        expect(Open3).to have_received(:capture2e).with('mediainfo', '-f', '--Output=JSON', 'make_believe.xyz')
       end
     end
 

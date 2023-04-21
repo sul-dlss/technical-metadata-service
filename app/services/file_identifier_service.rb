@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'open3'
-require 'shellwords'
 
 # Identifies a file using Siegfried.
 class FileIdentifierService
@@ -12,7 +11,7 @@ class FileIdentifierService
   # @return [String,String|nil,nil] pronom id, mimetype of the file or nil, nil if unknown
   # @raise [FileIdentifierService::Error]
   def identify(filepath:)
-    output, err, status = Open3.capture3('sf', '-json', Shellwords.escape(filepath))
+    output, err, status = Open3.capture3('sf', '-json', filepath)
     raise Error, "Identifying #{filepath} returned #{status.exitstatus}: #{err}\n#{output}" unless status.success?
 
     pronom_id, mimetype = extract_file_types(output, filepath)
