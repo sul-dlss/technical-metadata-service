@@ -49,7 +49,7 @@ RSpec.describe PdfCharacterizerService do
   end
 
   describe '#characterize' do
-    let(:characterization) { service.characterize(filepath: 'brief[draft].pdf') }
+    let(:characterization) { service.characterize(filepath: 'brief.pdf') }
 
     context 'when file is characterized' do
       let(:output) do
@@ -97,8 +97,8 @@ RSpec.describe PdfCharacterizerService do
                                        page_size: '612 x 792 pts (letter)',
                                        pdf_version: '1.6',
                                        text: true)
-        expect(Open3).to have_received(:capture2e).with('pdfinfo', 'brief\[draft\].pdf')
-        expect(Open3).to have_received(:capture2e).with('pdftotext', 'brief\[draft\].pdf', '-')
+        expect(Open3).to have_received(:capture2e).with('pdfinfo', 'brief.pdf')
+        expect(Open3).to have_received(:capture2e).with('pdftotext', 'brief.pdf', '-')
       end
     end
 

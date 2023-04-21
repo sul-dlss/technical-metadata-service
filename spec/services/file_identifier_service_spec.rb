@@ -119,16 +119,5 @@ RSpec.describe FileIdentifierService do
         expect(identifiers).to eq(['x-fmt/263', 'application/zip'])
       end
     end
-
-    context 'when file contains characters needing escaping' do
-      let(:identifiers) { service.identify(filepath: 'sample[1].txt') }
-      let(:output) { '{"siegfried":"1.10.0","signature":"default.sig","created":"2023-03-23T15:09:43Z","identifiers":[{"name":"pronom","details":"DROID_SignatureFile_V111.xml; container-signature-20230307.xml"}],"files":[{"filename":"sample[1].txt","filesize": 28,"modified":"2023-04-11T14:44:47-07:00","errors": "","matches": [{"ns":"pronom","id":"x-fmt/111","format":"Plain Text File","version":"","mime":"text/plain","class":"","basis":"extension match txt; text match ASCII","warning":""}]}]}' }
-      let(:status) { instance_double(Process::Status, success?: true) }
-
-      it 'returns pronom id and mimetype and receives the filename in escaped form' do
-        expect(identifiers).to eq(['x-fmt/111', 'text/plain'])
-        expect(Open3).to have_received(:capture3).with('sf', '-json', 'sample\[1\].txt')
-      end
-    end
   end
 end

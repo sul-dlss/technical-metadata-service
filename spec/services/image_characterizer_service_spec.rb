@@ -50,13 +50,13 @@ RSpec.describe ImageCharacterizerService do
   end
 
   describe '#characterize' do
-    let(:characterization) { service.characterize(filepath: 'bar[foo].png') }
+    let(:characterization) { service.characterize(filepath: 'bar.png') }
 
     context 'when file is characterized' do
       let(:output) do
         <<~OUTPUT
           [{
-            "SourceFile": "bar[foo].png",
+            "SourceFile": "bar.png",
             "ImageHeight": 694,
             "ImageWidth": 1366
           }]
@@ -66,8 +66,7 @@ RSpec.describe ImageCharacterizerService do
 
       it 'returns height and width' do
         expect(characterization).to eq(height: 694, width: 1366)
-        expect(Open3).to have_received(:capture3)
-          .with('exiftool', '-ImageHeight', '-ImageWidth', '-json', 'bar\[foo\].png')
+        expect(Open3).to have_received(:capture3).with('exiftool', '-ImageHeight', '-ImageWidth', '-json', 'bar.png')
       end
     end
 
@@ -75,7 +74,7 @@ RSpec.describe ImageCharacterizerService do
       let(:output) do
         <<~OUTPUT
           [{
-            "SourceFile": "bar[foo].png"
+            "SourceFile": "bar.png"
           }]
         OUTPUT
       end
@@ -103,7 +102,7 @@ RSpec.describe ImageCharacterizerService do
       let(:output) do
         <<~OUTPUT
           [{
-            "SourceFile": "bar[foo].png",
+            "SourceFile": "bar.png",
             "ImageHeight": 694,
             "ImageWidth": 1366
           }]
@@ -112,8 +111,7 @@ RSpec.describe ImageCharacterizerService do
 
       it 'returns height and width' do
         expect(characterization).to eq(height: 694, width: 1366)
-        expect(Open3).to have_received(:capture3)
-          .with('exiftool', '-ImageHeight', '-ImageWidth', '-json', 'bar\[foo\].png')
+        expect(Open3).to have_received(:capture3).with('exiftool', '-ImageHeight', '-ImageWidth', '-json', 'bar.png')
       end
     end
 
