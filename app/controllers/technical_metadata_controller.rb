@@ -6,8 +6,8 @@ require 'uri'
 class TechnicalMetadataController < ApiController
   # POST /v1/technical-metadata
   def create
-    TechnicalMetadataWorkflowJob.set(queue: queue).perform_later(druid: params[:druid], file_infos: file_infos,
-                                                                 force: force?)
+    TechnicalMetadataWorkflowJob.set(queue:).perform_later(druid: params[:druid], file_infos:,
+                                                           force: force?)
 
     head :ok
   end
@@ -23,8 +23,8 @@ class TechnicalMetadataController < ApiController
   def file_infos
     params[:files].map do |file|
       filepath = CGI.unescape(URI(file[:uri]).path)
-      filename = FilepathSupport.filename_for(filepath: filepath, basepath: params[:basepath])
-      FileInfo.new(filepath: filepath, md5: file[:md5], filename: filename)
+      filename = FilepathSupport.filename_for(filepath:, basepath: params[:basepath])
+      FileInfo.new(filepath:, md5: file[:md5], filename:)
     end
   end
 

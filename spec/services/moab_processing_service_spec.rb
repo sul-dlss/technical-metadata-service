@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe MoabProcessingService do
-  let(:service) { described_class.new(druid: druid, force: true) }
+  let(:service) { described_class.new(druid:, force: true) }
 
   let(:job) { class_double(TechnicalMetadataJob, perform_later: nil) }
 
@@ -18,7 +18,7 @@ RSpec.describe MoabProcessingService do
       service.process
       expect(TechnicalMetadataJob).to have_received(:set).with(queue: :retro)
       expect(job).to have_received(:perform_later)
-        .with(druid: druid,
+        .with(druid:,
               filepath_map: { 'spec/fixtures/storage_root01/sdr2objects/bj/102/hs/9687/bj102hs9687/v0001/data/content/eric-smith-dissertation.pdf' => 'eric-smith-dissertation.pdf',
                               'spec/fixtures/storage_root01/sdr2objects/bj/102/hs/9687/bj102hs9687/v0001/data/content/dir1/eric-smith-dissertation-augmented.pdf' => 'dir1/eric-smith-dissertation-augmented.pdf' },
               force: true)

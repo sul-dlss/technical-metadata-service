@@ -19,7 +19,7 @@ RSpec.describe TechnicalMetadataWorkflowJob do
     before do
       allow(TechnicalMetadataGenerator).to receive(:generate_with_file_info).and_return(errors)
       allow(Dor::Workflow::Client).to receive(:new).and_return(client)
-      job.perform(druid: druid, file_infos: file_infos)
+      job.perform(druid:, file_infos:)
     end
 
     context 'when no errors' do
@@ -44,7 +44,7 @@ RSpec.describe TechnicalMetadataWorkflowJob do
       allow(Honeybadger).to receive(:notify)
       allow(TechnicalMetadataGenerator).to receive(:generate_with_file_info).and_raise(StandardError)
       allow(Dor::Workflow::Client).to receive(:new).and_return(client)
-      job.perform(druid: druid, file_infos: file_infos)
+      job.perform(druid:, file_infos:)
     end
 
     it('logs error and sets workflow step to error') do

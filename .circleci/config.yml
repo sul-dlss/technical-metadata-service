@@ -8,8 +8,14 @@ workflows:
           name: validate
       - ruby-rails/lint:
           name: lint
+          executor:
+            name: ruby-rails/ruby
+            ruby-tag: '3.2.2'
       - ruby-rails/test-rails:
           name: test
+          executor:
+            name: ruby-rails/ruby-postgres
+            ruby-tag: '3.2.2'
       - ruby-rails/docker-publish:
           context: dlss
           dockerfile: docker/app/Dockerfile

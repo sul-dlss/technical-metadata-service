@@ -7,6 +7,6 @@ class FilepathSupport
   end
 
   def self.filepath_map_for(filepaths:, basepath:)
-    filepaths.index_with { |filepath| filename_for(filepath: filepath, basepath: basepath) }
+    filepaths.index_with { |filepath| filename_for(filepath:, basepath:) }
   end
 end

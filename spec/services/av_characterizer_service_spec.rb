@@ -336,7 +336,7 @@ RSpec.describe AvCharacterizerService do
                                         [{ part_type: 'other', part_id: '2', order: 1, format: nil,
                                            audio_metadata: nil,
                                            video_metadata: nil,
-                                           other_metadata: { title: title } }]])
+                                           other_metadata: { title: } }]])
         expect(Open3).to have_received(:capture2e).with('mediainfo', '-f', '--Output=JSON', 'make_believe.xyz')
       end
     end

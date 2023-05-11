@@ -117,7 +117,7 @@ class AvCharacterizerService
 
   def extract_part(track, part_type)
     {
-      part_type: part_type,
+      part_type:,
       part_id: track['ID'].presence,
       order: track['StreamOrder'].present? ? track['StreamOrder'].to_i : nil,
       format: track['Format'].presence,
