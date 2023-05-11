@@ -3,7 +3,7 @@
 # Queues metadata generation for files stored as moabs.
 class MoabProcessingService
   def self.process(druid:, force: false)
-    new(druid: druid, force: force).process
+    new(druid:, force:).process
   end
 
   # @param [String] druid
@@ -20,7 +20,7 @@ class MoabProcessingService
     filepath_map = generate_filepath_map
     return false if filepath_map.empty?
 
-    TechnicalMetadataJob.set(queue: queue).perform_later(druid: druid, filepath_map: filepath_map, force: force)
+    TechnicalMetadataJob.set(queue:).perform_later(druid:, filepath_map:, force:)
     true
   end
 

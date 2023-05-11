@@ -23,7 +23,7 @@ RSpec.describe FilepathSupport do
     let(:basepath) { 'spec/fixtures/test' }
 
     it 'returns a hash of filepath to filename' do
-      expect(described_class.filepath_map_for(filepaths: filepaths, basepath: basepath)).to eq(
+      expect(described_class.filepath_map_for(filepaths:, basepath:)).to eq(
         'spec/fixtures/test/foo.txt' => 'foo.txt',
         'spec/fixtures/test/dir1/bar.txt' => 'dir1/bar.txt'
       )

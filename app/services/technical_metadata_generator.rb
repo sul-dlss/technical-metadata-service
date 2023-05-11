@@ -3,11 +3,11 @@
 # Generates and persists technical metadata.
 class TechnicalMetadataGenerator
   def self.generate(druid:, filepath_map:, force: false)
-    new(druid: druid, force: force).generate(filepath_map)
+    new(druid:, force:).generate(filepath_map)
   end
 
   def self.generate_with_file_info(druid:, file_infos:, force: false)
-    new(druid: druid, force: force).generate_with_file_info(file_infos)
+    new(druid:, force:).generate_with_file_info(file_infos)
   end
 
   # @param [String] druid
@@ -81,7 +81,7 @@ class TechnicalMetadataGenerator
 
   def filepaths_to_generate_for(file_infos)
     file_infos_to_generate = file_infos.reject do |file_info|
-      DroFile.exists?(druid: druid, filename: file_info.filename, md5: file_info.md5)
+      DroFile.exists?(druid:, filename: file_info.filename, md5: file_info.md5)
     end
     file_infos_to_generate.to_h { |file_info| [file_info.filepath, file_info.filename] }
   end
@@ -105,7 +105,7 @@ class TechnicalMetadataGenerator
     metadata = { filetype: nil, mimetype: nil, tool_versions: {} }
 
     if ::File.size(filepath).positive?
-      metadata[:filetype], metadata[:mimetype] = file_identifier.identify(filepath: filepath)
+      metadata[:filetype], metadata[:mimetype] = file_identifier.identify(filepath:)
       metadata[:tool_versions]['siegfried'] = file_identifier.version
     end
 
@@ -120,14 +120,14 @@ class TechnicalMetadataGenerator
     return metadata if mimetype.nil?
 
     if image?(mimetype)
-      metadata[:image_metadata] = image_characterizer.characterize(filepath: filepath)
+      metadata[:image_metadata] = image_characterizer.characterize(filepath:)
       metadata[:tool_versions] = { 'exiftool' => image_characterizer.version }
     elsif pdf?(mimetype)
-      metadata[:pdf_metadata] = pdf_characterizer.characterize(filepath: filepath)
+      metadata[:pdf_metadata] = pdf_characterizer.characterize(filepath:)
       metadata[:tool_versions] = { 'poppler' => pdf_characterizer.version }
     elsif av?(mimetype)
       metadata[:av_metadata],
-          dro_file_part_inserts[filename] = av_characterizer.characterize(filepath: filepath)
+          dro_file_part_inserts[filename] = av_characterizer.characterize(filepath:)
       metadata[:tool_versions] = { 'mediainfo' => av_characterizer.version }
     end
 
@@ -137,7 +137,7 @@ class TechnicalMetadataGenerator
   # rubocop:enable Metrics/MethodLength
 
   def dro_file_for(filename)
-    DroFile.find_by(druid: druid, filename: filename)
+    DroFile.find_by(druid:, filename:)
   end
 
   def merged_upsert(dro_upsert, metadata_upsert)
@@ -149,9 +149,9 @@ class TechnicalMetadataGenerator
 
   def upsert_for(filepath, filename, md5)
     {
-      druid: druid,
-      filename: filename,
-      md5: md5,
+      druid:,
+      filename:,
+      md5:,
       bytes: ::File.size(filepath),
       file_modification: ::File.mtime(filepath),
       created_at: Time.zone.now,
@@ -160,7 +160,7 @@ class TechnicalMetadataGenerator
   end
 
   def generate_dro_files_deletes(filenames)
-    DroFile.where(druid: druid).find_each do |dro_file|
+    DroFile.where(druid:).find_each do |dro_file|
       dro_file_deletes << dro_file unless filenames.include?(dro_file.filename)
     end
   end

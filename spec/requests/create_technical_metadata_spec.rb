@@ -43,7 +43,7 @@ RSpec.describe 'Request create technical metadata' do
         expect(response).to have_http_status(:ok)
         expect(TechnicalMetadataWorkflowJob).to have_received(:set).with(queue: :default)
         expect(job).to have_received(:perform_later).with(druid: 'druid:bc123df4567',
-                                                          file_infos: file_infos, force: true)
+                                                          file_infos:, force: true)
       end
     end
 
@@ -56,7 +56,7 @@ RSpec.describe 'Request create technical metadata' do
         expect(response).to have_http_status(:ok)
         expect(TechnicalMetadataWorkflowJob).to have_received(:set).with(queue: :default)
         expect(job).to have_received(:perform_later).with(druid: 'druid:bc123df4567',
-                                                          file_infos: file_infos, force: true)
+                                                          file_infos:, force: true)
       end
     end
 
@@ -69,7 +69,7 @@ RSpec.describe 'Request create technical metadata' do
         expect(response).to have_http_status(:ok)
         expect(TechnicalMetadataWorkflowJob).to have_received(:set).with(queue: :low)
         expect(job).to have_received(:perform_later).with(druid: 'druid:bc123df4567',
-                                                          file_infos: file_infos, force: true)
+                                                          file_infos:, force: true)
       end
     end
   end

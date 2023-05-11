@@ -4,8 +4,7 @@
 #
 # NOTE: This uses a Debian-based image rather than an Alpine-based image so that
 #       we can install Debian packages. In particular: siegfried.
-FROM ruby:3.0.3-buster
-
+FROM ruby:3.2.2-buster
 
 # Two-pass package update: first install everything except siegfried, which is
 # installed via add-apt-repository, a tool that isn't installed until

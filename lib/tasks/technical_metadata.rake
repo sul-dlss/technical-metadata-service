@@ -5,7 +5,7 @@ namespace :techmd do
   task :generate, %i[druid filepaths basepath force] => :environment do |_task, args|
     filepath_map = FilepathSupport.filepath_map_for(filepaths: args[:filepaths].split(','), basepath: args[:basepath])
     errors = TechnicalMetadataGenerator.generate(druid: args[:druid],
-                                                 filepath_map: filepath_map,
+                                                 filepath_map:,
                                                  force: args[:force] == 'true')
     if errors.empty?
       puts 'Success'
@@ -24,9 +24,9 @@ namespace :techmd do
   task :generate_for_moab_list, %i[force] => :environment do |_task, args|
     force = args[:force] == 'true'
     File.foreach('druids.txt').map(&:strip).each_with_index do |druid, index|
-      if !force && DroFile.exists?(druid: druid)
+      if !force && DroFile.exists?(druid:)
         puts "Skipped #{druid} (#{index + 1}) since already has technical metadata"
-      elsif MoabProcessingService.process(druid: druid, force: force)
+      elsif MoabProcessingService.process(druid:, force:)
         puts "Queued #{druid} (#{index + 1})"
       else
         puts "Skipped #{druid} (#{index + 1}) since no content"

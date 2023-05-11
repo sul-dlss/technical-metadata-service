@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 RSpec.describe TechnicalMetadataGenerator do
-  let(:service) { described_class.new(druid: druid, force: force) }
+  let(:service) { described_class.new(druid:, force:) }
   let(:druid) { 'druid:abc123' }
   let(:force) { false }
-  let(:filepath_map) { FilepathSupport.filepath_map_for(filepaths: filepaths, basepath: 'spec/fixtures/content') }
+  let(:filepath_map) { FilepathSupport.filepath_map_for(filepaths:, basepath: 'spec/fixtures/content') }
 
   let(:file_identifier_service) { instance_double(FileIdentifierService, version: '1.4.5') }
 
@@ -76,27 +76,27 @@ RSpec.describe TechnicalMetadataGenerator do
 
       before do
         # Unchanged
-        DroFile.create(druid: druid, filename: '0001.html', md5: '1711cb9f08a0504e1035d198d08edda9', bytes: 0,
+        DroFile.create(druid:, filename: '0001.html', md5: '1711cb9f08a0504e1035d198d08edda9', bytes: 0,
                        filetype: 'test', mimetype: 'text/test')
         # MD5 mismatch
-        DroFile.create(druid: druid, filename: 'bar.txt', md5: 'xc157a79031e1c40f85931829bc5fc552', bytes: 0,
+        DroFile.create(druid:, filename: 'bar.txt', md5: 'xc157a79031e1c40f85931829bc5fc552', bytes: 0,
                        filetype: 'test', mimetype: 'text/test')
       end
 
       it 'generates technical metadata for files' do
         expect(errors.length).to eq(0)
-        file1 = DroFile.find_by!(druid: druid, filename: '0001.html')
+        file1 = DroFile.find_by!(druid:, filename: '0001.html')
         expect(file1.md5).to eq('1711cb9f08a0504e1035d198d08edda9')
         expect(file1.filetype).to eq('test')
 
-        file2 = DroFile.find_by!(druid: druid, filename: 'bar.txt')
+        file2 = DroFile.find_by!(druid:, filename: 'bar.txt')
         expect(file2.md5).to eq('c157a79031e1c40f85931829bc5fc552')
         expect(file2.filetype).to eq('x-fmt/111')
         expect(file2.mimetype).to eq('text/plain')
         expect(file2.bytes).to eq(4)
         expect(file2.file_modification).to be_a(Time)
 
-        file3 = DroFile.find_by!(druid: druid, filename: 'foo.jpg')
+        file3 = DroFile.find_by!(druid:, filename: 'foo.jpg')
         expect(file3.md5).to eq('5959c720af38282ea0926190e1161ddd')
         expect(file3.filetype).to eq('fmt/43')
         expect(file3.mimetype).to eq('image/jpeg')
@@ -105,7 +105,7 @@ RSpec.describe TechnicalMetadataGenerator do
         expect(file3.image_metadata['width']).to eq(151)
         expect(file3.tool_versions).to eq('siegfried' => '1.4.5', 'exiftool' => '11.85')
 
-        file4 = DroFile.find_by!(druid: druid, filename: 'dir/brief.pdf')
+        file4 = DroFile.find_by!(druid:, filename: 'dir/brief.pdf')
         expect(file4.md5).to eq('0e00380c2a5eea678fcb42b39d913463')
         expect(file4.filetype).to eq('fmt/20')
         expect(file4.mimetype).to eq('application/pdf')
@@ -119,7 +119,7 @@ RSpec.describe TechnicalMetadataGenerator do
                                          'text' => false)
         expect(file4.tool_versions).to eq('siegfried' => '1.4.5', 'poppler' => '0.85.0')
 
-        file5 = DroFile.find_by!(druid: druid, filename: 'noam.ogg')
+        file5 = DroFile.find_by!(druid:, filename: 'noam.ogg')
         expect(file5.md5).to eq('6343e57b10320404a1cc9eeb36db5121')
         expect(file5.filetype).to eq('fmt/203')
         expect(file5.mimetype).to eq('audio/ogg')
@@ -132,7 +132,7 @@ RSpec.describe TechnicalMetadataGenerator do
         expect(file5_part.part_type).to eq('audio')
         expect(file5_part.audio_metadata).to eq('channels' => '1', 'stream_size' => 10_020, 'sampling_rate' => 44_100)
 
-        file6 = DroFile.find_by!(druid: druid, filename: 'max.webm')
+        file6 = DroFile.find_by!(druid:, filename: 'max.webm')
         expect(file6.md5).to eq('075af8346dae86aa93feb3666803396d')
         expect(file6.filetype).to eq('fmt/573')
         expect(file6.mimetype).to eq('video/webm')
@@ -172,7 +172,7 @@ RSpec.describe TechnicalMetadataGenerator do
       end
 
       before do
-        DroFile.create(druid: druid, filename: '0002.html', md5: 'e41d8cd98f00b204e9800998ecf8427e', bytes: 0)
+        DroFile.create(druid:, filename: '0002.html', md5: 'e41d8cd98f00b204e9800998ecf8427e', bytes: 0)
       end
 
       it 'deletes them' do
@@ -193,7 +193,7 @@ RSpec.describe TechnicalMetadataGenerator do
 
       it 'does not identify them' do
         expect(errors.length).to eq(0)
-        file = DroFile.find_by!(druid: druid, filename: 'zero.txt')
+        file = DroFile.find_by!(druid:, filename: 'zero.txt')
         expect(file.bytes).to eq(0)
         expect(file.filetype).to be_nil
       end
@@ -219,7 +219,7 @@ RSpec.describe TechnicalMetadataGenerator do
 
       it 'removes the null character' do
         expect(errors.length).to eq(0)
-        file = DroFile.find_by!(druid: druid, filename: 'dir/brief.pdf')
+        file = DroFile.find_by!(druid:, filename: 'dir/brief.pdf')
         expect(file.pdf_metadata).to eq('form' => false,
                                         'pages' => 111,
                                         'tagged' => false,
@@ -243,21 +243,21 @@ RSpec.describe TechnicalMetadataGenerator do
 
       before do
         # Unchanged
-        DroFile.create(druid: druid, filename: '0001.html', md5: '1711cb9f08a0504e1035d198d08edda9', bytes: 0,
+        DroFile.create(druid:, filename: '0001.html', md5: '1711cb9f08a0504e1035d198d08edda9', bytes: 0,
                        filetype: 'test', mimetype: 'text/test')
         # MD5 mismatch
-        DroFile.create(druid: druid, filename: 'bar.txt', md5: 'xc157a79031e1c40f85931829bc5fc552', bytes: 0,
+        DroFile.create(druid:, filename: 'bar.txt', md5: 'xc157a79031e1c40f85931829bc5fc552', bytes: 0,
                        filetype: 'test', mimetype: 'text/test')
       end
 
       it 'generates technical metadata for files' do
         expect(errors.length).to eq(0)
-        file1 = DroFile.find_by!(druid: druid, filename: '0001.html')
+        file1 = DroFile.find_by!(druid:, filename: '0001.html')
         expect(file1.md5).to eq('1711cb9f08a0504e1035d198d08edda9')
         expect(file1.filetype).to eq('fmt/96')
         expect(file1.mimetype).to eq('text/html')
 
-        file2 = DroFile.find_by!(druid: druid, filename: 'bar.txt')
+        file2 = DroFile.find_by!(druid:, filename: 'bar.txt')
         expect(file2.md5).to eq('c157a79031e1c40f85931829bc5fc552')
         expect(file2.filetype).to eq('x-fmt/111')
         expect(file2.mimetype).to eq('text/plain')
@@ -280,7 +280,7 @@ RSpec.describe TechnicalMetadataGenerator do
 
     context 'when there is an existing DroFile with MD5 match' do
       let!(:dro_file) do
-        DroFile.create(druid: druid, filename: '0001.html', md5: '1711cb9f08a0504e1035d198d08edda9', bytes: 0,
+        DroFile.create(druid:, filename: '0001.html', md5: '1711cb9f08a0504e1035d198d08edda9', bytes: 0,
                        filetype: 'test', mimetype: 'text/test')
       end
 
@@ -293,7 +293,7 @@ RSpec.describe TechnicalMetadataGenerator do
 
     context 'when there is an existing DroFile with MD5 mismatch' do
       let!(:dro_file) do
-        DroFile.create(druid: druid, filename: '0001.html', md5: 'x1711cb9f08a0504e1035d198d08edda9', bytes: 0,
+        DroFile.create(druid:, filename: '0001.html', md5: 'x1711cb9f08a0504e1035d198d08edda9', bytes: 0,
                        filetype: 'test', mimetype: 'text/test')
       end
 
@@ -307,7 +307,7 @@ RSpec.describe TechnicalMetadataGenerator do
     context 'when there is not an existing DroFile and file exists' do
       it 'does not generate technical metadata for files' do
         expect(errors.length).to eq(0)
-        dro_file = DroFile.find_by!(druid: druid, filename: '0001.html')
+        dro_file = DroFile.find_by!(druid:, filename: '0001.html')
         expect(dro_file.md5).to eq('1711cb9f08a0504e1035d198d08edda9')
         expect(file_identifier_service).to have_received(:identify)
       end
@@ -327,7 +327,7 @@ RSpec.describe TechnicalMetadataGenerator do
 
     context 'when some DroFiles do not exist' do
       before do
-        DroFile.create(druid: druid, filename: '0002.html', md5: 'e41d8cd98f00b204e9800998ecf8427e', bytes: 0)
+        DroFile.create(druid:, filename: '0002.html', md5: 'e41d8cd98f00b204e9800998ecf8427e', bytes: 0)
       end
 
       it 'deletes them' do
@@ -362,13 +362,13 @@ RSpec.describe TechnicalMetadataGenerator do
 
   describe 'zero tracks for an av file' do
     before do
-      DroFile.create(druid: druid, filename: 'not_audio.tar', md5: 'asdfas9000lkjds;alfj34jk', bytes: 0,
+      DroFile.create(druid:, filename: 'not_audio.tar', md5: 'asdfas9000lkjds;alfj34jk', bytes: 0,
                      filetype: 'test', mimetype: 'audio/mp4')
       service.instance_variable_set(:@dro_file_part_inserts, 'not_audio.tar': [])
     end
 
     it 'insert_dro_file_parts return nil when file has zero tracks' do
-      file1 = DroFile.find_by!(druid: druid, filename: 'not_audio.tar')
+      file1 = DroFile.find_by!(druid:, filename: 'not_audio.tar')
       expect(service.send(:insert_dro_file_parts, file1)).to be_nil
     end
   end
