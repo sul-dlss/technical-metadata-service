@@ -37,7 +37,7 @@ RSpec.describe 'Show technical metadata' do
             headers: { 'Authorization' => "Bearer #{jwt}", 'Accept' => 'application/json' }
 
         expect(response).to have_http_status(:ok)
-        expect(JSON.parse(response.body)).to eq(response_json)
+        expect(response.parsed_body).to eq(response_json)
       end
     end
 
