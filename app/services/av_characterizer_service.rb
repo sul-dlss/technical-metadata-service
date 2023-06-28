@@ -134,7 +134,7 @@ class AvCharacterizerService
 
     time.gsub!(/[:-]/, '') # strips : or - in date and time parts to handle cases where the date has colons or dashes
     date_format = '%Y%m%d %H%M%S%z'
-    return Time.strptime("#{time}+0000", date_format).iso8601.delete_suffix('+00:00') unless time.start_with?('UTC')
+    return Time.strptime("#{time}+0000", date_format).iso8601 unless time.start_with?('UTC')
 
     Time.strptime("#{time}+0000", "UTC #{date_format}").iso8601
   rescue ArgumentError

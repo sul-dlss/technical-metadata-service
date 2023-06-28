@@ -130,7 +130,7 @@ RSpec.describe AvCharacterizerService do
 
         it 'returns av_metadata and track metadata' do
           expect(characterization).to eq([{ audio_count: 1, file_extension: 'ogg', format: 'Ogg', duration: 1.002,
-                                            encoded_date: '2020-02-27T18:23:48' },
+                                            encoded_date: '2020-02-27T18:23:48+00:00' },
                                           [{ part_type: 'audio', part_id: '28470', order: nil, format: 'Vorbis',
                                              audio_metadata: { channels: '1', sampling_rate: 44_100,
                                                                stream_size: 10_020 },
@@ -144,7 +144,7 @@ RSpec.describe AvCharacterizerService do
 
         it 'returns av_metadata and track metadata' do
           expect(characterization).to eq([{ audio_count: 1, file_extension: 'ogg', format: 'Ogg', duration: 1.002,
-                                            encoded_date: '2020-02-27T18:23:48' },
+                                            encoded_date: '2020-02-27T18:23:48+00:00' },
                                           [{ part_type: 'audio', part_id: '28470', order: nil, format: 'Vorbis',
                                              audio_metadata: { channels: '1', sampling_rate: 44_100,
                                                                stream_size: 10_020 },
