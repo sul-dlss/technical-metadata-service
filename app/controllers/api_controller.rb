@@ -11,7 +11,7 @@ class ApiController < ActionController::API
   # Ensure a valid token is present, or renders "401: Not Authorized"
   def check_auth_token
     token = decoded_auth_token
-    return render json: { error: 'Not Authorized' }, status: :unauthorized unless token
+    render json: { error: 'Not Authorized' }, status: :unauthorized unless token
   end
 
   def decoded_auth_token
