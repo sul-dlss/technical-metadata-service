@@ -59,10 +59,12 @@ module TechnicalMetadataService
                           error_class: JSONAPIError,
                           accept_request_filter: accept_proc,
                           parse_response_by_content_type: false,
-                          query_hash_key: 'action_dispatch.request.query_parameters'
+                          query_hash_key: 'action_dispatch.request.query_parameters',
+                          parameter_overwite_by_rails_rule: false
     config.middleware.use Committee::Middleware::ResponseValidation,
                           schema_path: 'openapi.yml',
                           parse_response_by_content_type: false,
-                          query_hash_key: 'rack.request.query_hash'
+                          query_hash_key: 'rack.request.query_hash',
+                          parameter_overwite_by_rails_rule: false
   end
 end
