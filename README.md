@@ -182,3 +182,10 @@ docker push suldlss/technical-metadata-service:latest
 
 ## Generating techmd from preservation storage
 For details, see https://github.com/sul-dlss/technical-metadata-service/wiki/Generating-techmd-from-preservation-storage
+
+## Reset Process (for QA/Stage)
+
+### Steps
+
+1. Reset the database: `bin/rails -e p db:reset`
+
