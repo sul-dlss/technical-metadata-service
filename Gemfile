@@ -14,7 +14,7 @@ gem 'okcomputer'
 gem 'pg'
 gem 'propshaft'
 gem 'redis', '~>4.8' # For OKComputer check
-gem 'sidekiq', '~> 7.0'
+gem 'sidekiq', '~> 7.1'
 gem 'turbo-rails'
 
 # Use Puma as the app server
