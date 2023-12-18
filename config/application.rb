@@ -38,6 +38,10 @@ class JSONAPIError < Committee::ValidationError
   end
 end
 
+# Parent class for characterization errors, helps us trap for any characterization errors
+class CharacterizationError < StandardError
+end
+
 module TechnicalMetadataService
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.

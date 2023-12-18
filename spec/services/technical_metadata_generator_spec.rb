@@ -5,13 +5,9 @@ RSpec.describe TechnicalMetadataGenerator do
   let(:druid) { 'druid:abc123' }
   let(:force) { false }
   let(:filepath_map) { FilepathSupport.filepath_map_for(filepaths:, basepath: 'spec/fixtures/content') }
-
   let(:file_identifier_service) { instance_double(FileIdentifierService, version: '1.4.5') }
-
   let(:image_characterizer_service) { instance_double(ImageCharacterizerService, version: '11.85') }
-
   let(:pdf_characterizer_service) { instance_double(PdfCharacterizerService, version: '0.85.0') }
-
   let(:av_characterizer_service) { instance_double(AvCharacterizerService, version: 'v19.09') }
 
   before do
@@ -60,6 +56,34 @@ RSpec.describe TechnicalMetadataGenerator do
       [
         'spec/fixtures/content/0001.html'
       ]
+    end
+
+    context 'when a file raises a characterization error' do
+      let(:filepath_map) { FilepathSupport.filepath_map_for(filepaths:, basepath: 'spec/fixtures/content') }
+      let(:filepaths) { ['spec/fixtures/content/sample.img'] }
+
+      before do
+        allow(file_identifier_service).to receive(:identify).with(filepath: 'spec/fixtures/content/sample.img')
+                                                            .and_return(['fmt/114', 'image/bmp'])
+        allow(image_characterizer_service).to receive(:characterize).with(filepath: 'spec/fixtures/content/sample.img')
+                                                                    .and_raise(ImageCharacterizerService::Error, 'Error: Unknown file type')
+        allow(Honeybadger).to receive(:notify)
+      end
+
+      it 'does not raise an error' do
+        expect(errors.length).to eq(0)
+        DroFile.find_by!(druid:, filename: 'sample.img')
+        expect(Honeybadger).to have_received(:notify).once.with(
+          ImageCharacterizerService::Error,
+          context: {
+            druid:,
+            mimetype: 'image/bmp',
+            filepath: 'spec/fixtures/content/sample.img',
+            filename: 'sample.img',
+            tool_versions: nil
+          }
+        )
+      end
     end
 
     context 'when all files exist' do
