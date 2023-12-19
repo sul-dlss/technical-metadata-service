@@ -119,16 +119,26 @@ class TechnicalMetadataGenerator
 
     return metadata if mimetype.nil?
 
-    if image?(mimetype)
-      metadata[:image_metadata] = image_characterizer.characterize(filepath:)
-      metadata[:tool_versions] = { 'exiftool' => image_characterizer.version }
-    elsif pdf?(mimetype)
-      metadata[:pdf_metadata] = pdf_characterizer.characterize(filepath:)
-      metadata[:tool_versions] = { 'poppler' => pdf_characterizer.version }
-    elsif av?(mimetype)
-      metadata[:av_metadata],
-          dro_file_part_inserts[filename] = av_characterizer.characterize(filepath:)
-      metadata[:tool_versions] = { 'mediainfo' => av_characterizer.version }
+    begin
+      if image?(mimetype)
+        metadata[:image_metadata] = image_characterizer.characterize(filepath:)
+        metadata[:tool_versions] = { 'exiftool' => image_characterizer.version }
+      elsif pdf?(mimetype)
+        metadata[:pdf_metadata] = pdf_characterizer.characterize(filepath:)
+        metadata[:tool_versions] = { 'poppler' => pdf_characterizer.version }
+      elsif av?(mimetype)
+        metadata[:av_metadata],
+        dro_file_part_inserts[filename] = av_characterizer.characterize(filepath:)
+        metadata[:tool_versions] = { 'mediainfo' => av_characterizer.version }
+      end
+    rescue CharacterizationError => e
+      Honeybadger.notify(e, context: {
+                           druid:,
+                           mimetype:,
+                           filepath:,
+                           filename:,
+                           tool_versions: metadata[:tool_versions]
+                         })
     end
 
     metadata

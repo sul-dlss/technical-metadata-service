@@ -4,7 +4,7 @@ require 'open3'
 
 # Characterizes an image using exiftool.
 class ImageCharacterizerService
-  class Error < StandardError
+  class Error < CharacterizationError
   end
 
   # @param [String] filepath of the image to characterize
