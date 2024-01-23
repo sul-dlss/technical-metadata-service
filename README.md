@@ -38,8 +38,6 @@ $ bundler exec rake techmd:generate_for_moab_list
 Queued druid:bc123df4567
 ```
 
-
-
 ## Background processing
 
 Background processing is performed by [Sidekiq](https://github.com/mperham/sidekiq).
@@ -50,6 +48,42 @@ For more information on configuring and deploying Sidekiq, see this [doc](https:
 ## Monitoring / statistics
 
 Basic monitoring and statistics are available from [/](http://localhost:3000/).
+
+## Reports
+
+The service includes a Rake task that outputs CSV for files belonging to druids (as specified in an argument to the rake task) if and only if the file has a `duration` value in its audiovisual metadata. It outputs the druid, the filename, the MIME type, and the duration (in seconds):
+
+```shell
+$ RAILS_ENV=production bin/rake techmd:reports:media_durations[/tmp/druids.txt]
+druid:bk586kk6146,cb147tv8205_pm.wav,audio/x-wav,1683.739
+druid:bk586kk6146,cb147tv8205_sh.wav,audio/x-wav,1646.118
+druid:bk586kk6146,cb147tv8205_sl.m4a,application/mp4,1646.179
+druid:cm856pm4228,gt507vy5436_sl.mp4,application/mp4,3816.201
+druid:ck227dm7693,bb761mb4522_FV4298_eng_sl.mp4,application/mp4,621.0
+druid:ck227dm7693,bb761mb4522_FV4298_ger_sl.mp4,application/mp4,621.0
+druid:ck227dm7693,bb761mb4522_FV4298_v1_sl.mp4,application/mp4,620.72
+druid:ck227dm7693,bb761mb4522_FV4298_v2_sl.mov,video/quicktime,620.96
+druid:ck227dm7693,bb761mb4522_FV4298_v3_sl.mp4,application/mp4,621.014
+druid:ck227dm7693,bb761mb4522_FV4298_v4_sl.mp4,application/mp4,620.96
+druid:nr582tm3161,Redivis_GMT20220303-205959_Recording_1920x1186.mp4,application/mp4,3322.912
+druid:nr582tm3161,Redivis_GMT20220303-205959_Recording.mp4,application/mp4,3322.912
+druid:pf759xf5671,qf378nj5000_sh.mpeg,video/mpeg,2261.04
+druid:pf759xf5671,qf378nj5000_sl.mp4,application/mp4,2294.956
+druid:rz125dy0428,bw689yg2740_sl.mp4,application/mp4,5080.485
+```
+
+where `/tmp/druids.txt` looks like:
+
+```
+druid:bk586kk6146
+druid:cm856pm4228
+foobar
+druid:ck227dm7693
+druid:nr582tm3161
+druid:pf759xf5671
+druid:rz125dy0428
+druid:bf342vg1682
+```
 
 ## Requirements
 
@@ -188,4 +222,3 @@ For details, see https://github.com/sul-dlss/technical-metadata-service/wiki/Gen
 ### Steps
 
 1. Reset the database: `bin/rails -e p db:reset`
-
