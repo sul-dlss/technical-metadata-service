@@ -33,4 +33,21 @@ namespace :techmd do
       end
     end
   end
+
+  namespace :reports do
+    desc 'Output a CSV of media durations for corresponding druids'
+    task :media_durations, %i[input_path] => :environment do |_task, args|
+      results = File.foreach(args[:input_path], chomp: true).flat_map do |druid|
+        DroFile.where(druid:)
+               .order(:filename)
+               .filter_map do |dro_file|
+          next if dro_file.av_metadata.blank?
+
+          "#{druid},#{dro_file.filename},#{dro_file.mimetype}," \
+            "#{dro_file.av_metadata.fetch('duration', 'none recorded')}"
+        end
+      end
+      puts results.join("\n")
+    end
+  end
 end
