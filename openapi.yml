@@ -128,7 +128,6 @@ components:
           format: float
         encoded_date:
           type: string
-          format: date-time
     DroFile:
       description: Technical metadata for a single file
       type: object
