@@ -3,36 +3,27 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-gem 'rails', '~> 7.0.1'
-
+gem 'bootsnap', '>= 1.4.2', require: false # # Reduces boot times through caching; required in config/boot.rb
 gem 'committee' # validates Open API spec (OAS)
 gem 'config'
 gem 'honeybadger'
-gem 'jbuilder'
+gem 'importmap-rails', '~> 1.0'
+gem 'jbuilder' # Build JSON APIs with ease.
 gem 'jwt'
 gem 'okcomputer'
 gem 'pg'
 gem 'propshaft'
-gem 'redis', '~>4.8' # For OKComputer check
+gem 'puma', '~> 5.6' # app server
+gem 'rails', '~> 7.0.1'
+gem 'redis', '~>4.8' # for OKComputer check
 gem 'sidekiq', '~> 7.0'
 gem 'turbo-rails'
 
-# Use Puma as the app server
-gem 'puma', '~> 5.6'
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-# gem 'jbuilder', '~> 2.7'
-# Use Redis adapter to run Action Cable in production
-# gem 'redis', '~> 4.0'
-
-# Reduces boot times through caching; required in config/boot.rb
-gem 'bootsnap', '>= 1.4.2', require: false
-
-# SDR specific
+# DLSS specific
 gem 'dor-workflow-client', '~> 7.0'
 gem 'moab-versioning', '~> 6.0'
 
 group :development, :test do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'rspec_junit_formatter'
   gem 'rspec-rails'
@@ -45,8 +36,7 @@ end
 
 group :development do
   gem 'listen', '~> 3.7'
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem 'spring'
+  gem 'spring' # speeds up rails development by keeping your application running in the background.
   gem 'spring-watcher-listen', '~> 2.0.0'
 end
 
@@ -55,5 +45,3 @@ group :deployment do
   gem 'capistrano-rails', require: false
   gem 'dlss-capistrano', require: false
 end
-
-gem 'importmap-rails', '~> 1.0'
