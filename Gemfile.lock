@@ -197,7 +197,7 @@ GEM
     method_source (1.0.0)
     mini_mime (1.1.5)
     mini_portile2 (2.8.5)
-    minitest (5.21.2)
+    minitest (5.22.2)
     moab-versioning (6.1.0)
       druid-tools (>= 1.0.0)
       json
@@ -369,7 +369,7 @@ GEM
     websocket-driver (0.7.6)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    zeitwerk (2.6.12)
+    zeitwerk (2.6.13)
 
 PLATFORMS
   ruby
@@ -407,7 +407,7 @@ DEPENDENCIES
   simplecov (~> 0.21)
   spring
   spring-watcher-listen (~> 2.0.0)
-  turbo-rails
+  turbo-rails (~> 1.5.0)
 
 BUNDLED WITH
    2.4.13
