@@ -84,6 +84,43 @@ paths:
           required: true
           schema:
             $ref: '#/components/schemas/Druid'
+  /v1/technical-metadata/audit/{druid}:
+    post:
+      tags:
+        - metadata
+      summary: Diff the technical metadata DB entries for a druid against the expected file/hash list provided to the endpoint
+      description: ''
+      operationId: technical_metadata#audit_by_druid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileAuditResult'
+        '404':
+          description: Druid not found
+        '401':
+          description: Unauthorized
+      parameters:
+        - name: druid
+          in: path
+          description: druid for which to audit the technical metadata
+          required: true
+          schema:
+            $ref: '#/components/schemas/Druid'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - expected_files
+              properties:
+                expected_files:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/FileAuditInfo'
 components:
   schemas:
     AudioMetadata:
@@ -194,6 +231,11 @@ components:
       type: string
       pattern: '^file:\/\/\/([^\\/]+\/)*[^\\/]+$'
       example: 'file:///foo/bar/baz/quix.jp2'
+    FileName:
+      description: filename for a file in SDR (from Cocina metadata)
+      type: string
+      pattern: '^([^\\/]+\/)*[^\\/]+$'
+      example: 'foo/bar/baz/quix.jp2'
     FileInfo:
       description: Information about a file.
       type: object
@@ -205,6 +247,36 @@ components:
       required:
         - uri
         - md5
+    FileAuditInfo:
+      description: Information about a file in SDR for which we expect technical metadata to exist.
+      type: object
+      properties:
+        filename:
+          $ref: '#/components/schemas/FileName'
+        md5:
+          type: string
+      required:
+        - filename
+        - md5
+    FileAuditResult:
+      description: Information about detected differences between expected technical metadata entries and actual technical metadata entries
+      type: object
+      properties:
+        missing_filenames:
+          type: array
+          items:
+            $ref:
+              '#/components/schemas/FileName'
+        unexpected_filenames:
+          type: array
+          items:
+            $ref:
+              '#/components/schemas/FileName'
+        mismatched_checksum_file_infos:
+          type: array
+          items:
+            $ref:
+              '#/components/schemas/FileAuditInfo'
     ImageMetadata:
       description: Image-specific technical metadata
       type: object
