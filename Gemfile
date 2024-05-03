@@ -25,6 +25,7 @@ gem 'moab-versioning', '~> 6.0'
 
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
+  gem 'erb_lint', '~> 0.5.0', require: false
   gem 'rspec_junit_formatter'
   gem 'rspec-rails'
   gem 'rubocop', require: false

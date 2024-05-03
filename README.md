@@ -133,10 +133,10 @@ Spin up the database using docker-compose:
 $ docker-compose up db # use -d to run in background
 ```
 
-Run the linter and test suite:
+Run the linters and the test suite:
 
 ```shell
-$ rubocop && rspec
+$ bin/rake
 ```
 
 ### Integration

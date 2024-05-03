@@ -22,6 +22,8 @@
 # Ignore uploaded files in development.
 /storage/*
 !/storage/.keep
+
+# Ignore local REPL history
 .byebug_history
 
 # Ignore master key for decrypting credentials and more.

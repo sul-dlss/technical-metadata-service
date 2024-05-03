@@ -173,7 +173,7 @@ RSpec.describe PdfCharacterizerService do
       let(:text_output) { instance_double(String) }
 
       it 'does not raise' do
-        expect { characterization }.not_to raise_error(ArgumentError)
+        expect { characterization }.not_to raise_error
       end
     end
 
