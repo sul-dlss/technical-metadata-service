@@ -23,6 +23,7 @@ services:
       - db
       - workers
   workers:
+    platform: linux/amd64 # Required for running on Apple Silicon
     build:
       context: .
       dockerfile: docker/workers/Dockerfile
