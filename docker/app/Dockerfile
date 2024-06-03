@@ -1,14 +1,8 @@
-# This Dockerfile is optimized for running in development. That means it trades
-# build speed for size. If we were using this for production, we might instead
-# optimize for a smaller size at the cost of a slower build.
-FROM ruby:3.2.2-alpine
-
-# postgresql-client is required for invoke.sh
-RUN apk add --update --no-cache  \
-  build-base \
-  postgresql-dev \
-  postgresql-client \
-  tzdata
+FROM ruby:3.3.2-bookworm
+    
+RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+    && apt-get -y install --no-install-recommends \
+        postgresql-client postgresql-contrib libpq-dev
 
 # Get latest bundler
 RUN gem install bundler
