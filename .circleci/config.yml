@@ -8,6 +8,7 @@ workflows:
           name: validate
       - ruby-rails/lint:
           name: lint
+      - ruby-rails/lint-erb
       - ruby-rails/test-rails:
           name: test
       - ruby-rails/docker-publish:
