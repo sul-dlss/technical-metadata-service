@@ -131,7 +131,7 @@ brew install mediainfo
 Spin up the database using docker-compose:
 
 ```shell
-$ docker-compose up db # use -d to run in background
+$ docker compose up db # use -d to run in background
 ```
 
 Run the linters and the test suite:
@@ -145,7 +145,7 @@ $ bin/rake
 Spin up all the docker-compose services for dev/testing:
 
 ```shell
-$ docker-compose up # use -d to run in background
+$ docker compose up # use -d to run in background
 ```
 
 Then create the accession workflow for the test object:
@@ -171,7 +171,7 @@ $ curl -i H "Authorization: Bearer #{TOKEN}" -H 'Content-Type: application/json'
 Verify that technical metadata was created:
 
 ```shell
-$ docker-compose exec app rails c
+$ docker compose exec app rails c
 > DroFile.pluck(:druid, :filename, :mimetype, :filetype)
 # should look like: [["druid:bc123df4567", "openapi.yml", "text/plain", "x-fmt/111"], ["druid:bc123df4567", "README.md", "text/markdown", "fmt/1149"]]
 ```
