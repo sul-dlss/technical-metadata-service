@@ -26,6 +26,7 @@ gem 'moab-versioning', '~> 6.0'
 group :development, :test do
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'erb_lint', require: false
+  gem 'rexml' # required by erb_lint, can be removed when fixed, see https://github.com/Shopify/erb_lint/issues/371
   gem 'rspec_junit_formatter'
   gem 'rspec-rails'
   gem 'rubocop', require: false
