@@ -14,8 +14,8 @@ gem 'okcomputer'
 gem 'pg'
 gem 'propshaft'
 gem 'puma' # app server
-gem 'rails', '~> 7.1.0'
-gem 'redis', '~>4.8' # for OKComputer check
+gem 'rails', '~> 7.2.0'
+gem 'redis', '~> 4.8' # for OKComputer check
 gem 'sidekiq', '~> 7.0'
 gem 'turbo-rails', '~> 1.5.0' # Pin turbo-rails to 1.5.0 until we can upgrade to 2.0.0
 
