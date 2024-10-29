@@ -7,14 +7,14 @@ gem 'bootsnap', '>= 1.4.2', require: false # # Reduces boot times through cachin
 gem 'committee' # validates Open API spec (OAS)
 gem 'config'
 gem 'honeybadger'
-gem 'importmap-rails', '~> 1.0'
+gem 'importmap-rails'
 gem 'jbuilder' # Build JSON APIs with ease.
 gem 'jwt'
 gem 'okcomputer'
 gem 'pg'
 gem 'propshaft'
-gem 'puma', '~> 5.6' # app server
-gem 'rails', '~> 7.0.1'
+gem 'puma' # app server
+gem 'rails', '~> 7.1.0'
 gem 'redis', '~>4.8' # for OKComputer check
 gem 'sidekiq', '~> 7.0'
 gem 'turbo-rails', '~> 1.5.0' # Pin turbo-rails to 1.5.0 until we can upgrade to 2.0.0
