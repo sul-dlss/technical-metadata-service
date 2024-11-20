@@ -40,9 +40,11 @@ Rails.application.configure do
   config.force_ssl = true
 
   # Log to STDOUT by default
-  config.logger = ActiveSupport::Logger.new($stdout)
-                                       .tap  { |logger| logger.formatter = Logger::Formatter.new }
-                                       .then { |logger| ActiveSupport::TaggedLogging.new(logger) }
+  if ENV['RAILS_LOG_TO_STDOUT'].present?
+    config.logger = ActiveSupport::Logger.new($stdout)
+                                         .tap  { |logger| logger.formatter = Logger::Formatter.new }
+                                         .then { |logger| ActiveSupport::TaggedLogging.new(logger) }
+  end
 
   # Prepend all log lines with the following tags.
   config.log_tags = [:request_id]
@@ -68,12 +70,6 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
-
-  if ENV['RAILS_LOG_TO_STDOUT'].present?
-    logger           = ActiveSupport::Logger.new($stdout)
-    logger.formatter = config.log_formatter
-    config.logger    = ActiveSupport::TaggedLogging.new(logger)
-  end
 
   config.active_job.queue_adapter = :sidekiq
 
