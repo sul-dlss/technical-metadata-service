@@ -40,6 +40,7 @@ Rails.application.configure do
   config.force_ssl = true
 
   # Log to STDOUT by default
+  config.log_formatter = Logger::Formatter.new
   if ENV['RAILS_LOG_TO_STDOUT'].present?
     config.logger = ActiveSupport::Logger.new($stdout)
                                          .tap  { |logger| logger.formatter = Logger::Formatter.new }
