@@ -124,6 +124,14 @@ To install on OS X:
 brew install mediainfo
 ```
 
+### FFMpeg
+[FFmpeg](https://github.com/FFmpeg/FFmpeg) is used for audio analysis of A/V files.
+
+To install on OS X:
+```
+brew install ffmpeg
+```
+
 ## Testing
 
 ### CI build
@@ -132,6 +140,11 @@ Spin up the database using docker-compose:
 
 ```shell
 $ docker compose up db # use -d to run in background
+```
+
+```shell
+$ rake db:setup # setup the databases (first time only)
+$ rake db:migrate # ensure up to date (after first setup)
 ```
 
 Run the linters and the test suite:

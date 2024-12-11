@@ -139,6 +139,8 @@ components:
           type: integer
         stream_size:
           type: integer
+        is_silent:
+          type: boolean
     AvMetadata:
       description: Audio/visual-specific technical metadata
       type: object

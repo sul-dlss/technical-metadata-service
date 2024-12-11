@@ -42,7 +42,7 @@ class AvCharacterizerService
       when 'General'
         av_metadata = extract_general(track)
       when 'Audio'
-        tracks << extract_audio(track)
+        tracks << extract_audio(track, filepath)
       when 'Video'
         tracks << extract_video(track)
       when 'Other'
@@ -73,7 +73,7 @@ class AvCharacterizerService
     end
   end
 
-  def extract_audio(track)
+  def extract_audio(track, filepath)
     part = extract_part(track, 'audio')
     part[:audio_metadata] = {}.tap do |metadata|
       metadata[:format_profile] = track['Format_Profile'] if track['Format_Profile'].present?
@@ -82,6 +82,7 @@ class AvCharacterizerService
       metadata[:sampling_rate] = track['SamplingRate'].to_i if track['SamplingRate'].present?
       metadata[:bit_depth] = track['BitDepth'].to_i if track['BitDepth'].present?
       metadata[:stream_size] = track['StreamSize'].to_i if track['StreamSize'].present?
+      metadata[:is_silent] = silent?(filepath)
     end
     part
   end
@@ -125,6 +126,36 @@ class AvCharacterizerService
       video_metadata: nil,
       other_metadata: nil
     }
+  end
+
+  def audio_tracks?(filepath)
+    command = "ffprobe -i #{filepath.shellescape} -show_streams -select_streams a -loglevel error"
+    output, status = Open3.capture2e(command)
+
+    raise Error, "Getting ffprobe track info returned #{status.exitstatus}: #{output}" unless status.success?
+
+    output.present?
+  end
+
+  # adapted from https://github.com/dnoneill/avpd/blob/a80193523558f9dcdc576ad6b9b3a76669ad2d43/app/helpers/av_helper.rb#L67
+  def silent?(filepath)
+    # first check to see if any audio tracks even exist, if not, return true
+    return true unless audio_tracks?(filepath)
+
+    # next examine the audio tracks to see if they are silent using volume detection
+    command = "ffmpeg -i #{filepath.shellescape} -af 'volumedetect' -vn -sn -dn -f null /dev/null"
+    output, status = Open3.capture2e(command)
+
+    raise Error, "Getting ffmpeg volume detection returned #{status.exitstatus}: #{output}" unless status.success?
+
+    split_output = output.split("\n")
+    max_volume = ff_mpeg_content_parse(split_output.grep(/max_volume/)[0])
+    mean_volume = ff_mpeg_content_parse(split_output.grep(/mean_volume/)[0])
+    mean_volume < -40 && max_volume < -30
+  end
+
+  def ff_mpeg_content_parse(content)
+    content.split(':')[-1].gsub!(/[^0-9\-.]/, '').strip.to_f
   end
 
   # @param [String,nil] time a date with format like 'UTC 2020-02-27 06:06:04' or nil if blank or unparseable.
