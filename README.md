@@ -177,8 +177,10 @@ bundle exec rake generate_token
 
 Hit the technical-metadata-service's HTTP API:
 
+Substitute the token above:
+
 ```shell
-$ curl -i H "Authorization: Bearer #{TOKEN}" -H 'Content-Type: application/json' --data '{"druid":"druid:bc123df4567","files":["file:///app/README.md","file:///app/openapi.yml"]}' http://localhost:3000/v1/technical-metadata
+$ curl -i -H "Authorization: Bearer {TOKEN}" -H 'Content-Type: application/json' --data '{"druid":"druid:bc123df4567","files":[{"uri":"file:///app/openapi.yml", "md5": "123"},{"uri":"file:///app/README.MD", "md5":"456"}], "basepath": "//app"}' http://localhost:3000/v1/technical-metadata
 ```
 
 Verify that technical metadata was created:
@@ -186,7 +188,7 @@ Verify that technical metadata was created:
 ```shell
 $ docker compose exec app rails c
 > DroFile.pluck(:druid, :filename, :mimetype, :filetype)
-# should look like: [["druid:bc123df4567", "openapi.yml", "text/plain", "x-fmt/111"], ["druid:bc123df4567", "README.md", "text/markdown", "fmt/1149"]]
+# should look like: [["druid:bc123df4567", "openapi.yml", "text/plain", "fmt/818"], ["druid:bc123df4567", "README.md", "text/markdown", "fmt/1149"]]
 ```
 
 And that the object's workflow was updated:
@@ -194,7 +196,7 @@ And that the object's workflow was updated:
 ```shell
 $ rails c
 > client = Dor::Workflow::Client.new(url: 'http://localhost:3001')
-> client.workflow_status({druid: 'druid:bc123df4567', workflow: 'accessionWF', process: 'technical-metadata'})
+> client.workflow_status(druid: 'druid:bc123df4567', workflow: 'accessionWF', process: 'technical-metadata')
 # should be "completed"
 ```
 
