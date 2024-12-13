@@ -118,7 +118,8 @@ RSpec.describe AvCharacterizerService do
           expect(characterization).to eq([{ audio_count: 1, file_extension: 'ogg', format: 'Ogg', duration: 1.002,
                                             encoded_date: '2020-02-27T18:23:48+00:00' },
                                           [{ part_type: 'audio', part_id: '28470', order: nil, format: 'Vorbis',
-                                             audio_metadata: { channels: '1', sampling_rate: 44_100, is_silent: false,
+                                             audio_metadata: { channels: '1', sampling_rate: 44_100,
+                                                               mean_volume: -24.2, max_volume: -4.7,
                                                                stream_size: 10_020 },
                                              video_metadata: nil, other_metadata: nil }]])
           expect(Open3).to have_received(:capture2e).with('mediainfo', '-f', '--Output=JSON', filepath)
@@ -129,11 +130,11 @@ RSpec.describe AvCharacterizerService do
         context 'when no audio track is detected by ffprobe' do
           let(:track_info) { '' }
 
-          it 'indicates the audio is silent and does not run ffmpeg command' do
+          it 'does not record the volume levels' do
             expect(characterization).to eq([{ audio_count: 1, file_extension: 'ogg', format: 'Ogg', duration: 1.002,
                                               encoded_date: '2020-02-27T18:23:48+00:00' },
                                             [{ part_type: 'audio', part_id: '28470', order: nil, format: 'Vorbis',
-                                               audio_metadata: { channels: '1', sampling_rate: 44_100, is_silent: true,
+                                               audio_metadata: { channels: '1', sampling_rate: 44_100,
                                                                  stream_size: 10_020 },
                                                video_metadata: nil, other_metadata: nil }]])
             expect(Open3).to have_received(:capture2e).with('mediainfo', '-f', '--Output=JSON', filepath)
@@ -142,7 +143,7 @@ RSpec.describe AvCharacterizerService do
           end
         end
 
-        context 'when an audio track is detected by ffprobe but the volume levels are low' do
+        context 'when a very quiet audio track is detected by ffprobe' do
           let(:volume_detect) do
             <<~VOLUME
               Lots of stuff here
@@ -153,11 +154,12 @@ RSpec.describe AvCharacterizerService do
             VOLUME
           end
 
-          it 'indicates the audio is silent' do
+          it 'records the volume levels' do
             expect(characterization).to eq([{ audio_count: 1, file_extension: 'ogg', format: 'Ogg', duration: 1.002,
                                               encoded_date: '2020-02-27T18:23:48+00:00' },
                                             [{ part_type: 'audio', part_id: '28470', order: nil, format: 'Vorbis',
-                                               audio_metadata: { channels: '1', sampling_rate: 44_100, is_silent: true,
+                                               audio_metadata: { channels: '1', sampling_rate: 44_100,
+                                                                 mean_volume: -45.2, max_volume: -31.7,
                                                                  stream_size: 10_020 },
                                                video_metadata: nil, other_metadata: nil }]])
             expect(Open3).to have_received(:capture2e).with('mediainfo', '-f', '--Output=JSON', filepath)
@@ -174,7 +176,8 @@ RSpec.describe AvCharacterizerService do
           expect(characterization).to eq([{ audio_count: 1, file_extension: 'ogg', format: 'Ogg', duration: 1.002,
                                             encoded_date: '2020-02-27T18:23:48+00:00' },
                                           [{ part_type: 'audio', part_id: '28470', order: nil, format: 'Vorbis',
-                                             audio_metadata: { channels: '1', sampling_rate: 44_100, is_silent: false,
+                                             audio_metadata: { channels: '1', sampling_rate: 44_100,
+                                                               mean_volume: -24.2, max_volume: -4.7,
                                                                stream_size: 10_020 },
                                              video_metadata: nil, other_metadata: nil }]])
           expect(Open3).to have_received(:capture2e).with('mediainfo', '-f', '--Output=JSON', filepath)
@@ -190,7 +193,8 @@ RSpec.describe AvCharacterizerService do
           expect(characterization).to eq([{ audio_count: 1, file_extension: 'ogg', format: 'Ogg', duration: 1.002,
                                             encoded_date: '2020-02-27T18:23:48+00:00' },
                                           [{ part_type: 'audio', part_id: '28470', order: nil, format: 'Vorbis',
-                                             audio_metadata: { channels: '1', sampling_rate: 44_100, is_silent: false,
+                                             audio_metadata: { channels: '1', sampling_rate: 44_100,
+                                                               mean_volume: -24.2, max_volume: -4.7,
                                                                stream_size: 10_020 },
                                              video_metadata: nil, other_metadata: nil }]])
           expect(Open3).to have_received(:capture2e).with('mediainfo', '-f', '--Output=JSON', filepath)
@@ -206,7 +210,8 @@ RSpec.describe AvCharacterizerService do
           expect(characterization).to eq([{ audio_count: 1, file_extension: 'ogg', format: 'Ogg', duration: 1.002,
                                             encoded_date: '2020-02-27T18:23:48+00:00' },
                                           [{ part_type: 'audio', part_id: '28470', order: nil, format: 'Vorbis',
-                                             audio_metadata: { channels: '1', sampling_rate: 44_100, is_silent: false,
+                                             audio_metadata: { channels: '1', sampling_rate: 44_100,
+                                                               mean_volume: -24.2, max_volume: -4.7,
                                                                stream_size: 10_020 },
                                              video_metadata: nil, other_metadata: nil }]])
           expect(Open3).to have_received(:capture2e).with('mediainfo', '-f', '--Output=JSON', filepath)
@@ -221,7 +226,8 @@ RSpec.describe AvCharacterizerService do
         it 'returns av_metadata and track metadata' do
           expect(characterization).to eq([{ audio_count: 1, file_extension: 'ogg', format: 'Ogg', duration: 1.002 },
                                           [{ part_type: 'audio', part_id: '28470', order: nil, format: 'Vorbis',
-                                             audio_metadata: { channels: '1', sampling_rate: 44_100, is_silent: false,
+                                             audio_metadata: { channels: '1', sampling_rate: 44_100,
+                                                               mean_volume: -24.2, max_volume: -4.7,
                                                                stream_size: 10_020 },
                                              video_metadata: nil, other_metadata: nil }]])
           expect(Open3).to have_received(:capture2e).with('mediainfo', '-f', '--Output=JSON', filepath)
@@ -317,7 +323,8 @@ RSpec.describe AvCharacterizerService do
                                                              frame_rate: 29.97, standard: 'NTSC' },
                                            other_metadata: nil },
                                          { part_type: 'audio', part_id: '2', order: 1, format: 'Opus',
-                                           audio_metadata: { codec_id: 'A_OPUS', is_silent: false, channels: '2',
+                                           audio_metadata: { codec_id: 'A_OPUS', channels: '2',
+                                                             mean_volume: -24.2, max_volume: -4.7,
                                                              sampling_rate: 48_000, bit_depth: 32 },
                                            video_metadata: nil, other_metadata: nil }]])
         expect(Open3).to have_received(:capture2e).with('mediainfo', '-f', '--Output=JSON', filepath)
@@ -408,6 +415,80 @@ RSpec.describe AvCharacterizerService do
 
       it 'raises' do
         expect { characterization }.to raise_error(AvCharacterizerService::Error)
+      end
+    end
+  end
+
+  describe '#audio_track?' do
+    let(:filepath) { 'test.mp3' }
+
+    context 'when file has an audio track' do
+      it 'returns true' do
+        expect(service.send(:audio_track?, filepath)).to be true
+      end
+    end
+
+    context 'when file has no audio track' do
+      let(:track_info) { '' }
+
+      it 'returns false' do
+        expect(service.send(:audio_track?, filepath)).to be false
+      end
+    end
+
+    context 'when ffprobe fails' do
+      let(:track_info) { 'error output' }
+      let(:status) { instance_double(Process::Status, success?: false, exitstatus: 1) }
+
+      it 'raises an error' do
+        expect { service.send(:audio_track?, filepath) }.to raise_error(AvCharacterizerService::Error)
+      end
+    end
+  end
+
+  describe '#compute_volume_levels' do
+    let(:filepath) { 'test.mp3' }
+
+    context 'when ffmpeg returns volume data successfully' do
+      let(:volume_detect) do
+        <<~VOLUME
+          [Parsed_volumedetect_0 @ 0x6000012f00b0] n_samples: 28525216
+          [Parsed_volumedetect_0 @ 0x6000012f00b0] mean_volume: -24.2 dB
+          [Parsed_volumedetect_0 @ 0x6000012f00b0] max_volume: -4.7 dB
+        VOLUME
+      end
+
+      it 'returns hash with mean and max volume levels' do
+        expect(service.send(:compute_volume_levels, filepath)).to eq(
+          mean_volume: -24.2,
+          max_volume: -4.7
+        )
+        expect(Open3).to have_received(:capture2e).with(ffmpeg_command)
+      end
+    end
+
+    context 'when ffmpeg returns volume data that cannot be parsed' do
+      let(:volume_detect) do
+        <<~VOLUME
+          Nothing but total nonsense returned
+        VOLUME
+      end
+
+      it 'returns hash with mean and max volume levels set to nil' do
+        expect(service.send(:compute_volume_levels, filepath)).to eq(
+          mean_volume: nil,
+          max_volume: nil
+        )
+        expect(Open3).to have_received(:capture2e).with(ffmpeg_command)
+      end
+    end
+
+    context 'when ffmpeg command fails' do
+      let(:status) { instance_double(Process::Status, success?: false, exitstatus: 1) }
+      let(:volume_detect) { 'error output' }
+
+      it 'raises an error' do
+        expect { service.send(:compute_volume_levels, filepath) }.to raise_error(AvCharacterizerService::Error)
       end
     end
   end
