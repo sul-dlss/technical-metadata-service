@@ -143,7 +143,7 @@ class AvCharacterizerService
 
   # adapted from https://github.com/dnoneill/avpd/blob/a80193523558f9dcdc576ad6b9b3a76669ad2d43/app/helpers/av_helper.rb#L67
   def compute_volume_levels(filepath)
-    # examine the audio tracks to see to extract mean and max volume levels
+    # examine the audio tracks to extract mean and max volume levels
     command = "ffmpeg -i #{filepath.shellescape} -af 'volumedetect' -vn -sn -dn -f null /dev/null"
     output, status = Open3.capture2e(command)
 
@@ -154,6 +154,9 @@ class AvCharacterizerService
       mean_volume: ff_mpeg_content_parse(split_output.grep(/mean_volume/)[0]) }
   end
 
+  # parse the volume level from the ffmpeg output, looks something like this:
+  #        [Parsed_volumedetect_0 @ 0x6000012f00b0] mean_volume: -24.2 dB
+  #        [Parsed_volumedetect_0 @ 0x6000012f00b0] max_volume: -4.7 dB
   def ff_mpeg_content_parse(content)
     return nil if content.blank?
 

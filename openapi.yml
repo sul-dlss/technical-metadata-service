@@ -140,9 +140,11 @@ components:
         stream_size:
           type: integer
         mean_volume:
-          type: integer
+          type: number
+          format: float
         max_volume:
-          type: integer
+          type: number
+          format: float
     AvMetadata:
       description: Audio/visual-specific technical metadata
       type: object
