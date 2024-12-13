@@ -25,10 +25,10 @@ Success
 
 This happens synchronously and will not update the workflow service.
 
-To generate for an item from a Moab (from preservation storage):
+To generate for an item from a Moab (from preservation storage).  Setting to the second parameter to "true" will force the generation of new technical-metadata even if it already exists.
 
 ```shell
-$ bundler exec rake techmd:generate_for_moab['druid:bc123df4567', 'true']
+$ bundler exec rake techmd:generate_for_moab['druid:bc123df4567','true']
 Queued
 ```
 
@@ -213,6 +213,30 @@ Then you can run
 bin/dev
 ```
 This starts css/js bundling and the development server
+
+### Generating local technical metadata locally
+
+If you have a file on your laptop you want to test quickly to see if generation is as expected, you can do this on the rails console.
+
+```ruby
+rails c
+
+druid = 'druid:ab123bc4567'
+basepath = '//some/local/laptop/path'
+files = [{"uri":"file:///some/local/laptop/path/nc889qn3957_sl.mp4", "md5": "012"}]
+params = {druid:, files:, basepath:}
+file_infos = params[:files].map do |file|
+    filepath = CGI.unescape(URI(file[:uri]).path)
+    filename = FilepathSupport.filename_for(filepath:, basepath: params[:basepath])
+    FileInfo.new(filepath:, md5: file[:md5], filename:)
+end
+errors = TechnicalMetadataGenerator.generate_with_file_info(druid:, file_infos:, force: true)
+
+puts errors
+
+pp DroFile.where(druid:)
+DroFile.where(druid:).each {|file| pp file.dro_file_parts};nil
+```
 
 ## Docker
 
