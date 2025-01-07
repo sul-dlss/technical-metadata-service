@@ -2,7 +2,7 @@
 
 require 'open3'
 
-# Characterizes an A/V file using mediainfo.
+# Characterizes an A/V file using mediainfo and ffmpeg.
 class AvCharacterizerService
   class Error < CharacterizationError
   end
