@@ -25,10 +25,10 @@ Success
 
 This happens synchronously and will not update the workflow service.
 
-To generate for an item from a Moab (from preservation storage):
+To generate for an item from a Moab (from preservation storage).  Setting to the second parameter to "true" will force the generation of new technical-metadata even if it already exists.
 
 ```shell
-$ bundler exec rake techmd:generate_for_moab['druid:bc123df4567', 'true']
+$ bundler exec rake techmd:generate_for_moab['druid:bc123df4567','true']
 Queued
 ```
 
@@ -124,6 +124,14 @@ To install on OS X:
 brew install mediainfo
 ```
 
+### FFMpeg
+[FFmpeg](https://github.com/FFmpeg/FFmpeg) is used for audio analysis of A/V files.
+
+To install on OS X:
+```
+brew install ffmpeg
+```
+
 ## Testing
 
 ### CI build
@@ -132,6 +140,11 @@ Spin up the database using docker-compose:
 
 ```shell
 $ docker compose up db # use -d to run in background
+```
+
+```shell
+$ rake db:setup # setup the databases (first time only)
+$ rake db:migrate # ensure up to date (after first setup)
 ```
 
 Run the linters and the test suite:
@@ -164,8 +177,10 @@ bundle exec rake generate_token
 
 Hit the technical-metadata-service's HTTP API:
 
+Substitute the token above:
+
 ```shell
-$ curl -i H "Authorization: Bearer #{TOKEN}" -H 'Content-Type: application/json' --data '{"druid":"druid:bc123df4567","files":["file:///app/README.md","file:///app/openapi.yml"]}' http://localhost:3000/v1/technical-metadata
+$ curl -i -H "Authorization: Bearer {TOKEN}" -H 'Content-Type: application/json' --data '{"druid":"druid:bc123df4567","files":[{"uri":"file:///app/openapi.yml", "md5": "123"},{"uri":"file:///app/README.MD", "md5":"456"}], "basepath": "//app"}' http://localhost:3000/v1/technical-metadata
 ```
 
 Verify that technical metadata was created:
@@ -173,7 +188,7 @@ Verify that technical metadata was created:
 ```shell
 $ docker compose exec app rails c
 > DroFile.pluck(:druid, :filename, :mimetype, :filetype)
-# should look like: [["druid:bc123df4567", "openapi.yml", "text/plain", "x-fmt/111"], ["druid:bc123df4567", "README.md", "text/markdown", "fmt/1149"]]
+# should look like: [["druid:bc123df4567", "openapi.yml", "text/plain", "fmt/818"], ["druid:bc123df4567", "README.md", "text/markdown", "fmt/1149"]]
 ```
 
 And that the object's workflow was updated:
@@ -181,7 +196,7 @@ And that the object's workflow was updated:
 ```shell
 $ rails c
 > client = Dor::Workflow::Client.new(url: 'http://localhost:3001')
-> client.workflow_status({druid: 'druid:bc123df4567', workflow: 'accessionWF', process: 'technical-metadata'})
+> client.workflow_status(druid: 'druid:bc123df4567', workflow: 'accessionWF', process: 'technical-metadata')
 # should be "completed"
 ```
 
@@ -198,6 +213,30 @@ Then you can run
 bin/dev
 ```
 This starts css/js bundling and the development server
+
+### Generating local technical metadata locally
+
+If you have a file on your laptop you want to test quickly to see if generation is as expected, you can do this on the rails console.
+
+```ruby
+rails c
+
+druid = 'druid:ab123bc4567'
+basepath = '//some/local/laptop/path'
+files = [{"uri":"file:///some/local/laptop/path/nc889qn3957_sl.mp4", "md5": "012"}]
+params = {druid:, files:, basepath:}
+file_infos = params[:files].map do |file|
+    filepath = CGI.unescape(URI(file[:uri]).path)
+    filename = FilepathSupport.filename_for(filepath:, basepath: params[:basepath])
+    FileInfo.new(filepath:, md5: file[:md5], filename:)
+end
+errors = TechnicalMetadataGenerator.generate_with_file_info(druid:, file_infos:, force: true)
+
+puts errors
+
+pp DroFile.where(druid:)
+DroFile.where(druid:).each {|file| pp file.dro_file_parts};nil
+```
 
 ## Docker
 
