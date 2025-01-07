@@ -3,7 +3,7 @@
 namespace :techmd do
   desc 'Generate technical metadata (synchronously) from druid + filepaths'
   task :generate, %i[druid filepaths basepath force] => :environment do |_task, args|
-    filepath_map = FilepathSupport.filepath_map_for(filepaths: args[:filepaths].split(' '), basepath: args[:basepath])
+    filepath_map = FilepathSupport.filepath_map_for(filepaths: args[:filepaths].split, basepath: args[:basepath])
     errors = TechnicalMetadataGenerator.generate(druid: args[:druid],
                                                  filepath_map:,
                                                  force: args[:force] == 'true')
