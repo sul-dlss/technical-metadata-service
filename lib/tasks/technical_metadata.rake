@@ -24,6 +24,9 @@ namespace :techmd do
   task :generate_for_moab_list, %i[force] => :environment do |_task, args|
     force = args[:force] == 'true'
     File.foreach('druids.txt').map(&:strip).each_with_index do |druid, index|
+      next if druid.blank? || druid.downcase == 'druid' # skip blank or header
+
+      druid = "druid:#{druid}" unless druid.start_with?('druid') # add prefix if missing
       if !force && DroFile.exists?(druid:)
         puts "Skipped #{druid} (#{index + 1}) since already has technical metadata"
       elsif MoabProcessingService.process(druid:, force:)
