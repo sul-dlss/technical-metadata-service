@@ -82,7 +82,7 @@ class AvCharacterizerService
       metadata[:sampling_rate] = track['SamplingRate'].to_i if track['SamplingRate'].present?
       metadata[:bit_depth] = track['BitDepth'].to_i if track['BitDepth'].present?
       metadata[:stream_size] = track['StreamSize'].to_i if track['StreamSize'].present?
-      if audio_track?(filepath) # if the audio track exists, get the volume levels
+      if audio_track?(filepath, part[:format]) # if the audio track exists, get the volume levels
         volume_levels = compute_volume_levels(filepath)
         metadata[:mean_volume] = volume_levels[:mean_volume]
         metadata[:max_volume] = volume_levels[:max_volume]
@@ -132,7 +132,9 @@ class AvCharacterizerService
     }
   end
 
-  def audio_track?(filepath)
+  def audio_track?(filepath, format)
+    return false if format == 'MIDI' # MIDI files do not have audio tracks and will cause ffprobe to throw an error
+
     command = "ffprobe -i #{filepath.shellescape} -show_streams -select_streams a -loglevel error"
     output, status = Open3.capture2e(command)
 
