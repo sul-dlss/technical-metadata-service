@@ -421,10 +421,11 @@ RSpec.describe AvCharacterizerService do
 
   describe '#audio_track?' do
     let(:filepath) { 'test.mp3' }
+    let(:format) { 'MPEG Audio' }
 
     context 'when file has an audio track' do
       it 'returns true' do
-        expect(service.send(:audio_track?, filepath)).to be true
+        expect(service.send(:audio_track?, filepath, format)).to be true
       end
     end
 
@@ -432,7 +433,16 @@ RSpec.describe AvCharacterizerService do
       let(:track_info) { '' }
 
       it 'returns false' do
-        expect(service.send(:audio_track?, filepath)).to be false
+        expect(service.send(:audio_track?, filepath, format)).to be false
+      end
+    end
+
+    context 'when it is a MIDI file' do
+      let(:filepath) { 'test.mid' }
+      let(:format) { 'MIDI' }
+
+      it 'returns false' do
+        expect(service.send(:audio_track?, filepath, format)).to be false
       end
     end
 
@@ -441,7 +451,7 @@ RSpec.describe AvCharacterizerService do
       let(:status) { instance_double(Process::Status, success?: false, exitstatus: 1) }
 
       it 'raises an error' do
-        expect { service.send(:audio_track?, filepath) }.to raise_error(AvCharacterizerService::Error)
+        expect { service.send(:audio_track?, filepath, format) }.to raise_error(AvCharacterizerService::Error)
       end
     end
   end
