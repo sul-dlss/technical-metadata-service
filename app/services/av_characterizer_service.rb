@@ -151,7 +151,7 @@ class AvCharacterizerService
 
     raise Error, "Getting ffmpeg volume detection returned #{status.exitstatus}: #{output}" unless status.success?
 
-    split_output = output.split("\n")
+    split_output = output.scrub('').split("\n")
     { max_volume: ff_mpeg_content_parse(split_output.grep(/max_volume/)[0]),
       mean_volume: ff_mpeg_content_parse(split_output.grep(/mean_volume/)[0]) }
   end
