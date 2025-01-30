@@ -39,12 +39,6 @@ group :development, :test do
   gem 'simplecov', '~> 0.21'
 end
 
-group :development do
-  gem 'listen', '~> 3.7'
-  gem 'spring' # speeds up rails development by keeping your application running in the background.
-  gem 'spring-watcher-listen', '~> 2.0.0'
-end
-
 group :deployment do
   gem 'capistrano-passenger', require: false
   gem 'capistrano-rails', require: false
