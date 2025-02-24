@@ -39,8 +39,7 @@ Rails.application.configure do
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   config.force_ssl = true
 
-  # Log to STDOUT by default
-  config.log_formatter = Logger::Formatter.new
+  # Log to STDOUT by default if env var is set
   if ENV['RAILS_LOG_TO_STDOUT'].present?
     config.logger = ActiveSupport::Logger.new($stdout)
                                          .tap  { |logger| logger.formatter = Logger::Formatter.new }
@@ -48,10 +47,7 @@ Rails.application.configure do
   end
 
   # Prepend all log lines with the following tags.
-  config.log_tags = [
-    ->(_request) { Time.now.iso8601 },
-    :request_id
-  ]
+  config.log_tags = [:request_id]
 
   # "info" includes generic and useful information about system operation, but avoids logging too much
   # information to avoid inadvertent exposure of personally identifiable information (PII). If you
