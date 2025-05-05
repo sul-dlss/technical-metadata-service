@@ -3,7 +3,7 @@
 RSpec.describe 'Request audit technical metadata' do
   let(:druid) { 'druid:bc123df4567' }
 
-  let(:file_info_0001) { { filename: '0001.html', md5: '1711cb9f08a0504e1035d198d08edda9' } } # rubocop:disable Naming/VariableNumber more consistent with the other var names, and not actually a numbered var anyway
+  let(:file_info_0001) { { filename: '0001.html', md5: '1711cb9f08a0504e1035d198d08edda9' } } # rubocop:disable Naming/VariableNumber -- more consistent with the other var names, and not actually a numbered var anyway
   let(:file_info_bar) { { filename: 'bar.txt', md5: 'c157a79031e1c40f85931829bc5fc552' } }
   let(:file_info_foo) { { filename: 'dir/foo.txt', md5: '4be1a9f251bb9c7dd3343abb94e6e9e1' } }
   let(:file_info_one_space) { { filename: 'one%20space.txt', md5: 'bec8c64f3ade34fe1aa1914c075ba8e9' } }
