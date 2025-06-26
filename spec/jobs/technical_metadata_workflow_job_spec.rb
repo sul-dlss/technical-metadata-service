@@ -13,12 +13,17 @@ RSpec.describe TechnicalMetadataWorkflowJob do
     ]
   end
 
-  let(:client) { instance_double(Dor::Workflow::Client, update_status: nil, update_error_status: nil) }
+  let(:object_client) { instance_double(Dor::Services::Client::Object, workflow: object_workflow) }
+  let(:object_workflow) { instance_double(Dor::Services::Client::ObjectWorkflow, process:) }
+  let(:process) { instance_double(Dor::Services::Client::Process, update: true, update_error: true) }
+
+  before do
+    allow(Dor::Services::Client).to receive(:object).with(druid).and_return(object_client)
+  end
 
   context 'when no exception' do
     before do
       allow(TechnicalMetadataGenerator).to receive(:generate_with_file_info).and_return(errors)
-      allow(Dor::Workflow::Client).to receive(:new).and_return(client)
       job.perform(druid:, file_infos:)
     end
 
@@ -26,7 +31,7 @@ RSpec.describe TechnicalMetadataWorkflowJob do
       let(:errors) { [] }
 
       it('logs success') do
-        expect(client).to have_received(:update_status)
+        expect(process).to have_received(:update).with(hash_including(status: 'completed'))
       end
     end
 
@@ -34,7 +39,7 @@ RSpec.describe TechnicalMetadataWorkflowJob do
       let(:errors) { ['Ooops'] }
 
       it('logs error') do
-        expect(client).to have_received(:update_error_status)
+        expect(process).to have_received(:update_error)
       end
     end
   end
@@ -43,12 +48,11 @@ RSpec.describe TechnicalMetadataWorkflowJob do
     before do
       allow(Honeybadger).to receive(:notify)
       allow(TechnicalMetadataGenerator).to receive(:generate_with_file_info).and_raise(StandardError)
-      allow(Dor::Workflow::Client).to receive(:new).and_return(client)
       job.perform(druid:, file_infos:)
     end
 
     it('logs error and sets workflow step to error') do
-      expect(client).to have_received(:update_error_status)
+      expect(process).to have_received(:update_error)
       expect(Honeybadger).to have_received(:notify)
     end
   end

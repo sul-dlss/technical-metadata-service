@@ -1,5 +1,6 @@
-workflow:
-  url: 'https://workflow.example.com/workflow'
+dor_services:
+  url: http://localhost:3003
+  token: TOKEN_GOES_HERE # for token see https://github.com/sul-dlss/dor-services-app#authentication
 
 hmac_secret: 'my$ecretK3y'
 

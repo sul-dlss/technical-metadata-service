@@ -182,8 +182,7 @@ Then create the accession workflow for the test object:
 
 ```shell
 $ rails c
-> client = Dor::Workflow::Client.new(url: 'http://localhost:3001')
-> client.create_workflow_by_name('druid:bc123df4567', 'accessionWF', version: '1')
+> Dor::Services::Client.object('druid:bc123df4567').workflow('accessionWF').create(version: '1')
 ```
 
 Get a JWT token for authentication
@@ -212,8 +211,7 @@ And that the object's workflow was updated:
 
 ```shell
 $ rails c
-> client = Dor::Workflow::Client.new(url: 'http://localhost:3001')
-> client.workflow_status(druid: 'druid:bc123df4567', workflow: 'accessionWF', process: 'technical-metadata')
+> Dor::Services::Client.object('druid:bc123df4567').workflow('accessionWF').process('technical-metadata').status
 # should be "completed"
 ```
 
