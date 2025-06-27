@@ -20,7 +20,7 @@ gem 'sidekiq', '~> 7.0'
 gem 'turbo-rails'
 
 # DLSS specific
-gem 'dor-workflow-client', '~> 7.0'
+gem 'dor-services-client'
 gem 'moab-versioning', '~> 6.0'
 
 group :development, :test do

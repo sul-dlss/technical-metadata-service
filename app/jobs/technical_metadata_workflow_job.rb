@@ -24,23 +24,23 @@ class TechnicalMetadataWorkflowJob < ApplicationJob
   private
 
   def log_success(druid:, elapsed:)
-    client.update_status(druid:,
-                         workflow: 'accessionWF',
-                         process: 'technical-metadata',
-                         status: 'completed',
-                         elapsed:,
-                         note: "Completed by technical-metadata-service on #{Socket.gethostname}.")
+    note = "Completed by technical-metadata-service on #{Socket.gethostname}."
+    Dor::Services::Client.object(druid).workflow(workflow).process(process)
+                         .update(status: 'completed',
+                                 elapsed:,
+                                 note:)
   end
 
   def log_failure(druid:, errors:)
-    client.update_error_status(druid:,
-                               workflow: 'accessionWF',
-                               process: 'technical-metadata',
-                               error_msg: 'Problem with technical-metadata-service on ' \
-                                          "#{Socket.gethostname}: #{errors}")
+    error_msg = "Problem with technical-metadata-service on #{Socket.gethostname}: #{errors}"
+    Dor::Services::Client.object(druid).workflow(workflow).process(process).update_error(error_msg:)
   end
 
-  def client
-    @client ||= Dor::Workflow::Client.new(url: Settings.workflow.url, logger: Rails.logger)
+  def workflow
+    'accessionWF'
+  end
+
+  def process
+    'technical-metadata'
   end
 end
