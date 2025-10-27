@@ -79,7 +79,7 @@ GEM
     base64 (0.3.0)
     bcrypt_pbkdf (1.1.1)
     bcrypt_pbkdf (1.1.1-x86_64-darwin)
-    benchmark (0.4.1)
+    benchmark (0.5.0)
     better_html (2.2.0)
       actionview (>= 7.0)
       activesupport (>= 7.0)
@@ -114,7 +114,7 @@ GEM
       capistrano (~> 3.1)
       capistrano-bundler (>= 1.1, < 3)
     capistrano-shared_configs (0.2.2)
-    cocina-models (0.107.0)
+    cocina-models (0.107.1)
       activesupport
       deprecation
       dry-struct (~> 1.0)
@@ -225,7 +225,7 @@ GEM
     jbuilder (2.14.1)
       actionview (>= 7.0.0)
       activesupport (>= 7.0.0)
-    json (2.15.1)
+    json (2.15.2)
     json_schema (0.21.0)
     jsonpath (1.1.5)
       multi_json
@@ -237,7 +237,8 @@ GEM
     loofah (2.24.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
-    mail (2.8.1)
+    mail (2.9.0)
+      logger
       mini_mime (>= 0.1.1)
       net-imap
       net-pop
@@ -277,14 +278,14 @@ GEM
       racc (~> 1.4)
     nokogiri (1.18.10-x86_64-linux-gnu)
       racc (~> 1.4)
-    nokogiri-happymapper (0.10.0)
+    nokogiri-happymapper (0.10.1)
       nokogiri (~> 1.5)
     okcomputer (1.19.0)
     openapi_parser (1.0.0)
     optimist (3.2.1)
     ostruct (0.6.3)
     parallel (1.27.0)
-    parser (3.3.9.0)
+    parser (3.3.10.0)
       ast (~> 2.4.1)
       racc
     patience_diff (1.2.0)
@@ -376,7 +377,7 @@ GEM
     rspec-support (3.13.6)
     rspec_junit_formatter (0.6.0)
       rspec-core (>= 2, < 4, != 2.12.0)
-    rubocop (1.81.1)
+    rubocop (1.81.6)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)
@@ -436,7 +437,7 @@ GEM
       net-ssh (>= 2.8.0)
       ostruct
     stringio (3.1.7)
-    super_diff (0.16.0)
+    super_diff (0.17.0)
       attr_extras (>= 6.2.4)
       diff-lcs
       patience_diff
