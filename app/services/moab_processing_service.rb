@@ -16,7 +16,7 @@ class MoabProcessingService
   end
 
   # @return [Boolean] true if a job was queued.
-  def process
+  def process # rubocop:disable Naming/PredicateMethod
     filepath_map = generate_filepath_map
     return false if filepath_map.empty?
 
