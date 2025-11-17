@@ -124,7 +124,7 @@ class AvCharacterizerService
     {
       part_type:,
       part_id: track['ID'].presence,
-      order: track['StreamOrder'].present? ? track['StreamOrder'].to_i : nil,
+      order: track['StreamOrder'].presence&.to_i,
       format: track['Format'].presence,
       audio_metadata: nil,
       video_metadata: nil,

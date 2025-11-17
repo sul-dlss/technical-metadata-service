@@ -1,7 +1,7 @@
 <turbo-frame id="mimetype_stats">
   <table class="table table-striped">
     <tbody>
-      <% DroFile.group(:mimetype).order('count_all desc').limit(10).count.each do |mimetype, count| %>
+      <% DroFile.group(:mimetype).order(count_all: :desc).limit(10).count.each do |mimetype, count| %>
         <tr>
           <td><%= mimetype || 'unknown' %></td>
           <td><%= number_with_delimiter(count) %></td>
