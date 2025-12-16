@@ -16,7 +16,7 @@ gem 'propshaft'
 gem 'puma' # app server
 gem 'rails', '~> 8.0.0'
 gem 'redis', '~> 4.8' # for OKComputer check
-gem 'sidekiq', '~> 7.0'
+gem 'sidekiq', '~> 8.0'
 gem 'turbo-rails'
 
 # DLSS specific
