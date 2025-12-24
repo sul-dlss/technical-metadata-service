@@ -18,14 +18,21 @@ RUN apt-get update && apt-get install siegfried
 # Get latest bundler
 RUN gem install bundler
 
+ARG UID=1000
+ARG GID=1000
+RUN groupadd -g $GID techmd
+RUN useradd -g $GID -u $UID techmd
+
 RUN mkdir /app
 WORKDIR /app
 
 COPY Gemfile Gemfile.lock ./
 
-RUN bundle config set without 'production'
+ENV RAILS_ENV=production
+ENV BUNDLER_WITHOUT="development test"
 RUN bundle install
 
-COPY . .
+COPY --chown=techmd:techmd . .
 
+USER techmd:techmd
 CMD ["./docker/workers/invoke.sh"]
