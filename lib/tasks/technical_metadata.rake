@@ -44,10 +44,10 @@ namespace :techmd do
         DroFile.where(druid:)
                .order(:filename)
                .filter_map do |dro_file|
-                 next if dro_file.av_metadata.blank?
+          next if dro_file.av_metadata.blank?
 
-                 "#{druid},#{dro_file.filename},#{dro_file.mimetype},#{dro_file.bytes}," \
-                   "#{dro_file.av_metadata.fetch('duration', 'none recorded')}"
+          "#{druid},#{dro_file.filename},#{dro_file.mimetype},#{dro_file.bytes}," \
+            "#{dro_file.av_metadata.fetch('duration', 'none recorded')}"
         end
       end
       puts results.join("\n")
