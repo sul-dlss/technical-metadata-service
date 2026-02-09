@@ -143,7 +143,7 @@ GEM
       capistrano-shared_configs
       ed25519
     docile (1.4.1)
-    dor-services-client (15.25.3)
+    dor-services-client (15.26.0)
       activesupport (>= 7.0.0)
       cocina-models (~> 0.109.0)
       deprecation
@@ -168,7 +168,7 @@ GEM
       dry-types (~> 1.8, >= 1.8.2)
       ice_nine (~> 0.11)
       zeitwerk (~> 2.6)
-    dry-types (1.9.0)
+    dry-types (1.9.1)
       bigdecimal (>= 3.0)
       concurrent-ruby (~> 1.0)
       dry-core (~> 1.0)
@@ -189,7 +189,7 @@ GEM
       rubocop (>= 1)
       smart_properties
     erubi (1.13.1)
-    faraday (2.14.0)
+    faraday (2.14.1)
       faraday-net_http (>= 2.0, < 3.5)
       json
       logger
@@ -217,7 +217,7 @@ GEM
     jbuilder (2.14.1)
       actionview (>= 7.0.0)
       activesupport (>= 7.0.0)
-    json (2.18.0)
+    json (2.18.1)
     json_schema (0.21.0)
     jsonpath (1.1.5)
       multi_json
@@ -371,7 +371,7 @@ GEM
     rspec-support (3.13.7)
     rspec_junit_formatter (0.6.0)
       rspec-core (>= 2, < 4, != 2.12.0)
-    rubocop (1.84.0)
+    rubocop (1.84.1)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)
@@ -495,4 +495,4 @@ DEPENDENCIES
   turbo-rails
 
 BUNDLED WITH
-  4.0.5
+  4.0.6
