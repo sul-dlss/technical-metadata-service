@@ -350,7 +350,7 @@ Rails/StripHeredoc: # new in 2.15
   Enabled: true
 Rails/ToFormattedS: # new in 2.15
   Enabled: true
-Capybara/SpecificMatcher: # new in 2.12
+Capybara/RSpec/SpecificMatcher: # new in 2.12
   Enabled: true
 RSpecRails/HaveHttpStatus: # new in 2.12
   Enabled: true
@@ -394,7 +394,7 @@ Rails/WhereNotWithMultipleConditions: # new in 2.17
   Enabled: true
 RSpec/SortMetadata: # new in 2.14
   Enabled: true
-Capybara/NegationMatcher: # new in 2.14
+Capybara/RSpec/NegationMatcher: # new in 2.14
   Enabled: true
 Capybara/SpecificActions: # new in 2.14
   Enabled: true
@@ -447,7 +447,7 @@ Rails/ResponseParsedBody: # new in 2.18
   Enabled: true
 Rails/ThreeStateBooleanColumn: # new in 2.19
   Enabled: true
-Capybara/MatchStyle: # new in 2.17
+Capybara/RSpec/MatchStyle: # new in 2.17
   Enabled: true
 FactoryBot/AssociationStyle: # new in 2.23
   Enabled: true
@@ -616,7 +616,7 @@ Style/SuperArguments: # new in 1.64
   Enabled: true
 Capybara/FindAllFirst: # new in 2.22
   Enabled: true
-Capybara/NegationMatcherAfterVisit: # new in 2.22
+Capybara/RSpec/NegationMatcherAfterVisit: # new in 2.22
   Enabled: true
 Performance/StringBytesize: # new in 1.23
   Enabled: true
