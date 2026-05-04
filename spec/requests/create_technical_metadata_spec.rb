@@ -72,6 +72,19 @@ RSpec.describe 'Request create technical metadata' do
                                                           file_infos:, force: true)
       end
     end
+
+    context 'when high lane-id provided' do
+      it 'queues a job to high queue' do
+        post '/v1/technical-metadata',
+             params: data.merge('lane-id' => 'high').to_json,
+             headers: { 'Content-Type' => 'application/json', 'Authorization' => "Bearer #{jwt}" }
+
+        expect(response).to have_http_status(:ok)
+        expect(TechnicalMetadataWorkflowJob).to have_received(:set).with(queue: :high)
+        expect(job).to have_received(:perform_later).with(druid: 'druid:bc123df4567',
+                                                          file_infos:, force: true)
+      end
+    end
   end
 
   context 'when unauthorized' do
