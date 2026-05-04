@@ -73,7 +73,7 @@ class TechnicalMetadataController < ApiController
   end
 
   def queue
-    params['lane-id'] == 'low' ? :low : :default
+    %w[low high].include?(params['lane-id']) ? params['lane-id'].to_sym : :default
   end
 
   def force?

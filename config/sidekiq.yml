@@ -1,5 +1,6 @@
 :concurrency: 6
 :queues:
+  - high
   - default
   - low
   - retro
