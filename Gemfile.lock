@@ -87,7 +87,7 @@ GEM
       parser (>= 2.4)
       smart_properties
     bigdecimal (4.1.2)
-    bootsnap (1.24.4)
+    bootsnap (1.24.5)
       msgpack (~> 1.2)
     builder (3.3.0)
     byebug (13.0.0)
@@ -194,7 +194,7 @@ GEM
       faraday-net_http (>= 2.0, < 3.5)
       json
       logger
-    faraday-net_http (3.4.2)
+    faraday-net_http (3.4.3)
       net-http (~> 0.5)
     faraday-retry (2.4.0)
       faraday (~> 2.0)
@@ -245,7 +245,7 @@ GEM
       net-imap
       net-pop
       net-smtp
-    marcel (1.1.0)
+    marcel (1.2.1)
     mini_mime (1.1.5)
     mini_portile2 (2.8.9)
     minitest (6.0.6)
@@ -409,7 +409,7 @@ GEM
       lint_roller (~> 1.1)
       rubocop (>= 1.75.0, < 2.0)
       rubocop-ast (>= 1.47.1, < 2.0)
-    rubocop-rails (2.35.1)
+    rubocop-rails (2.35.2)
       activesupport (>= 4.2.0)
       lint_roller (~> 1.1)
       rack (>= 1.1)
@@ -467,7 +467,7 @@ GEM
       base64
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    zeitwerk (2.7.5)
+    zeitwerk (2.8.2)
 
 PLATFORMS
   arm64-darwin-24
@@ -511,4 +511,4 @@ DEPENDENCIES
   turbo-rails
 
 BUNDLED WITH
-  4.0.11
+  4.0.12
