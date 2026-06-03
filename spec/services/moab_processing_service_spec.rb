@@ -44,4 +44,37 @@ RSpec.describe MoabProcessingService do
       expect(Honeybadger).not_to have_received(:notify)
     end
   end
+
+  context 'when item exists' do
+    before do
+      FileUtils.rm_rf('spec/fixtures/storage_root01/sdr2objects/bj/102/hs/9688/bj102hs9688/v0003/data/content')
+    end
+
+    after do
+      FileUtils.rm_rf('spec/fixtures/storage_root01/sdr2objects/bj/102/hs/9688/bj102hs9688/v0003/data/content')
+    end
+
+    context 'when the missing content is on preservation' do
+      let(:druid) { 'druid:bj102hs9688' }
+
+      it 'queues the job' do
+        service.process
+        expect(TechnicalMetadataJob).to have_received(:set).with(queue: :retro)
+        expect(job).to have_received(:perform_later)
+          .with(druid:,
+                filepath_map: { 'spec/fixtures/storage_root01/sdr2objects/bj/102/hs/9688/bj102hs9688/v0003/data/content/eric-smith-dissertation.pdf' => 'eric-smith-dissertation.pdf',
+                                'spec/fixtures/storage_root01/sdr2objects/bj/102/hs/9688/bj102hs9688/v0003/data/content/dir1/eric-smith-dissertation-augmented.pdf' => 'dir1/eric-smith-dissertation-augmented.pdf' },
+                force: true)
+      end
+    end
+
+    context 'when the missing content is not on preservation' do
+      let(:druid) { 'druid:bj102hs9689' }
+
+      it 'raises a Moab::FileNotFoundException error' do
+        expect { service.process }.to raise_error(Moab::FileNotFoundException)
+        expect(TechnicalMetadataJob).not_to have_received(:set)
+      end
+    end
+  end
 end

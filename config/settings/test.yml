@@ -1,3 +1,5 @@
 storage_root_map:
   default:
     fixture_sr1: 'spec/fixtures/storage_root01'
+preservation_root_map:
+  - 'spec/fixtures/pres_01/sdr2objects'
