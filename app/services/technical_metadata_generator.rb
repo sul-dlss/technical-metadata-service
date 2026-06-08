@@ -76,7 +76,12 @@ class TechnicalMetadataGenerator
   attr_reader :druid, :errors, :dro_file_upserts, :dro_file_part_inserts, :force, :dro_file_deletes
 
   def check_files_exist(filepaths)
-    filepaths.each { |filepath| errors << "#{filepath} not found" unless File.exist?(filepath) }
+    filepaths.each do |filepath|
+      next if File.exist?(filepath)
+      next if PreservationService.copy_file(druid:, filepath:).nil?
+
+      errors << "#{filepath} not found"
+    end
   end
 
   def filepaths_to_generate_for(file_infos)

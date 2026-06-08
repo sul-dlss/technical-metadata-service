@@ -2,7 +2,8 @@
 
 RSpec.describe TechnicalMetadataGenerator do
   let(:service) { described_class.new(druid:, force:) }
-  let(:druid) { 'druid:abc123' }
+  # let(:druid) { 'druid:abc123' }
+  let(:druid) { 'druid:bj102hs9687' }
   let(:force) { false }
   let(:filepath_map) { FilepathSupport.filepath_map_for(filepaths:, basepath: 'spec/fixtures/content') }
   let(:file_identifier_service) { instance_double(FileIdentifierService, version: '1.4.5') }
@@ -171,18 +172,41 @@ RSpec.describe TechnicalMetadataGenerator do
       end
     end
 
-    context 'when some files do not exist' do
-      let(:filepaths) do
-        [
-          'spec/fixtures/content/0001.html',
-          'spec/fixtures/content/bar.txt',
-          'spec/fixtures/content/foo.jpg',
-          'spec/fixtures/content/does_not_exist.txt'
-        ]
+    context 'when two files do not exist' do
+      context 'when one missing file is available on preservation' do
+        let(:filepaths) do
+          [
+            'spec/fixtures/content/0001.html',
+            'spec/fixtures/content/bar.txt',
+            'spec/fixtures/content/foo.jpg',
+            'spec/fixtures/content/does_not_exist.txt',
+            'spec/fixtures/content/eric-smith-dissertation.pdf'
+          ]
+        end
+
+        after do
+          File.delete('spec/fixtures/content/eric-smith-dissertation.pdf')
+        end
+
+        it 'only returns one error' do
+          expect(errors.length).to eq(1)
+        end
       end
 
-      it 'returns an error' do
-        expect(errors.length).to eq(1)
+      context 'when no missing files are available on preservation' do
+        let(:filepaths) do
+          [
+            'spec/fixtures/content/0001.html',
+            'spec/fixtures/content/bar.txt',
+            'spec/fixtures/content/foo.jpg',
+            'spec/fixtures/content/does_not_exist.txt',
+            'spec/fixtures/content/eric-smith-dissertation-missing.pdf'
+          ]
+        end
+
+        it 'only returns two errors' do
+          expect(errors.length).to eq(2)
+        end
       end
     end
 
