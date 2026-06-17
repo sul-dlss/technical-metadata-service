@@ -24,6 +24,8 @@ gem 'dor-services-client'
 gem 'moab-versioning', '~> 6.0'
 
 group :development, :test do
+  # Security audit for known security defects in code (use config/brakeman.ignore to ignore issues)
+  gem 'brakeman', require: false
   gem 'byebug'
   gem 'erb_lint', require: false
   gem 'rexml' # required by erb_lint, can be removed when fixed, see https://github.com/Shopify/erb_lint/issues/371
