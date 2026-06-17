@@ -1,0 +1,25 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "Remote Code Execution",
+      "warning_code": 110,
+      "fingerprint": "d882f63ce96c28fb6c6e0982f2a171460e4b933bfd9b9a5421dca21eef3f76da",
+      "check_name": "CookieSerialization",
+      "message": "Use of unsafe cookie serialization strategy `:marshal` might lead to remote code execution",
+      "file": "config/initializers/cookies_serializer.rb",
+      "line": 7,
+      "link": "https://brakemanscanner.org/docs/warning_types/unsafe_deserialization",
+      "code": "Rails.application.config.action_dispatch.cookies_serializer = :marshal",
+      "render_path": null,
+      "location": null,
+      "user_input": null,
+      "confidence": "Medium",
+      "cwe_id": [
+        565,
+        502
+      ],
+      "note": ""
+    }
+  ],
+  "brakeman_version": "8.0.5"
+}

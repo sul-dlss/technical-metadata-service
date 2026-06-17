@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  ruby-rails: sul-dlss/ruby-rails@4.11.0
+  ruby-rails: sul-dlss/ruby-rails@4.12.0
 workflows:
   build:
     jobs:
@@ -8,6 +8,8 @@ workflows:
           name: validate
       - ruby-rails/lint:
           name: lint
+      - ruby-rails/brakeman:
+          name: brakeman
       - ruby-rails/lint-erb
       - ruby-rails/test-rails:
           name: test
