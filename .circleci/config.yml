@@ -8,6 +8,8 @@ workflows:
           name: validate
       - ruby-rails/lint:
           name: lint
+      - ruby-rails/brakeman:
+          name: brakeman
       - ruby-rails/lint-erb
       - ruby-rails/test-rails:
           name: test
