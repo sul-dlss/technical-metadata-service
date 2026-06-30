@@ -28,6 +28,7 @@ class TechnicalMetadataGenerator
   # @param [Hash<String,String>] map of filepaths of files to filenames
   # @return [Array<String>] errors
   def generate(filepath_map)
+    copy_missing_files_from_preservation(filepath_map)
     # Check that file exists for every filepath. If it doesn't, add to errors and fail.
     check_files_exist(filepath_map.keys)
     return errors unless errors.empty?
@@ -54,6 +55,7 @@ class TechnicalMetadataGenerator
     # Find names without an existing DroFile (matching MD5, filename, druid).
     filepath_map = filepaths_to_generate_for(file_infos)
 
+    copy_missing_files_from_preservation(filepath_map)
     # Check that file exists for every filepath. If it doesn't, add to errors and fail.
     check_files_exist(filepath_map.keys)
     return errors unless errors.empty?
@@ -77,6 +79,20 @@ class TechnicalMetadataGenerator
 
   def check_files_exist(filepaths)
     filepaths.each { |filepath| errors << "#{filepath} not found" unless File.exist?(filepath) }
+  end
+
+  def copy_missing_files_from_preservation(filepath_map)
+    filepath_map.each do |filepath, filename|
+      next if File.exist?(filepath)
+
+      preservation_client.objects.content_to_file(
+        druid:,
+        filepath: filename,
+        destination_filepath: filepath
+      )
+    rescue Preservation::Client::NotFoundError
+      Rails.logger.info("#{filename} for #{druid} not found in preservation")
+    end
   end
 
   def filepaths_to_generate_for(file_infos)
@@ -239,5 +255,10 @@ class TechnicalMetadataGenerator
         insert_dro_file_parts(dro_file)
       end
     end
+  end
+
+  def preservation_client
+    @preservation_client ||= Preservation::Client.configure(url: Settings.preservation_catalog.url,
+                                                            token: Settings.preservation_catalog.token)
   end
 end

@@ -21,7 +21,8 @@ gem 'turbo-rails'
 
 # DLSS specific
 gem 'dor-services-client'
-gem 'moab-versioning', '~> 6.0'
+gem 'moab-versioning'
+gem 'preservation-client'
 
 group :development, :test do
   # Security audit for known security defects in code (use config/brakeman.ignore to ignore issues)
