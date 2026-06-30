@@ -8,3 +8,7 @@ storage_root_map: # empty here, override in #{RAILS_ENV}.yml
   default: {}
 
 redis_url: redis://localhost:6379/
+
+preservation_catalog:
+  url: 'https://preservation-catalog-stage.stanford.edu'
+  token: 'mint-token-with-target-preservation-catalog-rake-generate-token'
