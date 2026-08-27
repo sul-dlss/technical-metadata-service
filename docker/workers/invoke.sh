@@ -11,7 +11,10 @@ done
 
 echo "Postgres is up"
 
+# This sets the name for Sidekiq processs
+export DYNO="$SIDEKIQ_ID-`hostname`"
+
 # Don't allow any following commands to fail
 set -e
 echo "Running workers"
-exec bin/bundle exec sidekiq
+exec bin/bundle exec sidekiq -e $RAILS_ENV 2>&1 | tee -a log/sidekiq.log
