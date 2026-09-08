@@ -90,7 +90,7 @@ GEM
       parser (>= 2.4)
       smart_properties
     bigdecimal (4.1.2)
-    bootsnap (1.25.0)
+    bootsnap (1.26.0)
       msgpack (~> 1.5)
     brakeman (8.0.6)
       racc
@@ -239,11 +239,13 @@ GEM
       activesupport (>= 7.0.0)
     json (2.21.2)
     json_schema (0.21.0)
-    jsonschema_rs (0.52.1-arm64-darwin)
+    jsonschema_rs (0.55.0-aarch64-linux)
       bigdecimal (>= 3.1, < 5)
-    jsonschema_rs (0.52.1-x86_64-darwin)
+    jsonschema_rs (0.55.0-arm64-darwin)
       bigdecimal (>= 3.1, < 5)
-    jsonschema_rs (0.52.1-x86_64-linux)
+    jsonschema_rs (0.55.0-x86_64-darwin)
+      bigdecimal (>= 3.1, < 5)
+    jsonschema_rs (0.55.0-x86_64-linux)
       bigdecimal (>= 3.1, < 5)
     jwt (3.2.0)
       base64
@@ -287,6 +289,8 @@ GEM
       net-protocol
     net-ssh (7.3.3)
     nio4r (2.7.5)
+    nokogiri (1.19.4-aarch64-linux-gnu)
+      racc (~> 1.4)
     nokogiri (1.19.4-arm64-darwin)
       racc (~> 1.4)
     nokogiri (1.19.4-x86_64-darwin)
@@ -300,13 +304,14 @@ GEM
     openapi_parser (2.3.1)
     optimist (3.2.1)
     ostruct (0.6.3)
-    parallel (2.1.0)
+    parallel (2.2.0)
     parser (3.3.12.0)
       ast (~> 2.4.1)
       racc
     patience_diff (1.2.0)
       optimist (~> 3.0)
     pg (1.6.3)
+    pg (1.6.3-aarch64-linux)
     pg (1.6.3-arm64-darwin)
     pg (1.6.3-x86_64-darwin)
     pg (1.6.3-x86_64-linux)
@@ -486,7 +491,9 @@ GEM
     zeitwerk (2.8.3)
 
 PLATFORMS
+  aarch64-linux
   arm64-darwin-24
+  arm64-darwin-25
   x86_64-darwin-19
   x86_64-linux
 
@@ -504,6 +511,7 @@ DEPENDENCIES
   honeybadger
   importmap-rails
   jbuilder
+  json (~> 2.0)
   jwt
   moab-versioning
   okcomputer
@@ -528,4 +536,4 @@ DEPENDENCIES
   turbo-rails
 
 BUNDLED WITH
-  4.0.19
+  4.0.20
