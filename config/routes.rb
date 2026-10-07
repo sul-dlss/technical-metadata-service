@@ -7,6 +7,8 @@ Rails.application.routes.draw do
   scope 'v1' do
     post '/technical-metadata', to: 'technical_metadata#create'
     get '/technical-metadata/druid/:druid', to: 'technical_metadata#show_by_druid'
+    get '/technical-metadata/druid/:druid/file', to: 'technical_metadata#show_by_druid_and_filename',
+                                                 defaults: { format: :json }
     post '/technical-metadata/audit/:druid', to: 'technical_metadata#audit_by_druid' # POST, since params may be > 2 kB
   end
 
