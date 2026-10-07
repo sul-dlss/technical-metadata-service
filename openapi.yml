@@ -226,7 +226,7 @@ components:
           format: date-time
         image_metadata:
           $ref: '#/components/schemas/ImageMetadata'
-        pdf_metdata:
+        pdf_metadata:
           $ref: '#/components/schemas/PdfMetadata'
         av_metadata:
           $ref: '#/components/schemas/AvMetadata'
