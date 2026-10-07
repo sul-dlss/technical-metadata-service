@@ -85,6 +85,40 @@ paths:
           required: true
           schema:
             $ref: '#/components/schemas/Druid'
+  /v1/technical-metadata/druid/{druid}/file:
+    get:
+      tags:
+        - metadata
+      summary: Get the metadata for a single file associated with a druid
+      description: ''
+      operationId: technical_metadata#show_by_druid_and_filename
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DroFile'
+        '400':
+          description: Filename missing or blank
+        '404':
+          description: File not found
+      parameters:
+        - name: druid
+          in: path
+          description: druid for which to return the technical metadata
+          required: true
+          schema:
+            $ref: '#/components/schemas/Druid'
+        - name: filename
+          in: query
+          description: >-
+            Filename (path of the file within the object, e.g., images/page 1.tif) for which to return the
+            technical metadata. Must be percent-encoded exactly once; a literal + must be encoded as %2B.
+          required: true
+          schema:
+            type: string
+            minLength: 1
   /v1/technical-metadata/audit/{druid}:
     post:
       tags:
@@ -192,7 +226,7 @@ components:
           format: date-time
         image_metadata:
           $ref: '#/components/schemas/ImageMetadata'
-        pdf_metdata:
+        pdf_metadata:
           $ref: '#/components/schemas/PdfMetadata'
         av_metadata:
           $ref: '#/components/schemas/AvMetadata'

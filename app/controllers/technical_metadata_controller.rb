@@ -15,8 +15,15 @@ class TechnicalMetadataController < ApiController
 
   # GET /v1/technical-metadata/druid/{druid}
   def show_by_druid
-    @files = DroFile.where(druid: params[:druid]).order(:filename)
+    @files = DroFile.where(druid: params[:druid]).includes(:dro_file_parts).order(:filename)
     head(:not_found) if @files.empty?
+  end
+
+  # The filename is passed as a query parameter (percent-encoded once), so it may contain any character.
+  # GET /v1/technical-metadata/druid/{druid}/file?filename={filename}
+  def show_by_druid_and_filename
+    @file = DroFile.find_by(druid: params[:druid], filename: params[:filename])
+    head(:not_found) unless @file
   end
 
   # Given a druid (in the URL path) and a list of filename/md5 pairs (in the request body with filename URL encoded),
