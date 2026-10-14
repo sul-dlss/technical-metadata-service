@@ -165,6 +165,8 @@ brew install ffmpeg
 
 ## Testing
 
+Use Ruby 4.0.7 for development and testing.
+
 ### CI build
 
 Spin up the database using docker-compose:
