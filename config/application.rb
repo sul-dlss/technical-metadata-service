@@ -39,10 +39,10 @@ class JSONAPIError < Committee::ValidationError
 end
 
 # Parent class for characterization errors, helps us trap for any characterization errors
-class CharacterizationError < StandardError
+class CharacterizationError < StandardError # rubocop:disable Style/OneClassPerFile
 end
 
-module TechnicalMetadataService
+module TechnicalMetadataService # rubocop:disable Style/OneClassPerFile
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 8.1

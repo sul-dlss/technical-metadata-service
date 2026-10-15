@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-gem 'bootsnap', '>= 1.4.2', require: false # # Reduces boot times through caching; required in config/boot.rb
+gem 'bootsnap', require: false # # Reduces boot times through caching; required in config/boot.rb
 gem 'committee' # validates Open API spec (OAS)
 gem 'config'
 gem 'honeybadger'
@@ -15,8 +15,8 @@ gem 'pg'
 gem 'propshaft'
 gem 'puma' # app server
 gem 'rails', '~> 8.1.0'
-gem 'redis', '~> 4.8' # for OKComputer check
-gem 'sidekiq', '~> 8.0'
+gem 'redis' # for OKComputer check
+gem 'sidekiq'
 gem 'turbo-rails'
 
 # DLSS specific
@@ -39,7 +39,7 @@ group :development, :test do
   gem 'rubocop-rails', require: false
   gem 'rubocop-rspec', require: false
   gem 'rubocop-rspec_rails', require: false
-  gem 'simplecov', '~> 0.21'
+  gem 'simplecov'
 end
 
 group :deployment do
